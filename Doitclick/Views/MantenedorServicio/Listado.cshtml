@@ -1,0 +1,135 @@
+
+@{
+    ViewData["Title"] = "Listado Servicios";
+}
+
+<form id="frm-generico">
+    <div class="row">
+        <div class="col-lg-12">
+            <div id="demo-panel-network" class="panel">
+                <div class="panel-heading">
+                    <div class="panel-control">
+                        <button id="demo-panel-network-refresh" class="btn btn-default btn-active-primary" data-toggle="panel-overlay" data-target="#demo-panel-network"><i class="demo-psi-repeat-2"></i></button>
+                        <div class="dropdown">
+                            <button class="dropdown-toggle btn btn-default btn-active-primary" data-toggle="dropdown" aria-expanded="false"><i class="demo-psi-dot-vertical"></i></button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">Separated link</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <h3 class="panel-title">
+                        <ol class="breadcrumb">
+                            <li></li>
+                            <li class="active">@ViewData["Title"]</li>
+                        </ol>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <a href="/MantenedorServicio/Formulario" class="btn btn-primary">Nuevo Servicio</a>
+                            <table id="table" class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Servicio</th>
+                                        <th>Descripción</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var itm in ViewBag.servList)
+                                    {
+                                        <tr>
+                                            <td>@itm.Nombre</td>
+                                            <td>@itm.Resumen</td>
+                                            <td>
+                                                 <a href="#" data-id="@itm.Id" class="elimination btn btn-danger btn-sm">Eliminar</a>
+                                                @*<a href="/MantenedorServicio/Formulario/@itm.Id" class="edicion btn btn-primary btn-sm">Editar</a>*@
+                                            </td>
+                                        </tr>
+
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer text-right">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="demo-lg-modal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+                    <h4 class="modal-title" id="myLargeModalLabel">Orden de Trabajo</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="demo-gallery" style="display:none;">
+                        <a href="#">
+                            <img alt="The winding road"
+                                 src="~/Assets/img/gallery/thumbs/tile1.jpg"
+                                 data-image="~/Assets/img/gallery/big/tile1.jpg"
+                                 data-description="The winding road description"
+                                 style="display:none">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+</form>
+
+@section Scripts{
+
+    <script src="~/Assets/plugins/unitegallery/js/unitegallery.min.js"></script>
+    <script src="~/Assets/plugins/unitegallery/themes/tiles/ug-theme-tiles.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+
+            $('.elimination').on('click', function (e) {
+                e.preventDefault();
+
+                var id = $(this).data("id");
+                
+                $.ajax({
+                    type: "GET",
+                    url:`/api/mantenedores/servicios/eliminar/${id}`
+                }).done(function (data) {
+                    alert("Eliminado exitoso");
+                     location.reload();
+                }).fail(function (errMsg) {
+                    console.log(errMsg);
+                }).always(function () {
+                   
+                });
+
+            });
+
+        });
+    </script>
+}
+
+
+
+
+
+
+
+
+
+

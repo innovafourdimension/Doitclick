@@ -1,0 +1,146 @@
+﻿@{
+    ViewData["Title"] = "Asignar Cotización";
+}
+
+
+<form id="frm-ingreso-datos-paciente">
+    <div class="row">
+        <div class="col-lg-12">
+            <div id="demo-panel-network" class="panel">
+                <div class="panel-heading">
+                    <div class="panel-control">
+                        <button id="demo-panel-network-refresh" class="btn btn-default btn-active-primary" data-toggle="panel-overlay" data-target="#demo-panel-network"><i class="demo-psi-repeat-2"></i></button>
+                        <div class="dropdown">
+                            <button class="dropdown-toggle btn btn-default btn-active-primary" data-toggle="dropdown" aria-expanded="false"><i class="demo-psi-dot-vertical"></i></button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">Separated link</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <h3 class="panel-title">
+                        <ol class="breadcrumb">
+                            <li></li>
+                            <li class="active">@ViewData["Title"]</li>
+                        </ol>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <label for="RutPaciente">Paciente</label>
+                            <div class="input-group mar-btm">
+                                <strong>@ViewBag.Cotizacion.Cliente.Nombres</strong><br />
+                                <small>@ViewBag.Cotizacion.Cliente.Rut</small><br />
+                                <small>@ViewBag.Cotizacion.Cliente.PrevisionSalud</small>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <label for="RutPaciente">Dr. Solicitante</label>
+                            <div class="input-group mar-btm">
+                                <strong>@ViewBag.Cotizacion.DrSolicitante</strong><br />
+                                <small>Orden Nro: @ViewBag.Cotizacion.FolioSolicitante</small><br />
+                                <a href="#!" data-toggle="modal" data-target="#modal-imagen" class="btn-link"><small>Visualizar oden de trabajo</small></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Servicio</th>
+                                        <th>Cantidad</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var itm in ViewBag.Servicios)
+                                    {
+                                        @if (itm.Servicio == null)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <strong>Servicio Especial</strong><br />
+                                                    <small>@itm.Descripcion</small>
+                                                </td>
+                                                <td>1</td>
+                                            </tr>
+
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <strong>@itm.Servicio.Nombre</strong><br />
+                                                    <small>@itm.Servicio.Resumen</small>
+                                                </td>
+                                                <td>@itm.Cantidad</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label for="selResultadoAsignacion">Asignar a</label>
+                            <div class="input-group mar-btm">
+                                <select id="selResultadoAsignacion" class="form-control">
+                                    <option value="17042783-1">Carlos Pradenas</option>
+                                    <option value="18872956-8">Ivonne Alexandra</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="text-right no-print">
+                                <button class="btn btn-primary" id="btn-confirmar">Guardar y Avanzar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+        </div>
+    </div>
+
+</form>
+
+
+<!-- Modal -->
+<div class="modal fade" id="modal-imagen" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Imagen Orden de Trabajo</h4>
+            </div>
+            <div class="modal-body">
+                <img src="@ViewBag.Cotizacion.ImagenOrdenSolicitante" alt="Orden de Trabajo" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section styles{
+    <link href="~/Assets/plugins/chosen/chosen.min.css" rel="stylesheet">
+}
+@section Scripts{
+    <script src="~/lib/signalr.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            console.log('init');
+        });
+    </script>
+}

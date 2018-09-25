@@ -1,0 +1,137 @@
+﻿@{
+    ViewData["Title"] = "Cobro de Servicios";
+}
+
+<form id="frm-ingreso-datos-paciente">
+    <div class="row">
+        <div class="col-lg-12">
+            <div id="demo-panel-network" class="panel">
+                <div class="panel-heading">
+                    <div class="panel-control">
+                        <button id="demo-panel-network-refresh" class="btn btn-default btn-active-primary" data-toggle="panel-overlay" data-target="#demo-panel-network"><i class="demo-psi-repeat-2"></i></button>
+                        <div class="dropdown">
+                            <button class="dropdown-toggle btn btn-default btn-active-primary" data-toggle="dropdown" aria-expanded="false"><i class="demo-psi-dot-vertical"></i></button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">Separated link</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <h3 class="panel-title">
+                        <ol class="breadcrumb">
+                            <li></li>
+                            <li class="active">@ViewData["Title"]</li>
+                        </ol>
+                    </h3>
+                </div>
+                <div class="panel-body">
+
+
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <label for="RutPaciente">Paciente</label>
+                            <div class="input-group mar-btm">
+                                <strong>Carlos Antonio Pradenas Prexz</strong><br />
+                                <small>17.042.783-1</small><br />
+                                <small>Isapre Consalud</small>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <label for="RutPaciente">Dr. Solicitante</label>
+                            <div class="input-group mar-btm">
+                                <strong>Ingacio Ponceaga Lareqoi</strong><br />
+                                <small>Orden Nro: 838753954349573</small><br />
+                                <a href="#!" class="btn-link"><small>Visualizar oden de trabajo</small></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Servicio</th>
+                                        <th>Cantidad</th>
+                                        <th>Precio</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <strong>Servicio de carlos 1</strong><br />
+                                            <small>Descripcion del servicio</small>
+                                        </td>
+                                        <td>1</td>
+                                        <td>30000</td>
+                                        <td>30000</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="clearfix">
+                                <table class="table invoice-total">
+                                    <tbody>
+                                        <tr>
+                                            <td>Abonos:</td>
+                                            <td class="h4 showapagar">$0</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>A Pagar:</strong></td>
+                                            <td class="text-bold h4 showapagar">$0</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                   
+
+                 
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="text-right no-print">
+                                <button class="btn btn-warning" id="btn-rechazar">Cliente Rechaza Presupuesto</button>
+                                <button class="btn btn-primary" id="btn-confirmar">Generar Recibo</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+        </div>
+    </div>
+
+</form>
+@section styles{
+    <link href="~/Assets/plugins/chosen/chosen.min.css" rel="stylesheet">
+}
+@section Scripts{
+    <script src="~/lib/signalr.js"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            $("#selResultadoEvaluacion").on("change", function (event) {
+                console.log($(this).val())
+                if ($(this).val() == "N") {
+                    $(".reparos").show();
+                    $(".cotiza").hide();
+                } else if ($(this).val() == "S") {
+                    $(".reparos").hide();
+                    $(".cotiza").show();
+                } else {
+                    $(".reparos").hide();
+                    $(".cotiza").hide();
+                }
+            });
+        });
+    </script>
+}

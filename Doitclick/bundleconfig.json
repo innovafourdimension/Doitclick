@@ -1,0 +1,43 @@
+[
+  {
+    "outputFileName": "wwwroot/js/ext.min.js",
+    "inputFiles": [
+      "Client/configuracion.js",
+      "Client/extensiones.js",
+      "Client/constantes.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "outputMode": "singleLine"
+    },
+    "sourceMap": true
+  },
+  {
+    "outputFileName": "wwwroot/js/FlujoInterno/IngresoDatosPaciente.min.js",
+    "inputFiles": [
+      "Client/FlujoInterno/IngresoDatosPaciente.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "outputMode": "singleLine"
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/inicio.min.js",
+    "inputFiles": [
+      "Client/inicio.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/Mantenedores/Servicios.min.js",
+    "inputFiles": [
+      "Client/Mantenedores/Servicios.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/Mantenedores/Cliente.min.js",
+    "inputFiles": [
+      "Client/Mantenedores/Clientes.js"
+    ]
+  }
+]

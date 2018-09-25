@@ -1,0 +1,240 @@
+﻿@{
+    ViewData["Title"] = "Ingreso de Paciente";
+}
+<form id="frm-ingreso-datos-paciente">
+    <div class="row">
+        <div class="col-lg-12">
+            <div id="demo-panel-network" class="panel">
+                <div class="panel-heading">
+                    <div class="panel-control">
+                        <button id="demo-panel-network-refresh" class="btn btn-default btn-active-primary" data-toggle="panel-overlay" data-target="#demo-panel-network"><i class="demo-psi-repeat-2"></i></button>
+                        <div class="dropdown">
+                            <button class="dropdown-toggle btn btn-default btn-active-primary" data-toggle="dropdown" aria-expanded="false"><i class="demo-psi-dot-vertical"></i></button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">Separated link</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <h3 class="panel-title">
+                        <ol class="breadcrumb">
+                            <li></li>
+                            <li class="active">Datos Paciente</li>
+                        </ol>
+                    </h3>
+                </div>
+                <div class="panel-body">
+
+
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <label for="RutPaciente">Rut Paciente</label>
+                            <div class="input-group mar-btm">
+                                <span class="input-group-addon"><i class="demo-pli-male"></i></span>
+                                <input type="text" id="RutPaciente" name="RutPaciente" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <label for="RutPaciente">Previsión Salud</label>
+                            <div class="input-group mar-btm">
+                                <span class="input-group-addon"><i class="demo-pli-male"></i></span>
+                                <select id="PrevisionSalud" name="PrevisionSalud" class="form-control">
+                                    @foreach (var prv in ViewBag.PrevisionesSalud)
+                                    {
+                                        <option value="@prv.Id">@prv.Nombre</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <label for="NombrePaciente">Nombre Paciente</label>
+                            <div class="input-group mar-btm">
+                                <span class="input-group-addon"><i class="demo-pli-list-view"></i></span>
+                                <input type="text" id="NombrePaciente" name="NombrePaciente" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <label for="ApellidosPaciente">Apellidos Paciente</label>
+                            <div class="input-group mar-btm">
+                                <span class="input-group-addon"><i class="demo-pli-male"></i></span>
+                                <input type="text" id="ApellidosPaciente" name="ApellidosPaciente" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <label for="Telefono">Telefono</label>
+                            <div class="input-group mar-btm">
+                                <span class="input-group-addon"><i class="demo-pli-add-user-star"></i></span>
+                                <input type="text" id="Telefono" name="Telefono" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <label for="Correo">Correo Electronico</label>
+                            <div class="input-group mar-btm">
+                                <span class="input-group-addon"><i class="demo-pli-mail"></i></span>
+                                <input type="text" id="Correo" name="Correo" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <label for="DrSolicitante">Dr. Solicitante</label>
+                            <div class="input-group mar-btm">
+                                <span class="input-group-addon"><i class="demo-pli-male"></i></span>
+                                <input type="text" id="DrSolicitante" name="DrSolicitante" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-3">
+                            <label for="x">N° de Orden</label>
+                            <div class="input-group mar-btm">
+                                <span class="input-group-addon"><i class="demo-pli-list-view"></i></span>
+                                <input type="text" id="NroOrden" name="NroOrden" class="form-control">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class=" pad-top">
+                            <div class="text-lg">
+                                <div class="bord-top pad-ver">
+                                    <span class="btn btn-primary fileinput-button dz-clickable">
+                                        <i class="fa fa-plus"></i>
+                                        <span>Cargar Orden Odontologo...</span>
+                                        <input type="file" id="imgUpload" onchange="previsualizarImagen()" />
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class=" pad-top">
+                            <p>Previsualización</p>
+                            <img id="img-previsualiza" src="" alt="Previsualizacion Imagen" style="display:none;width:95%; height: 95%;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+        </div>
+    </div>
+    <div class="panel">
+        <div class="panel-body  clearfix">
+            <div class="panel-heading">
+                <div class="panel-control">
+                    <button id="demo-panel-network-refresh" class="btn btn-default btn-active-primary" data-toggle="panel-overlay" data-target="#demo-panel-network"><i class="demo-pli-printer"></i></button>
+                    <div class="dropdown">
+                        <button class="dropdown-toggle btn btn-default btn-active-primary" data-toggle="dropdown" aria-expanded="false"><i class="demo-psi-dot-vertical"></i></button>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a href="#">Action</a></li>
+                            <li><a href="#">Another action</a></li>
+                            <li><a href="#">Something else here</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">Separated link</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <h3 class="panel-title">
+                    <ol class="breadcrumb">
+                        <li></li>
+                        <li class="active">Item OT</li>
+                    </ol>
+                </h3>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    <label for="xs">Tipo de Trabajo</label>
+                    <div class="input-group mar-btm">
+                        <span class="input-group-addon"><i class="demo-psi-repair"></i></span>
+                        <select id="demo-cs-multiselect" data-placeholder="Seleccione Trabajo" tabindex="4">
+                            <option value=""></option>
+                            <option value="Otro">Otro</option>
+                            @foreach (var svc in ViewBag.Servicios)
+                            {
+                                <option data-descripcion="@svc.Resumen" data-valor="@svc.ValorTotal" value="@svc.Id">@svc.Nombre</option>
+                            }
+
+                        </select>
+
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 extension-otros" style="display:none;">
+                    <label for="xs">Descripción Trabajo</label>
+                    <div class="input-group mar-btm">
+                        <span class="input-group-addon"><i class="demo-psi-repair"></i></span>
+                        <textarea id="DescripcionEvaluacionOP" class="form-control"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    <label for="xs">&nbsp;</label>
+                    <div class="input-group mar-btm">
+                        <button type="button" class="btn btn-primary agrgar-trabajo">Agregar</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 table-responsive">
+                    <table class="table table-bordered invoice-summary">
+                        <thead>
+                            <tr class="bg-trans-dark">
+                                <th class="text-uppercase">Descripción</th>
+                                <th class="min-col text-center text-uppercase">Precio</th>
+                                <th class="min-col text-center text-uppercase">Cantidad</th>
+                                <th class="min-col text-right text-uppercase">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="detalles-cotizacion"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 pad-top">
+                    <div class="text-lg">
+                        <hr>
+                        <div class="alert alert-danger mensaje-otros" style="display:none;">
+                            <small>Al seleccionar la opción otros se enviará a cotizar el servicio con uno de los técnicos</small>
+                        </div>
+                        <div class="clearfix">
+                            <table class="table invoice-total">
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Total:</strong></td>
+                                        <td class="text-bold h4 showapagar">$0</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="text-right no-print">
+                            <a href="javascript:window.print()" class="btn btn-default"><i class="demo-pli-printer icon-lg"></i></a>
+                            <button class="btn btn-primary" id="btn-confirmar">Generar Cotización</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+@section styles{
+    <link href="~/Assets/plugins/chosen/chosen.min.css" rel="stylesheet">
+}
+@section Scripts{
+    <script src="~/lib/signalr.js"></script>
+    <script src="~/Assets/plugins/chosen/chosen.jquery.min.js"></script>
+    <script src="~/js/FlujoInterno/IngresoDatosPaciente.min.js"></script>
+
+}
+

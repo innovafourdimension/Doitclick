@@ -1,0 +1,13 @@
+﻿dotnet ef migrations add CREAR_ESQUEMA_TABLAS -o Data/Migrations
+
+dotnet ef database update
+
+
+dotnet ef migrations remove
+
+
+#Desarrollo Local
+"DoItClickConnection": "server=localhost;port=14595;database=doitclick;uid=usr_doitclick;password=secreto"
+
+#Testing RDS
+"DoItClickConnection": "server=doitclickdevinstance.c3i7tgmal0at.us-east-1.rds.amazonaws.com;port=3306;database=doitclick;uid=doitclick;password=Secretillo.01"

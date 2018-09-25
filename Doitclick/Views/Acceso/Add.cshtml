@@ -1,0 +1,94 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Add</title>
+    <script src="~/Assets/js/jquery.min.js"></script>
+    <script>
+        $(function () { 
+
+            /*const model = {
+                Nombre: "Admin",
+                OrganizacionId: "1",
+                PadreId: ""
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/api/Auth/Role/Create",
+                data: JSON.stringify(model),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) { console.log(data); },
+                failure: function (errMsg) {
+                    console.log(errMsg);
+                }
+            });*/
+
+
+
+            $("#frm").on("submit", function () { 
+
+                console.log($(this).serialize());
+
+
+                const model = {
+                    Nombres: $("#Nombres").val(),
+                    Identificacion: $("#Identificacion").val(),
+                    Correo: $("#Correo").val(),
+                    Llave: $("#Llave").val()
+                }
+
+                console.log(model)
+
+
+                /*$.post("/api/Auth/Create", model, function (resolve) {
+                    console.log(resolve);
+                 })*/
+
+
+                $.ajax({
+                    type: "POST",
+                    url: "/api/Auth/User/Create",
+                    data: JSON.stringify(model),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) { console.log(data); },
+                    failure: function (errMsg) {
+                        console.log(errMsg);
+                    }
+                });
+
+                return false;
+            })
+
+        });
+    </script>
+</head>
+<body>
+    <form id="frm">
+        <div>
+            <input name="Nombres" id="Nombres" type="text" placeholder="Nombres" />
+        </div>
+        <div>
+            <input name="Identificacion" id="Identificacion" type="text" placeholder="Rut" />
+        </div>
+        <div>
+            <input name="Correo" id="Correo" type="text" placeholder="Correo" />
+        </div>
+        <div>
+            <input name="Llave" id="Llave" type="text" placeholder="Clave" />
+        </div>
+
+        <div>
+            <button>Guardar</button>
+        </div>
+    </form>
+</body>
+</html>

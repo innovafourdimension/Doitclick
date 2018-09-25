@@ -1,0 +1,176 @@
+﻿
+@{
+    ViewData["Title"] = "Ingresa Solicitud";
+}
+
+
+<link href="~/Assets/plugins/bootstrap-select/bootstrap-select.css" rel="stylesheet" />
+<form id="frm-ingreso-datos-paciente">
+    <div class="row">
+        <div class="col-lg-12">
+            <div id="demo-panel-network" class="panel">
+                <div class="panel-heading">
+                    <div class="panel-control">
+                        <button id="demo-panel-network-refresh" class="btn btn-default btn-active-primary" data-toggle="panel-overlay" data-target="#demo-panel-network"><i class="demo-psi-repeat-2"></i></button>
+                        <div class="dropdown">
+                            <button class="dropdown-toggle btn btn-default btn-active-primary" data-toggle="dropdown" aria-expanded="false"><i class="demo-psi-dot-vertical"></i></button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">Separated link</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <h3 class="panel-title">
+                        <ol class="breadcrumb">
+                            <li></li>
+                            <li class="active">@ViewData["Title"]</li>
+                        </ol>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <label for="RutPaciente">Paciente</label>
+                            <div class="input-group mar-btm">
+                                <strong>Carlos Antonio Pradenas Prexz</strong><br />
+                                <small>17.042.783-1</small><br />
+                                <small>Isapre Consalud</small>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <label for="RutPaciente">Dr. Solicitante</label>
+                            <div class="input-group mar-btm">
+                                <strong>Ingacio Ponceaga Lareqoi</strong><br />
+                                <small>Orden Nro: 838753954349573</small><br />
+                                <a href="#!" class="btn-link"  data-target="#demo-lg-modal" data-toggle="modal" ><small>Visualizar oden de trabajo</small></a>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <p class="control-label">Tipo de Trabajo</p>
+                                    <select class="selectpicker" tabindex="-98" stye="495px;" id="slTipoTrabajo">
+                                        <option>Seleccione..</option>
+                                        <option value="1">Normal</option>
+                                        <option value="2">Virtual</option>
+                                        <option value="3">Otro</option>
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="control-label">Dr.</label>
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="control-label">Dirección</label>
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="control-label">Telefono</label>
+                                    <input type="url" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="control-label">Correo</label>
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row obs" style="display:none;">
+                        <div class="col-sm-12 ">
+                            <div class="form-group">
+                                <label class="control-label">Descripcion</label>
+                                <textarea placeholder="Descripción" rows="6" class="form-control" id="txDescripcion"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer text-right">
+                    <button class="btn btn-success" type="submit">Guardar y enviar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5">
+    </div>
+
+
+    <div id="demo-lg-modal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+                    <h4 class="modal-title" id="myLargeModalLabel">Orden de Trabajo</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="demo-gallery" style="display:none;">
+                        <a href="#">
+                            <img alt="The winding road"
+                                 src="~/Assets/img/gallery/thumbs/tile1.jpg"
+                                 data-image="~/Assets/img/gallery/big/tile1.jpg"
+                                 data-description="The winding road description"
+                                 style="display:none">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+</form>
+
+@section Scripts{
+
+    <script src="~/Assets/plugins/unitegallery/js/unitegallery.min.js"></script>
+    <script src="~/Assets/plugins/unitegallery/themes/tiles/ug-theme-tiles.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+
+            $("#slTipoTrabajo").on("change", function (event) {
+                console.log($(this).val())
+                if ($(this).val() == 3) {
+                    $(".obs").show();
+
+                } else {
+                    $(".obs").hide();
+                }
+            });
+
+            $("#demo-gallery").unitegallery();
+
+
+        });
+    </script>}
+
+
+
+
+
+
+
+
+
+

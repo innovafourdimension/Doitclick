@@ -1,0 +1,79 @@
+﻿
+@{
+    ViewData["Title"] = "Envio de Solicitud";
+}
+
+
+<table class="body-wrap" style="background-color: inherit;" >
+    <tr>
+        <td></td>
+        <td class="container" width="600">
+            <div class="content">
+                <table class="main" width="100%" cellpadding="0" cellspacing="0" style="border-radius: 5px;">
+                    <tr>
+                        <td class="alert alert-good">
+                            <strong>ENVIO DE SOLICITUD.</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="content-wrap aligncenter">
+                            <table width="100%" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td class="content-block aligncenter">
+                                        <table class="invoice">
+                                            <tr>
+                                                <td><strong>DR. Ingacio Ponceaga Lareqoi</strong><br>Direccion: <strong>Capitania #123 Las Condes. </strong><br>Fecha: <strong>Sep. 05 2018</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <table class="invoice-items" cellpadding="0" cellspacing="0">
+                                                        <tr>
+                                                            <td>Service 1</td>
+                                                            <td class="alignright">1</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Service 2</td>
+                                                            <td class="alignright">2</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Service 3</td>
+                                                            <td class="alignright">1</td>
+                                                        </tr>
+                                                        <tr class="total">
+                                                            <td class="alignright" width="80%">Total</td>
+                                                            <td class="alignright">4</td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td class="content-block aligncenter">
+                                        <textarea placeholder="Observación" rows="6" class="form-control" id="textObservacion"></textarea>
+                                    </td>
+                                </tr>
+                          
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                <div class="footer">
+                    <table width="100%">
+                        <tr>
+                            <td class="aligncenter content-block">© 2018 TO IT CLICK</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </td>
+        <td></td>
+    </tr>
+</table>
+
+@section styles{
+    <link href="~/Assets/plugins/transactional-email-templates/templates/styles.css" media="all" rel="stylesheet" type="text/css" />
+}
+

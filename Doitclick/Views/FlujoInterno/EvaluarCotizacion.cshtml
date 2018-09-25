@@ -1,0 +1,129 @@
+﻿@{
+    ViewData["Title"] = "About";
+}
+<form id="frm-generico">
+    <div class="row">
+        <div class="col-lg-12">
+            <div id="demo-panel-network" class="panel">
+                <div class="panel-heading">
+                    <div class="panel-control">
+                        <button id="demo-panel-network-refresh" class="btn btn-default btn-active-primary" data-toggle="panel-overlay" data-target="#demo-panel-network"><i class="demo-psi-repeat-2"></i></button>
+                        <div class="dropdown">
+                            <button class="dropdown-toggle btn btn-default btn-active-primary" data-toggle="dropdown" aria-expanded="false"><i class="demo-psi-dot-vertical"></i></button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">Separated link</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <h3 class="panel-title">
+                        <ol class="breadcrumb">
+                            <li></li>
+                            <li class="active">@ViewData["Title"]</li>
+                        </ol>
+                    </h3>
+                </div>
+                <div class="panel-body">
+
+
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <label for="RutPaciente">Paciente</label>
+                            <div class="input-group mar-btm">
+                                <strong>@ViewBag.Cotizacion.Cliente.Nombres</strong><br />
+                                <small>@ViewBag.Cotizacion.Cliente.Rut</small><br />
+                                <small>@ViewBag.Cotizacion.Cliente.PrevisionSalud</small>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <label for="RutPaciente">Dr. Solicitante</label>
+                            <div class="input-group mar-btm">
+                                <strong>@ViewBag.Cotizacion.DrSolicitante</strong><br />
+                                <small>Orden Nro: @ViewBag.Cotizacion.FolioSolicitante</small><br />
+                                <a href="#!" data-toggle="modal" data-target="#modal-imagen" class="btn-link"><small>Visualizar oden de trabajo</small></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label for="RutPaciente">¿Se puede realizar esta cotización?</label>
+                            <div class="input-group mar-btm">
+                                <select id="selResultadoEvaluacion" name="Resultado" class="form-control">
+                                    <option value="">-</option>
+                                    <option value="S">Si</option>
+                                    <option value="N">No</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row reparos" style="display:none;">
+                        <div class="col-sm-12 mar-btm">
+                            <label for="motivoReparo">Indique cuales son los motivos</label>
+                            <textarea id="motivoReparo" name="MotivoReparo" class="form-control" rows="5" cols="20"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="row cotiza" style="display:none;">
+                        <div class="col-sm-12 mar-btm">
+                            <label for="descripcionCotizacion">Describa Cotización</label>
+                            <textarea id="descripcionCotizacion" name="DescripcionCotizacion" class="form-control" rows="5" cols="20"></textarea>
+                        </div>
+                        <div class="col-sm-12 mar-btm">
+                            <label for="RutPaciente">Indique Valor de Cotización</label>
+                            <div class="input-group mar-btm">
+                                <input type="text" name="ValorCotizacion" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="text-right no-print">
+                                <input type="hidden" name="NumeroTicket" value="@ViewBag.Cotizacion.NumeroTicket" />
+                                <button class="btn btn-primary" id="btn-confirmar">Guardar y Avanzar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+        </div>
+    </div>
+
+</form>
+@section styles{
+    <link href="~/Assets/plugins/chosen/chosen.min.css" rel="stylesheet">
+}
+@section Scripts{
+    <script src="~/lib/signalr.js"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            $("#selResultadoEvaluacion").on("change", function (event) {
+                console.log($(this).val())
+                if ($(this).val() == "N") {
+                    $(".reparos").show();
+                    $(".cotiza").hide();
+                } else if ($(this).val() == "S") {
+                    $(".reparos").hide();
+                    $(".cotiza").show();
+                } else {
+                    $(".reparos").hide();
+                    $(".cotiza").hide();
+                }
+            });
+
+
+            $('#frm-generico').on('submit', function (e) {
+                e.preventDefault();
+                var model = $(this).serializeFormJSON();
+                console.log(model)
+            });
+        });
+    </script>
+}
