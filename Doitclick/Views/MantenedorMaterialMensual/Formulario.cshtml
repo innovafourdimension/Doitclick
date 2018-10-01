@@ -44,7 +44,7 @@
                                     <option value="">Seleccione</option>
                                     @foreach(var itm in ViewBag.marcaListado)
                                     {
-                                        if(ViewBag.editando && ViewBag.mensual.Marca.Id == itm.Id)
+                                        @if(ViewBag.editando && ViewBag.mensual.Marca.Id == itm.Id)
                                         {
                                             <option value="@itm.Id" selected>@itm.Nombre</option>
                                         }
@@ -62,20 +62,19 @@
                        
                          <div class="col-md-3">
                             <div class="form-group">
-                                <label class="control-label">Unidad</label>
+                                <label class="control-label">Unidad @ViewBag.mensual.UnidadMedida.Id</label>
                                 <select class="form-control" id="sslUnidadMedida" name="sslUnidadMedida">
                                     <option value="">Seleccione</option>
                                     @foreach(var itm in ViewBag.unidadmed)
                                     {
-                                        if(ViewBag.editando && ViewBag.mensual.UnidadMedida.Id == itm.Id)
+                                        @if(ViewBag.editando && ViewBag.mensual.UnidadMedida.Id == itm.Id)
                                         {
-                                            <option value="@itm.Id">@itm.Nombre</option>
+                                            <option value="@itm.Id" selected>@itm.Nombre</option>
                                         }
                                         else
                                         {
                                             <option value="@itm.Id">@itm.Nombre</option>
                                         }
-                                        
                                     }
                                 </select>
                             </div>
@@ -149,6 +148,14 @@
                     $('#frm-generico')[0].reset();
                 }).fail(function (errMsg) {
                     console.log(errMsg);
+                     $.niftyNoty({
+                        type: "warning",
+                        container : "floating",
+                        title : "Suceso Erroneo",
+                        message : errMsg,
+                        closeBtn : false,
+                        timer : 5000
+                    });
                 }).always(function () {
                      
                 });

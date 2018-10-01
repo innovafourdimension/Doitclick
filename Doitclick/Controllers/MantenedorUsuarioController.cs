@@ -41,7 +41,7 @@ namespace Doitclick.Controllers
         {
             var user = await _context.Users.FindAsync(id);
             ViewBag.editando = !String.IsNullOrEmpty(id);
-            //ViewBag.rolUsuario = await _userManager.GetRolesAsync(user);
+            ViewBag.rolUsuario = await _userManager.GetRolesAsync(user);
             ViewBag.usuario = user;
             ViewBag.rolesList = _context.Roles.Include(r => r.Orzanizacion).ToList();
             return View();

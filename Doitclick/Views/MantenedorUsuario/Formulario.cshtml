@@ -68,9 +68,18 @@
                                   <option value="">Seleccione</option>
                                   @foreach(var itm in ViewBag.rolesList)
                                   {
-                                    <option data-comisionista="@itm.Comisionista" value="@itm.Name">@itm.Orzanizacion.Nombre / @itm.Name</option>
+                                      @if(ViewBag.rolUsuario[0] == itm.Name)
+                                      {
+                                        <option data-comisionista="@itm.Comisionista" value="@itm.Name" selected>@itm.Orzanizacion.Nombre / @itm.Name</option>
+                                      }
+                                      else
+                                      {
+                                        <option data-comisionista="@itm.Comisionista" value="@itm.Name">@itm.Orzanizacion.Nombre / @itm.Name</option>
+                                      }
+                                    
                                   }  
                             </select>
+                            <p></p>
                         </div>
 
                         <div class="col-sm-12 col-md-4 comisionist" style="display:none;">
@@ -114,6 +123,8 @@
                 }
             });
 
+            $("#rol").trigger("change");
+
             $('#frm-generico').on('submit', function (e) {
                 e.preventDefault();
                 var model = $(this).serializeFormJSON();
@@ -131,7 +142,10 @@
                         title : "Suceso Exitoso",
                         message : "Los datos del Rol se han guardado correctamente",
                         closeBtn : false,
-                        timer : 5000
+                        timer : 5000,
+                        onHide: function(){
+                            location.reload();
+                        }
                     });
                     $('#frm-generico')[0].reset();
                 }).fail(function (errMsg) {

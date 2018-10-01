@@ -60,6 +60,9 @@ function previsualizarImagen() {
 
 $(function () {
 
+    $('#demo-cs-multiselect').chosen();
+
+
     $(document).on('doitclick.events.onCambiaValor', function (event, extra) {
         var totalGeneral = 0;
         $.each(_servicios_detalle_cotizacion, function (i, e) {

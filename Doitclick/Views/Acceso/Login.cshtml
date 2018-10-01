@@ -89,16 +89,22 @@
                     url: "/api/Auth/Login",
                     data: JSON.stringify(model),
                     contentType: "application/json; charset=utf-8",
-                    dataType: "json",
                     success: function (data) {
                         console.log(data);
                         localStorage.setItem('token', data.token);
                         localStorage.setItem('tokenExpiration', data.expiration);
+                        localStorage.setItem('userData', JSON.stringify(data.userData));
                         $('.botonyweas').html(oldText);
                         location.href = '/mi-gestion';
                     },
                     failure: function (errMsg) {
                         console.log(errMsg);
+                        $.niftyNoty({
+                            type: "warning",
+                            container : "floating",
+                            title : "Ingreso Erroneo",
+                            message : errMsg
+                        });
                     }
                 });
 

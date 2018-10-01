@@ -130,7 +130,7 @@
                                 </div>
                             </div>
                         </li>
-                        <li id="dropdown-user" class="dropdown">
+                        @*<li id="dropdown-user" class="dropdown">
                             <a href="#" data-toggle="dropdown" class="dropdown-toggle text-right">
                                 <span class="ic-user pull-right">
                                     <i class="demo-pli-male"></i>
@@ -155,7 +155,7 @@
                                     </li>
                                 </ul>
                             </div>
-                        </li>
+                        </li>*@
                     </ul>
                 </div>
             </div>
@@ -181,22 +181,27 @@
                                             <span class="pull-right dropdown-toggle">
                                                 <i class="dropdown-caret"></i>
                                             </span>
-                                            <p class="mnp-name">Ximena Toledo</p>
-                                            <span class="mnp-desc">Ximena.toledo@doclick.cl</span>
+                                            <p class="mnp-name" id="__nombreUsuario"></p>
+                                            <span class="mnp-desc" id="__correoUsuario"></span>
+                                            <script>
+                                                var userData = JSON.parse(localStorage.getItem('userData'));
+                                                document.querySelector('#__nombreUsuario').innerHTML = userData.nombres;
+                                                document.querySelector('#__correoUsuario').innerHTML = userData.email;
+                                            </script>
                                         </a>
                                     </div>
                                     <div id="profile-nav" class="collapse list-group bg-trans">
-                                        <a href="#" class="list-group-item">
+                                        @*<a href="#" class="list-group-item">
                                             <i class="demo-pli-male icon-lg icon-fw"></i> View Profile
                                         </a>
                                         <a href="#" class="list-group-item">
                                             <i class="demo-pli-gear icon-lg icon-fw"></i> Settings
-                                        </a>
+                                        </a>*@
                                         <a href="#" class="list-group-item">
-                                            <i class="demo-pli-information icon-lg icon-fw"></i> Help
+                                            <i class="demo-pli-information icon-lg icon-fw"></i> Ayuda
                                         </a>
-                                        <a href="#" class="list-group-item">
-                                            <i class="demo-pli-unlock icon-lg icon-fw"></i> Logout
+                                        <a href="#" id="logout" class="list-group-item">
+                                            <i class="demo-pli-unlock icon-lg icon-fw"></i> Salir
                                         </a>
                                     </div>
                                 </div>

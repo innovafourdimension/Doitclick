@@ -49,11 +49,30 @@
                             <div class="form-group">
                                 <label class="control-label">Estado</label>
                                 <select class="form-control" name="Estado">
-                                    <option value="">Seleccione</option>   
-                                    <option value="BN" @(ViewBag.editando && ViewBag.instru.Estado == "N" ? "selected" : "")>Bueno</option>  
-                                    <option value="RG" @(ViewBag.editando && ViewBag.instru.Estado == "R" ? "selected" : "")>Regular</option>  
-                                    <option value="ML" @(ViewBag.editando && ViewBag.instru.Estado == "M" ? "selected" : "")>Malo</option>  
-                                    <option value="BJ" @(ViewBag.editando && ViewBag.instru.Estado == "B" ? "selected" : "")>De baja</option>   
+                                    <option value="">Seleccione</option>
+                                    @if(ViewBag.editando && ViewBag.instru.Estado == "BN"){
+                                        <option value="BN" selected>Bueno</option>
+                                    }else{
+                                        <option value="BN">Bueno</option>
+                                    }   
+                                      
+                                    @if(ViewBag.editando && ViewBag.instru.Estado == "RG"){
+                                        <option value="RG" selected>Regular</option>
+                                    }else{
+                                        <option value="RG">Regular</option>
+                                    }
+
+                                    @if(ViewBag.editando && ViewBag.instru.Estado == "ML"){
+                                        <option value="ML" selected>Malo</option>
+                                    }else{
+                                        <option value="ML">Malo</option>
+                                    }
+
+                                    @if(ViewBag.editando && ViewBag.instru.Estado == "BJ"){
+                                        <option value="BJ" selected>De Baja</option>
+                                    }else{
+                                        <option value="BJ">De Baja</option>
+                                    }
                                 </select>
                             </div>
                         </div>

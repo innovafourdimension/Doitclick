@@ -66,12 +66,21 @@ namespace Doitclick.Controllers.Api
             }
         }
 
+        [HttpGet]
+        [Route("Logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return Ok();
+        }
+
+        
         private IActionResult BuildToken(InfoUsuario infoUsuario)
         {
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.UniqueName, infoUsuario.Identificacion),
-                new Claim("Algo", "caca"),
+                //new Claim("Algo", "caca"),
                 //new Claim("Correo", infoUsuario.Correo),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
@@ -83,16 +92,21 @@ namespace Doitclick.Controllers.Api
             
 
             JwtSecurityToken token = new JwtSecurityToken(
-               issuer: "yourdomain.com",
-               audience: "yourdomain.com",
+               issuer: "doitclick.cl",
+               audience: "doitclick.cl",
                claims: claims,
                expires: expiration,
                signingCredentials: creds);
 
+            var userData = _userManager.FindByNameAsync(infoUsuario.Identificacion);
             return Ok(new
             {
                 token = new JwtSecurityTokenHandler().WriteToken(token),
-                expiration
+                expiration,
+                userData = new {
+                    nombres = userData.Result.Nombres,
+                    email = userData.Result.Email
+                }
             });
 
         }

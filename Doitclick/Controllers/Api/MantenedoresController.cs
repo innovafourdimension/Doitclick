@@ -148,7 +148,15 @@ namespace Doitclick.Controllers.Api
                 elUsuario.UserName = entrada.Identificacion;
                 elUsuario.Nombres = entrada.Nombres;
                 elUsuario.Email = entrada.Correo;
-                elUsuario.PorcentajeComision = Convert.ToSingle(entrada.PorcentajeComision);
+                elUsuario.PhoneNumber = entrada.Telefono;
+                elUsuario.PorcentajeComision = !string.IsNullOrEmpty(entrada.PorcentajeComision) ? Convert.ToSingle(entrada.PorcentajeComision.Replace('.',',')) : 0;
+                var roledelete = await _context.UserRoles.FirstOrDefaultAsync(x => x.UserId == elUsuario.Id);
+                if(roledelete != null)
+                {
+                    var role = await _context.Roles.FirstOrDefaultAsync(r => r.Id == roledelete.RoleId);
+                    var rs1 = await _userManager.RemoveFromRoleAsync(elUsuario, role.Name);
+                }
+                var rs = await _userManager.AddToRoleAsync(elUsuario, entrada.Rol);
 
                 var result = await _userManager.UpdateAsync(elUsuario);
                 if (result.Succeeded)

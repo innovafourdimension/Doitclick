@@ -12,16 +12,16 @@ namespace Doitclick.Models.Helper
             string estado = "Sin Valor";
             switch (marca)
             {
-                case "N":
+                case "BN":
                     estado = "Nuevo";
                     break;                
-                case "R":
+                case "RG":
                     estado = "Regular";
                     break;
-                case "M":
+                case "ML":
                     estado = "Malo";
                     break;
-                case "B":
+                case "BJ":
                     estado = "De Baja";
                     break;
             } 

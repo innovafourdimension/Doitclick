@@ -155,19 +155,15 @@
             <div class="row">
                 <div class="col-sm-12 col-md-6">
                     <label for="xs">Tipo de Trabajo</label>
-                    <div class="input-group mar-btm">
-                        <span class="input-group-addon"><i class="demo-psi-repair"></i></span>
-                        <select id="demo-cs-multiselect" data-placeholder="Seleccione Trabajo" tabindex="4">
-                            <option value=""></option>
-                            <option value="Otro">Otro</option>
-                            @foreach (var svc in ViewBag.Servicios)
-                            {
-                                <option data-descripcion="@svc.Resumen" data-valor="@svc.ValorTotal" value="@svc.Id">@svc.Nombre</option>
-                            }
+                    <select id="demo-cs-multiselect" data-placeholder="Seleccione Trabajo" tabindex="4" class="form-control">
+                        <option value=""></option>
+                        <option value="Otro">Otro</option>
+                        @foreach (var svc in ViewBag.Servicios)
+                        {
+                            <option data-descripcion="@svc.Resumen" data-valor="@svc.ValorTotal" value="@svc.Id">@svc.Nombre</option>
+                        }
 
-                        </select>
-
-                    </div>
+                    </select>
                 </div>
                 <div class="col-sm-12 col-md-6 extension-otros" style="display:none;">
                     <label for="xs">Descripción Trabajo</label>

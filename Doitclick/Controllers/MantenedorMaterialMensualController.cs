@@ -29,12 +29,20 @@ namespace Doitclick.Controllers
         public IActionResult Formulario(int id = 0)
         {
             ViewBag.Id = id;
-            ViewBag.unidadmed =_context.TiposUnidadMedidas.Where(x => x.Activa == true).ToList();
-
+            
+            
             var materialmensual = _context.MaterialesMensuales.Include(x=>x.UnidadMedida).Include(x => x.Marca).FirstOrDefault(x => x.Id == id);
             ViewBag.mensual = materialmensual;
-            ViewBag.marcaListado = _context.Marcas.Where(x => x.Activa == true).ToList();
+            
             ViewBag.editando = (id > 0);
+            if(id > 0){
+                ViewBag.marcaListado = _context.Marcas.ToList();
+                ViewBag.unidadmed =_context.TiposUnidadMedidas.ToList();
+            }else{
+                ViewBag.marcaListado = _context.Marcas.Where(x => x.Activa == true).ToList();
+                ViewBag.unidadmed =_context.TiposUnidadMedidas.Where(x => x.Activa == true).ToList();
+            }
+            
             return View();
         }
 

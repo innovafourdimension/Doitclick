@@ -52,8 +52,8 @@ namespace Doitclick
                         ValidateAudience = true,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = "yourdomain.com",
-                        ValidAudience = "yourdomain.com",
+                        ValidIssuer = "doitclick.cl",
+                        ValidAudience = "doitclick.cl",
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Llave"])),
                         ClockSkew = TimeSpan.Zero
                     };
