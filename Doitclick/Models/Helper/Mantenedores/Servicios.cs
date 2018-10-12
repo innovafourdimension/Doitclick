@@ -11,6 +11,7 @@ namespace Doitclick.Models.Helper.Mantenedores
         public string CodigoServicio     {get;set;}
         public int VManoObra          {get;set;}
         public int PorcentajeComision {get;set;}
+        public int ValorCosto { get; set; }
         public IEnumerable<MaterialFormItem> Materiales { get; set; }
     }
 

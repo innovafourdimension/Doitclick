@@ -17,6 +17,7 @@ namespace Doitclick.Models.Application
         public int PorcentajeComision { get; set; }
         public int ValorTotal { get; set; }
         public bool Activa { get; set; }
+        public int ValorCosto { get; set; }
 
         public ICollection<ItemCotizar> ServiciosCotizar { get; set; }
         public ICollection<MaterialPresupuestado> MaterialesPresupuestados { get; set; }
