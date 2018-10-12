@@ -166,8 +166,7 @@ $(function () {
             type: "POST",
             url: "/api/flujo-interno/ingreso-datos-paciente",
             data: JSON.stringify(model),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json"
+            contentType: "application/json; charset=utf-8"
         }).done(function (data) {
             console.log(data);
             const user = "Chachacharles";
