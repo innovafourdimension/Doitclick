@@ -36,7 +36,8 @@ namespace Doitclick.Controllers.Api
                 Codigo=servicios.CodigoServicio,
                 ValorManoObra= 0,
                 PorcentajeComision=0,
-                Activa = true
+                Activa = true,
+                ValorCosto = servicios.ValorCosto
                 
            };
 
