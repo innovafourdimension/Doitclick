@@ -1,0 +1,373 @@
+
+@{
+    ViewData["Title"] = ViewBag.editando ? "Etapa: " + ViewBag.etapa.Nombre : "Nueva Etapa";
+    var modelo = new {
+        Id = ViewBag.editando ? ViewBag.etapa.Id : "",
+        Nombre = ViewBag.editando ? ViewBag.etapa.Nombre : "",
+        TipoEtapa = ViewBag.editando ? ViewBag.etapa.TipoEtapa : "",
+        TipoUsuarioAsignado = ViewBag.editando ? ViewBag.etapa.TipoUsuarioAsignado : "",
+        ValorUsuarioAsignado = ViewBag.editando ? ViewBag.etapa.ValorUsuarioAsignado : "",
+        TipoDuracion = ViewBag.editando ? ViewBag.etapa.TipoDuracion : "",
+        ValorDuracion = ViewBag.editando ? ViewBag.etapa.ValorDuracion : "",
+        TipoDuracionRetardo = ViewBag.editando ? ViewBag.etapa.TipoDuracionRetardo : "",
+        ValorDuracionRetardo = ViewBag.editando ? ViewBag.etapa.ValorDuracionRetardo : "",
+    };
+}
+
+
+@section Scripts{
+    
+
+    <script type="text/javascript">
+
+        window._destinos = [];
+
+        window.render = function(){
+
+            $.each(_destinos, function(i,e){
+                $('#tabla-destinos').append(
+                    $('<tr>').append(
+                        $('<td>').text(e.etapaDestino.nombre)
+                    ).append(
+                        $('<td>').text(e.namespaceValidacion)
+                    ).append(
+                        $('<td>').text(e.claseValidacion)
+                    ).append(
+                        $('<td>').text(e.metodoValidacion)
+                    ).append(
+                        $('<td>').append(`<a href="/WorkflowAdmin/Transito?id=${e.id}" class="transito btn btn-primary btn-sm">Editar</a>`)
+                    )
+                )
+            })
+            console.log({_destinos})
+        }
+
+
+        $(function () {
+
+            let elId = $('#Id').val();            
+            $.ajax({
+                    type: "GET",
+                    url: `/WorkFlowAdmin/DestinosEtapa?etapaId=${elId}` 
+                }).done(function (data) {
+                    _destinos = data;
+                    render();
+                    //console.log('Legax', data)
+                })
+
+            if($('#tabla-destinos > tr').length > 0)
+            {
+                $('#tabla-destinos > tr').each(function(i, e){
+                    console.log(e)
+                });
+            }
+
+            $('#agregar-destino').on('click', function(){
+                _destinos.push({
+                    Id: 0,
+                    EtapaDestino: {
+                        Id: parseInt($('#etapaDestino').val())
+                    },
+                    NamespaceValidacion:$('#namespaceValidacion').val(),
+                    ClaseValidacion:$('#claseValidacion').val(),
+                    MetodoValidacion:$('#metodoValidacion').val()
+                });
+
+                console.log({_destinos})
+            });
+
+
+
+            $('#frm-generico').on('submit', function (e) {
+                e.preventDefault();
+                var model = $(this).serializeFormJSON();
+                model.Destinos = _destinos;
+                $(".submit-generico").html("Cargando...");
+
+
+                console.log({e, model})
+                /*$.ajax({
+                    type: "POST",
+                    url: "/api/mantenedores/marcas/guardar",
+                    data: JSON.stringify(model),
+                    contentType: "application/json; charset=utf-8" 
+                }).done(function (data) {
+                    $.niftyNoty({
+                        type: "success",
+                        container : "floating",
+                        title : "Suceso Exitoso",
+                        message : "Los datos de la Marca se han guardado correctamente",
+                        closeBtn : false,
+                        timer : 5000
+                    });
+                    $('#frm-generico')[0].reset();
+                }).fail(function (xhr, textStatus) {
+                    $.niftyNoty({
+                        type: "warning",
+                        container : "floating",
+                        title : "Suceso Erroneo",
+                        message : "Está mal: " + textStatus,
+                        closeBtn : false,
+                        timer : 5000
+                    });
+                }).always(function () {
+                    $(".submit-generico").html("Guardar");
+                });*/
+                
+
+                return false;
+            });
+
+        });
+    </script>
+    }
+
+
+<form id="frm-generico">
+    <div class="row">
+        <div class="col-lg-12">
+            <div id="demo-panel-network" class="panel">
+                <div class="panel-heading">
+                    <div class="panel-control">
+                        <button id="demo-panel-network-refresh" class="btn btn-default btn-active-primary" data-toggle="panel-overlay" data-target="#demo-panel-network"><i class="demo-psi-repeat-2"></i></button>
+                        <div class="dropdown">
+                            <button class="dropdown-toggle btn btn-default btn-active-primary" data-toggle="dropdown" aria-expanded="false"><i class="demo-psi-dot-vertical"></i></button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">Separated link</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <h3 class="panel-title">
+                        <ol class="breadcrumb">
+                            <li></li>
+                            <li class="active">@ViewData["Title"]</li>
+                        </ol>
+                    </h3>
+                </div>
+                <div class="panel-body">
+
+                    <h4>Etapa</h4>
+                    <hr />
+
+                    <div class="row">
+                         <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Nombre</label>
+                                <input type="text" value="@modelo.Nombre" name="Nombre" class="form-control" autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Tipo Etapa</label>
+                                <select class="form-control" name="TipoEtapa">
+                                    @foreach(var item in ViewBag.tiposEtapa)
+                                    {
+                                        @if(ViewBag.editando && modelo.TipoEtapa == item)
+                                        {
+                                            <option value="@item" selected="selected">@item</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item">@item</option>
+                                        }
+                                    }    
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                         <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Tipo Asignación</label>
+                                <select class="form-control" name="TipoUsuarioAsignado">
+                                    @foreach(var item in ViewBag.tiposAsignado)
+                                    {
+                                        @if(ViewBag.editando && modelo.TipoUsuarioAsignado == item)
+                                        {
+                                            <option value="@item" selected="selected">@item</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item">@item</option>
+                                        }
+                                    }    
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Valor Asignación</label>
+                                <input type="text" value="@modelo.ValorUsuarioAsignado" name="ValorUsuarioAsignado" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                   
+                    <div class="row">
+                         <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Tipo Duración</label>
+                                <select class="form-control" name="TipoDuracion">
+                                    @foreach(var item in ViewBag.tiposDuracion)
+                                    {
+                                        @if(ViewBag.editando && modelo.TipoDuracion == item)
+                                        {
+                                            <option value="@item" selected="selected">@item</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item">@item</option>
+                                        }
+                                    }    
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Valor Duración</label>
+                                <input type="text" value="@modelo.ValorDuracion" name="ValorDuracion" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                 
+
+                    <div class="row">
+                         <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Tipo Duración Retardada</label>
+                                <select class="form-control" name="TipoDuracionRetardo">
+                                    @foreach(var item in ViewBag.tiposDuracion)
+                                    {
+                                        @if(ViewBag.editando && modelo.TipoDuracionRetardo == item)
+                                        {
+                                            <option value="@item" selected="selected">@item</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item">@item</option>
+                                        }
+                                    }    
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Valor Duración Retardada</label>
+                                <input type="text" value="@modelo.ValorDuracionRetardo" name="ValorDuracionRetardo" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4>Tránsito</h4>
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <button type="button" data-target="#modal-destinos" data-toggle="modal" class="btn btn-primary">Agregar Destino</button>
+                            <div class="table-responsive mar-top">
+                                <table id="table" class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre Etapa Destino</th>
+                                            <th>Namespace</th>
+                                            <th>Clase</th>
+                                            <th>Metodo</th>
+                                            <th>Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabla-destinos">
+                                        @if(ViewBag.editando)
+                                        {
+                                                @foreach(var item in ViewBag.etapa.Destinos)
+                                                {
+                                                    <tr>
+                                                        <td>@item.EtapaDestino.Nombre</td>
+                                                        <td>@item.NamespaceValidacion</td>
+                                                        <td>@item.ClaseValidacion</td>
+                                                        <td>@item.MetodoValidacion</td>
+                                                        <td>
+                                                            <a href="/WorkflowAdmin/Transito?id=@item.Id" class="transito btn btn-primary btn-sm">Editar</a>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer text-right">
+                    <input type="hidden" name="Id" id="Id" value="@ViewBag.Id" />
+                    <a href="javascript:history.back();" class="btn btn-primary" >Volver</a>
+                    <button class="btn btn-success submit-generico" type="submit">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<!--Default Bootstrap Modal-->
+<!--===================================================-->
+<div class="modal fade" id="modal-destinos" role="dialog" tabindex="-1" aria-labelledby="modal-destinos" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!--Modal header-->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+                <h4 class="modal-title">Información de Transito de Etapa</h4>
+            </div>
+
+            <!--Modal body-->
+            <div class="modal-body">
+                <div class="row">
+                         <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Etapa Destino</label>
+                                <select class="form-control" id="etapaDestino">
+                                    <option value="">Selecciona Etapa</option>
+                                    @foreach(var item in ViewBag.listadoEtapas)
+                                    {
+                                        <option value="@item.Id">@item.Nombre</option>
+                                    }    
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Namespace Validación</label>
+                                <input type="text" value="Doitclick.Services.Workflow.Transition" id="namespaceValidacion" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Clase Validación</label>
+                                <input type="text" value="WorkflowApproved" id="claseValidacion" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Método Validación</label>
+                                <input type="text" value="Validar" id="metodoValidacion" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+            </div>
+
+            <!--Modal footer-->
+            <div class="modal-footer">
+                <button data-dismiss="modal" class="btn btn-default" type="button">Close</button>
+                <button id="agregar-destino" class="btn btn-primary">Agregar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--===================================================-->
+<!--End Default Bootstrap Modal-->

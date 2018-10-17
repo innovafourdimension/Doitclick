@@ -32,36 +32,39 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
                             <a href="/MantenedorMaterialMensual/Formulario" class="btn btn-primary">Nuevo</a>
-                            <table id="table" class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Material</th>
-                                        <th>Descripción</th>
-                                        <th>Unidad Medida</th>
-                                        <th>Cantidad</th>
-                                        <th>Stock</th>
-                                        <th>Acción</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var itm in ViewBag.matmens)
-                                    {
+                            <div class="table-responsive mar-top">
+                                <table id="table" class="table table-hover">
+                                    <thead>
                                         <tr>
-                                            <td>@itm.Nombre</td>
-                                            <td>@itm.Descripcion</td>
-                                            <td>@itm.UnidadMedida.Nombre</td>
-                                            <td>@itm.Cantidad</td>
-                                            <td>@itm.StockAlerta</td>
-                                            <td>
-                                                <a href="#" data-id="@itm.Id" class="elimination btn btn-danger btn-sm">Eliminar</a>
-                                                <a href="/MantenedorMaterialMensual/Formulario/@itm.Id" class="edicion btn btn-primary btn-sm">Editar</a>
-                                            </td>
+                                            <th>Material</th>
+                                            <th>Descripción</th>
+                                            <th>Unidad Medida</th>
+                                            <th>Cantidad</th>
+                                            <th>Stock</th>
+                                            <th>Acción</th>
                                         </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var itm in ViewBag.matmens)
+                                        {
+                                            <tr>
+                                                <td>@itm.Nombre</td>
+                                                <td>@itm.Descripcion</td>
+                                                <td>@itm.UnidadMedida.Nombre</td>
+                                                <td>@itm.Cantidad</td>
+                                                <td>@itm.StockAlerta</td>
+                                                <td>
+                                                    <a href="#" data-id="@itm.Id" class="elimination btn btn-danger btn-sm">Eliminar</a>
+                                                    <a href="/MantenedorMaterialMensual/Formulario/@itm.Id" class="edicion btn btn-primary btn-sm">Editar</a>
+                                                </td>
+                                            </tr>
 
-                                    }
+                                        }
 
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
                         </div>
                     </div>
                 </div>
