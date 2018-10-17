@@ -32,32 +32,34 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
                             <a href="/MantenedorServicio/Formulario" class="btn btn-primary">Nuevo Servicio</a>
-                            <table id="table" class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Servicio</th>
-                                        <th>Descripción</th>
-                                        <th>Costo</th>
-                                        <th>Acción</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var itm in ViewBag.servList)
-                                    {
+                            <div class="table-responsive mar-top">
+                                <table id="table" class="table table-hover">
+                                    <thead>
                                         <tr>
-                                            <td>@itm.Nombre</td>
-                                            <td>@itm.Resumen</td>
-                                            <td>$@itm.ValorCosto</td>
-                                            <td>
-                                                 <a href="#" data-id="@itm.Id" class="elimination btn btn-danger btn-sm">Eliminar</a>
-                                                @*<a href="/MantenedorServicio/Formulario/@itm.Id" class="edicion btn btn-primary btn-sm">Editar</a>*@
-                                            </td>
+                                            <th>Servicio</th>
+                                            <th>Descripción</th>
+                                            <th>Costo</th>
+                                            <th>Acción</th>
                                         </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var itm in ViewBag.servList)
+                                        {
+                                            <tr>
+                                                <td>@itm.Nombre</td>
+                                                <td>@itm.Resumen</td>
+                                                <td>$@itm.ValorCosto</td>
+                                                <td>
+                                                    <a href="#" data-id="@itm.Id" class="elimination btn btn-danger btn-sm">Eliminar</a>
+                                                    @*<a href="/MantenedorServicio/Formulario/@itm.Id" class="edicion btn btn-primary btn-sm">Editar</a>*@
+                                                </td>
+                                            </tr>
 
-                                    }
+                                        }
 
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
