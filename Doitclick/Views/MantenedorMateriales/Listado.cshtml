@@ -1,0 +1,113 @@
+
+@{
+    ViewData["Title"] = "Listado Materiales";
+}
+
+<form id="frm-generico">
+    <div class="row">
+        <div class="col-lg-12">
+            <div id="demo-panel-network" class="panel">
+                <div class="panel-heading">
+                    <div class="panel-control">
+                        <button id="demo-panel-network-refresh" class="btn btn-default btn-active-primary" data-toggle="panel-overlay" data-target="#demo-panel-network"><i class="demo-psi-repeat-2"></i></button>
+                        <div class="dropdown">
+                            <button class="dropdown-toggle btn btn-default btn-active-primary" data-toggle="dropdown" aria-expanded="false"><i class="demo-psi-dot-vertical"></i></button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">Separated link</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <h3 class="panel-title">
+                        <ol class="breadcrumb">
+                            <li></li>
+                            <li class="active">@ViewData["Title"]</li>
+                        </ol>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <a href="/MantenedorMateriales/Formulario" class="btn btn-primary">Nuevo</a>
+                            <div class="table-responsive mar-top">
+                                <table id="listado" class="table table-bordered table-hover toggle-circle" data-page-size="15">
+                                    <thead>
+                                        <tr>
+                                            <th data-toggle="true">Codigo</th>
+                                            <th data-toggle="true">Nombre</th>
+                                            <th data-toggle="true">Marca</th>
+                                            <th data-toggle="true">Unidad Medida</th>
+                                            <th data-toggle="true">Precio</th>
+                                            <th data-toggle="true">Stock Alerta</th>
+                                            <th data-toggle="true">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="bodylistar"></tbody>
+                                </table>
+                            </div>
+                            
+                        </div>
+
+                        
+                    </div>
+                </div>
+                <div class="panel-footer text-right">
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+@section Scripts{
+
+    <script src="~/Assets/plugins/unitegallery/js/unitegallery.min.js"></script>
+    <script src="~/Assets/plugins/unitegallery/themes/tiles/ug-theme-tiles.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+
+           $.ajax({
+                type: "GET",
+                url: "/api/mantenedor/materiales",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    $.each(data, function (i, e) {
+                        $("#bodylistar")
+                            .append(
+                                $("<tr>")
+                                    .append($("<td>").append(e.codigo))
+                                    .append($("<td>").append(e.nombre))
+                                    .append($("<td>").append(e.marca.nombre))
+                                    .append($("<td>").append(e.unidadMedida.nombre))
+                                    .append($("<td>").append(e.precioUnidad))
+                                    .append($("<td>").append(e.stockAlerta))
+                                    .append($("<td>").append(`
+                                        <a href="/MantenedorMateriales/Formulario/${e.id}" class="edicion btn btn-primary btn-sm">Editar</a>
+                                    `))
+                            )
+
+
+                    });
+                },
+                failure: function (errMsg) {
+                    console.log(errMsg);
+                }
+            });
+
+        });
+    </script>
+}
+
+
+
+
+
+
+
+
+
+
