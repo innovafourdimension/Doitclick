@@ -39,5 +39,11 @@
     "inputFiles": [
       "Client/Mantenedores/Clientes.js"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/js/WorkFlowAdmin/etapa.min.js",
+    "inputFiles": [
+      "wwwroot/js/WorkFlowAdmin/etapa.js"
+    ]
   }
 ]

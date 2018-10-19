@@ -41,7 +41,7 @@ namespace Doitclick.Controllers.Api
             string esPredeterminado = "1";
             //Genera instancia WF ya que aqui es donde empieza todo el proceso
             string resumen = "Paciente: " + paciente.RutPaciente + " - " + paciente.ApellidosPaciente + " " + paciente.NombrePaciente + ", Solicitda: " + paciente.DrSolicitante + ", Orden: " + paciente.NroOrden;
-            var solicitudGen = _wfService.Instanciar("FlujoPruebas", "17042783-1", resumen);
+            var solicitudGen = _wfService.Instanciar("FlujoInterno", "17042783-1", resumen);
             #region Paciente
             //Generar modelo de cliente que en este caso es un paciente que viene a la oficina
             Cliente _paciente = new Cliente
@@ -144,7 +144,7 @@ namespace Doitclick.Controllers.Api
             var respuesta = await _context.SaveChangesAsync();
 
             _wfService.AsignarVariable("ES_TRABAJO_PREDETERMINADO", esPredeterminado, solicitudGen.NumeroTicket);
-            _wfService.Avanzar("FlujoPruebas", EtapasFlujoInterno.IngresoDatosPaciente, solicitudGen.NumeroTicket, "17042783-1");
+            _wfService.Avanzar("FlujoInterno", EtapasFlujoInterno.IngresoDatosPaciente, solicitudGen.NumeroTicket, "17042783-1");
             return Ok("Datos guardados");
 
         }
@@ -158,7 +158,7 @@ namespace Doitclick.Controllers.Api
 
             _wfService.AsignarVariable("RESPONSABLE_TRABAJO", entrada.UsuarioAsignado, entrada.NumeroTicket);
             
-            _wfService.Avanzar("FlujoPruebas", EtapasFlujoInterno.AsignarTrabajo, entrada.NumeroTicket, User.Identity.Name);
+            _wfService.Avanzar("FlujoInterno", EtapasFlujoInterno.AsignarTrabajo, entrada.NumeroTicket, User.Identity.Name);
 
 
             return Ok("Datos guardados");
@@ -176,7 +176,7 @@ namespace Doitclick.Controllers.Api
             {
                 _wfService.AsignarVariable("MOTIVO_REPARO_TRABAJO", entrada.MotivoReparo, entrada.NumeroTicket);
             }
-            _wfService.Avanzar("FlujoPruebas", EtapasFlujoInterno.IngresoDatosPaciente, entrada.NumeroTicket, User.Identity.Name);
+            _wfService.Avanzar("FlujoInterno", EtapasFlujoInterno.IngresoDatosPaciente, entrada.NumeroTicket, User.Identity.Name);
 
 
             return Ok("Datos guardados");
@@ -194,7 +194,7 @@ namespace Doitclick.Controllers.Api
             {
                 _wfService.AsignarVariable("MOTIVO_REPARO_COTZACION", entrada.MotivoReparo, entrada.NumeroTicket);
             }
-            _wfService.Avanzar("FlujoPruebas", EtapasFlujoInterno.AsignarCotizacion, entrada.NumeroTicket, User.Identity.Name);
+            _wfService.Avanzar("FlujoInterno", EtapasFlujoInterno.AsignarCotizacion, entrada.NumeroTicket, User.Identity.Name);
 
 
             return Ok("Datos guardados");

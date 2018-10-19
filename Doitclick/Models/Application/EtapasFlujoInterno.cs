@@ -7,15 +7,13 @@ namespace Doitclick.Models.Application
 {
     public static class EtapasFlujoInterno
     {
-        public const string InicioProceso = "InicioProceso";
-        public const string IngresoDatosPaciente = "IngresoDatosPaciente";
-        public const string NotificacionOT = "NotificacionOT";
-        public const string NotificacionCotizacion = "NotificacionCotizacion";
-        public const string AsignarTrabajo = "AsignarTrabajo";
-        public const string AsignarCotizacion = "AsignarCotizacion";
-        public const string EvaluarTrabajo = "EvaluarTrabajo";
-        public const string EvaluarCotizacion = "EvaluarCotizacion";
-        public const string CobroServicio = "CobroServicio";
+        public const string InicioProceso = "INICIO_PROCESO";
+        public const string IngresoDatosPaciente = "INGRESO_DATOS_PACIENTE";
+        public const string AsignarTrabajo = "ASIGNAR_TRABAJO";
+        public const string AsignarCotizacion = "ASIGNAR_COTIZACION";
+        public const string EvaluarTrabajo = "EVALUA_TRABAJO";
+        public const string EvaluarCotizacion = "EVALUA_COTIZACION";
+        public const string CobroServicio = "COBRO_SERVICIO";
         
     }
 }

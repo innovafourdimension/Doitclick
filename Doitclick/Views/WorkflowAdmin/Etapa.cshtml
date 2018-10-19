@@ -10,117 +10,22 @@
         TipoDuracion = ViewBag.editando ? ViewBag.etapa.TipoDuracion : "",
         ValorDuracion = ViewBag.editando ? ViewBag.etapa.ValorDuracion : "",
         TipoDuracionRetardo = ViewBag.editando ? ViewBag.etapa.TipoDuracionRetardo : "",
-        ValorDuracionRetardo = ViewBag.editando ? ViewBag.etapa.ValorDuracionRetardo : "",
+        ValorDuracionRetardo = ViewBag.editando ? ViewBag.etapa.ValorDuracionRetardo : ""
     };
 }
 
 
 @section Scripts{
     
+     <!--Page Script-->
+<environment include="Development">
+    <script src="~/js/WorkFlowAdmin/etapa.js"></script>
+</environment>
+<environment exclude="Development">
+    <script src="~/js/WorkFlowAdmin/etapa.min.js"></script>
+</environment>
 
-    <script type="text/javascript">
-
-        window._destinos = [];
-
-        window.render = function(){
-
-            $.each(_destinos, function(i,e){
-                $('#tabla-destinos').append(
-                    $('<tr>').append(
-                        $('<td>').text(e.etapaDestino.nombre)
-                    ).append(
-                        $('<td>').text(e.namespaceValidacion)
-                    ).append(
-                        $('<td>').text(e.claseValidacion)
-                    ).append(
-                        $('<td>').text(e.metodoValidacion)
-                    ).append(
-                        $('<td>').append(`<a href="/WorkflowAdmin/Transito?id=${e.id}" class="transito btn btn-primary btn-sm">Editar</a>`)
-                    )
-                )
-            })
-            console.log({_destinos})
-        }
-
-
-        $(function () {
-
-            let elId = $('#Id').val();            
-            $.ajax({
-                    type: "GET",
-                    url: `/WorkFlowAdmin/DestinosEtapa?etapaId=${elId}` 
-                }).done(function (data) {
-                    _destinos = data;
-                    render();
-                    //console.log('Legax', data)
-                })
-
-            if($('#tabla-destinos > tr').length > 0)
-            {
-                $('#tabla-destinos > tr').each(function(i, e){
-                    console.log(e)
-                });
-            }
-
-            $('#agregar-destino').on('click', function(){
-                _destinos.push({
-                    Id: 0,
-                    EtapaDestino: {
-                        Id: parseInt($('#etapaDestino').val())
-                    },
-                    NamespaceValidacion:$('#namespaceValidacion').val(),
-                    ClaseValidacion:$('#claseValidacion').val(),
-                    MetodoValidacion:$('#metodoValidacion').val()
-                });
-
-                console.log({_destinos})
-            });
-
-
-
-            $('#frm-generico').on('submit', function (e) {
-                e.preventDefault();
-                var model = $(this).serializeFormJSON();
-                model.Destinos = _destinos;
-                $(".submit-generico").html("Cargando...");
-
-
-                console.log({e, model})
-                /*$.ajax({
-                    type: "POST",
-                    url: "/api/mantenedores/marcas/guardar",
-                    data: JSON.stringify(model),
-                    contentType: "application/json; charset=utf-8" 
-                }).done(function (data) {
-                    $.niftyNoty({
-                        type: "success",
-                        container : "floating",
-                        title : "Suceso Exitoso",
-                        message : "Los datos de la Marca se han guardado correctamente",
-                        closeBtn : false,
-                        timer : 5000
-                    });
-                    $('#frm-generico')[0].reset();
-                }).fail(function (xhr, textStatus) {
-                    $.niftyNoty({
-                        type: "warning",
-                        container : "floating",
-                        title : "Suceso Erroneo",
-                        message : "Está mal: " + textStatus,
-                        closeBtn : false,
-                        timer : 5000
-                    });
-                }).always(function () {
-                    $(".submit-generico").html("Guardar");
-                });*/
-                
-
-                return false;
-            });
-
-        });
-    </script>
-    }
+}
 
 
 <form id="frm-generico">
@@ -157,14 +62,14 @@
                          <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Nombre</label>
-                                <input type="text" value="@modelo.Nombre" name="Nombre" class="form-control" autocomplete="off">
+                                <input type="text" value="@modelo.Nombre" name="nombre" class="form-control" autocomplete="off">
                             </div>
                         </div>
 
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Tipo Etapa</label>
-                                <select class="form-control" name="TipoEtapa">
+                                <select class="form-control" name="tipoEtapa">
                                     @foreach(var item in ViewBag.tiposEtapa)
                                     {
                                         @if(ViewBag.editando && modelo.TipoEtapa == item)
@@ -185,7 +90,7 @@
                          <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Tipo Asignación</label>
-                                <select class="form-control" name="TipoUsuarioAsignado">
+                                <select class="form-control" name="tipoUsuarioAsignado">
                                     @foreach(var item in ViewBag.tiposAsignado)
                                     {
                                         @if(ViewBag.editando && modelo.TipoUsuarioAsignado == item)
@@ -203,7 +108,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Valor Asignación</label>
-                                <input type="text" value="@modelo.ValorUsuarioAsignado" name="ValorUsuarioAsignado" class="form-control">
+                                <input type="text" value="@modelo.ValorUsuarioAsignado" name="valorUsuarioAsignado" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -212,7 +117,7 @@
                          <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Tipo Duración</label>
-                                <select class="form-control" name="TipoDuracion">
+                                <select class="form-control" name="tipoDuracion">
                                     @foreach(var item in ViewBag.tiposDuracion)
                                     {
                                         @if(ViewBag.editando && modelo.TipoDuracion == item)
@@ -230,7 +135,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Valor Duración</label>
-                                <input type="text" value="@modelo.ValorDuracion" name="ValorDuracion" class="form-control">
+                                <input type="text" value="@modelo.ValorDuracion" name="valorDuracion" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -240,7 +145,7 @@
                          <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Tipo Duración Retardada</label>
-                                <select class="form-control" name="TipoDuracionRetardo">
+                                <select class="form-control" name="tipoDuracionRetardo">
                                     @foreach(var item in ViewBag.tiposDuracion)
                                     {
                                         @if(ViewBag.editando && modelo.TipoDuracionRetardo == item)
@@ -258,7 +163,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Valor Duración Retardada</label>
-                                <input type="text" value="@modelo.ValorDuracionRetardo" name="ValorDuracionRetardo" class="form-control">
+                                <input type="text" value="@modelo.ValorDuracionRetardo" name="valorDuracionRetardo" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -280,23 +185,7 @@
                                             <th>Acción</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="tabla-destinos">
-                                        @if(ViewBag.editando)
-                                        {
-                                                @foreach(var item in ViewBag.etapa.Destinos)
-                                                {
-                                                    <tr>
-                                                        <td>@item.EtapaDestino.Nombre</td>
-                                                        <td>@item.NamespaceValidacion</td>
-                                                        <td>@item.ClaseValidacion</td>
-                                                        <td>@item.MetodoValidacion</td>
-                                                        <td>
-                                                            <a href="/WorkflowAdmin/Transito?id=@item.Id" class="transito btn btn-primary btn-sm">Editar</a>
-                                                        </td>
-                                                    </tr>
-                                                }
-                                        }
-                                    </tbody>
+                                    <tbody id="tabla-destinos"></tbody>
                                 </table>
                             </div>
                         </div>
@@ -304,6 +193,8 @@
                 </div>
                 <div class="panel-footer text-right">
                     <input type="hidden" name="Id" id="Id" value="@ViewBag.Id" />
+                    <input type="hidden" name="Proceso" id="Proceso" value="@ViewBag.ProcesoId" />
+                    
                     <a href="javascript:history.back();" class="btn btn-primary" >Volver</a>
                     <button class="btn btn-success submit-generico" type="submit">Guardar</button>
                 </div>
@@ -330,6 +221,7 @@
                 <div class="row">
                          <div class="col-md-12">
                             <div class="form-group">
+                                <input type="hidden" id="IdTr" value="0" />
                                 <label class="control-label">Etapa Destino</label>
                                 <select class="form-control" id="etapaDestino">
                                     <option value="">Selecciona Etapa</option>
@@ -363,8 +255,8 @@
 
             <!--Modal footer-->
             <div class="modal-footer">
-                <button data-dismiss="modal" class="btn btn-default" type="button">Close</button>
-                <button id="agregar-destino" class="btn btn-primary">Agregar</button>
+                <button data-dismiss="modal" class="btn btn-default" type="button">Cerrar</button>
+                <button id="agregar-destino" class="btn btn-primary">Guardar</button>
             </div>
         </div>
     </div>
