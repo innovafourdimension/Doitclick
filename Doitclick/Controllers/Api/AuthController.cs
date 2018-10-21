@@ -211,7 +211,7 @@ namespace Doitclick.Controllers.Api
         }
 
         [Route("listar-comisionistas")]
-        public async Task<IActionResult> ListarComisionistas()
+        public IActionResult ListarComisionistas()
         {
             var comisionistas = _userManager.Users.Where(x => x.PorcentajeComision > 0).ToList();
             return Ok(comisionistas);
