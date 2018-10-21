@@ -209,5 +209,12 @@ namespace Doitclick.Controllers.Api
             await _userManager.AddClaimAsync(usuarioLogeado, new Claim(JwtRegisteredClaimNames.Sid, id));
             return Ok("...Data Procesada");
         }
+
+        [Route("listar-comisionistas")]
+        public async Task<IActionResult> ListarComisionistas()
+        {
+            var comisionistas = _userManager.Users.Where(x => x.PorcentajeComision > 0).ToList();
+            return Ok(comisionistas);
+        }
     }
 }

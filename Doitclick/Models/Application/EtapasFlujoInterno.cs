@@ -14,6 +14,7 @@ namespace Doitclick.Models.Application
         public const string EvaluarTrabajo = "EVALUA_TRABAJO";
         public const string EvaluarCotizacion = "EVALUA_COTIZACION";
         public const string CobroServicio = "COBRO_SERVICIO";
+        public const string InformeRechazo = "INFORME_DE_RECHAZO";
         
     }
 }

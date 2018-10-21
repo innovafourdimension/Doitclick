@@ -19,6 +19,7 @@ namespace Doitclick.Models.Workflow
         public TipoDuracion TipoDuracionRetardo { get; set; }
         public string ValorDuracionRetardo { get; set; }
         public int Secuencia { get; set; }
+        public string Enlace { get; set; }
         public ICollection<TareaAutomatica> TareasAutomaticas { get; set; }
         public ICollection<Transito> Destinos { get; set; }
         public ICollection<Transito> Actuales { get; set; }

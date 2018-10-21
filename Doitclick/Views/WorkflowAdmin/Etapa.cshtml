@@ -1,4 +1,3 @@
-
 @{
     ViewData["Title"] = ViewBag.editando ? "Etapa: " + ViewBag.etapa.Nombre : "Nueva Etapa";
     var modelo = new {
@@ -10,21 +9,15 @@
         TipoDuracion = ViewBag.editando ? ViewBag.etapa.TipoDuracion : "",
         ValorDuracion = ViewBag.editando ? ViewBag.etapa.ValorDuracion : "",
         TipoDuracionRetardo = ViewBag.editando ? ViewBag.etapa.TipoDuracionRetardo : "",
-        ValorDuracionRetardo = ViewBag.editando ? ViewBag.etapa.ValorDuracionRetardo : ""
+        ValorDuracionRetardo = ViewBag.editando ? ViewBag.etapa.ValorDuracionRetardo : "",
+        Enlace = ViewBag.editando ? ViewBag.etapa.Enlace : ""
     };
 }
 
 
 @section Scripts{
-    
-     <!--Page Script-->
-<environment include="Development">
-    <script src="~/js/WorkFlowAdmin/etapa.js"></script>
-</environment>
-<environment exclude="Development">
-    <script src="~/js/WorkFlowAdmin/etapa.min.js"></script>
-</environment>
-
+    <!--Page Script-->
+    <script src="~/js/WorkflowAdmin/etapa.min.js"></script>
 }
 
 
@@ -164,6 +157,14 @@
                             <div class="form-group">
                                 <label class="control-label">Valor Duración Retardada</label>
                                 <input type="text" value="@modelo.ValorDuracionRetardo" name="valorDuracionRetardo" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Enlace</label>
+                                <input type="text" value="@modelo.Enlace" name="Enlace" class="form-control">
                             </div>
                         </div>
                     </div>

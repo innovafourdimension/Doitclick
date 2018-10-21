@@ -76,6 +76,7 @@ namespace Doitclick.Controllers
                 etp.ValorDuracionRetardo =  etapa.valorDuracion;
                 etp.TipoUsuarioAsignado = (TipoUsuarioAsignado)Enum.Parse(typeof(TipoUsuarioAsignado), etapa.tipoUsuarioAsignado);
                 etp.ValorUsuarioAsignado = etapa.valorUsuarioAsignado;
+                etp.Enlace = etapa.enlace;
 
                 foreach(var destino in etapa.destinos)
                 {
@@ -91,11 +92,11 @@ namespace Doitclick.Controllers
                     else
                     {
                         _context.Transiciones.Add(new Transito{
-                                NamespaceValidacion = destino.namespaceValidacion,
-                                ClaseValidacion = destino.claseValidacion,
-                                MetodoValidacion = destino.metodoValidacion,
-                                EtapaDestino = _context.Etapas.Find(destino.etapaDestino),
-                                EtapaActaual = etp
+                            NamespaceValidacion = destino.namespaceValidacion,
+                            ClaseValidacion = destino.claseValidacion,
+                            MetodoValidacion = destino.metodoValidacion,
+                            EtapaDestino = _context.Etapas.Find(destino.etapaDestino),
+                            EtapaActaual = etp
                         });
                     }
                 }
@@ -116,14 +117,15 @@ namespace Doitclick.Controllers
                 etp.ValorDuracionRetardo =  etapa.valorDuracion;
                 etp.TipoUsuarioAsignado = (TipoUsuarioAsignado)Enum.Parse(typeof(TipoUsuarioAsignado), etapa.tipoUsuarioAsignado);
                 etp.ValorUsuarioAsignado = etapa.valorUsuarioAsignado;
+                etp.Enlace = etapa.enlace;
 
                 foreach(var destino in etapa.destinos)
                 {
                     etp.Destinos.Add(new Transito{
-                            NamespaceValidacion = destino.namespaceValidacion,
-                            ClaseValidacion = destino.claseValidacion,
-                            MetodoValidacion = destino.metodoValidacion,
-                            EtapaDestino = _context.Etapas.Find(destino.etapaDestino)
+                        NamespaceValidacion = destino.namespaceValidacion,
+                        ClaseValidacion = destino.claseValidacion,
+                        MetodoValidacion = destino.metodoValidacion,
+                        EtapaDestino = _context.Etapas.Find(destino.etapaDestino)
                     });
                 }
                 _context.Etapas.Add(etp);

@@ -25,6 +25,7 @@ namespace Doitclick.Controllers.Api
 
         private readonly ApplicationDbContext _context;
         private readonly IWorkflowService _wfService;
+        private readonly string _nombreProceso = "FlujoInterno";
 
         public FlujoInternoController(ApplicationDbContext context, IWorkflowService wfService)
         {
@@ -41,7 +42,7 @@ namespace Doitclick.Controllers.Api
             string esPredeterminado = "1";
             //Genera instancia WF ya que aqui es donde empieza todo el proceso
             string resumen = "Paciente: " + paciente.RutPaciente + " - " + paciente.ApellidosPaciente + " " + paciente.NombrePaciente + ", Solicitda: " + paciente.DrSolicitante + ", Orden: " + paciente.NroOrden;
-            var solicitudGen = _wfService.Instanciar("FlujoInterno", "17042783-1", resumen);
+            var solicitudGen = _wfService.Instanciar(_nombreProceso, User.Identity.Name, resumen);
             #region Paciente
             //Generar modelo de cliente que en este caso es un paciente que viene a la oficina
             Cliente _paciente = new Cliente
@@ -144,25 +145,32 @@ namespace Doitclick.Controllers.Api
             var respuesta = await _context.SaveChangesAsync();
 
             _wfService.AsignarVariable("ES_TRABAJO_PREDETERMINADO", esPredeterminado, solicitudGen.NumeroTicket);
-            _wfService.Avanzar("FlujoInterno", EtapasFlujoInterno.IngresoDatosPaciente, solicitudGen.NumeroTicket, "17042783-1");
-            return Ok("Datos guardados");
+            _wfService.AsignarVariable("USUARIO_GENERA_OT", User.Identity.Name, solicitudGen.NumeroTicket);
+            _wfService.Avanzar(_nombreProceso, EtapasFlujoInterno.IngresoDatosPaciente, solicitudGen.NumeroTicket, User.Identity.Name);
+            return Ok(solicitudGen);
 
         }
-
 
 
         [Route("asignar-trabajo")]
         [HttpPost]
         public IActionResult GuardarAsignacionTrabajo([FromBody] ResultadoAsignacionDefault entrada)
         {
-
-            _wfService.AsignarVariable("RESPONSABLE_TRABAJO", entrada.UsuarioAsignado, entrada.NumeroTicket);
+            _wfService.AsignarVariable("USUARIO_EVALUA_TRABAJO", entrada.UsuarioAsignado, entrada.NumeroTicket);
+            _wfService.Avanzar(_nombreProceso, EtapasFlujoInterno.AsignarTrabajo, entrada.NumeroTicket, User.Identity.Name);
             
-            _wfService.Avanzar("FlujoInterno", EtapasFlujoInterno.AsignarTrabajo, entrada.NumeroTicket, User.Identity.Name);
+            return Ok();
+        }
 
 
-            return Ok("Datos guardados");
-
+        [Route("asignar-cotizacion")]
+        [HttpPost]
+        public IActionResult GuardarAsignacionEvaluacion([FromBody] ResultadoAsignacionDefault entrada)
+        {
+            _wfService.AsignarVariable("USUARIO_EVALUA_COTIZACION", entrada.UsuarioAsignado, entrada.NumeroTicket);
+            _wfService.Avanzar(_nombreProceso, EtapasFlujoInterno.AsignarTrabajo, entrada.NumeroTicket, User.Identity.Name);
+            
+            return Ok();
         }
 
 
@@ -170,17 +178,13 @@ namespace Doitclick.Controllers.Api
         [HttpPost]
         public IActionResult GuardarEvaluacionTrabajo([FromBody] ResultadoReparoDefault entrada)
         {
-
-            _wfService.AsignarVariable("TRABAJO_REALIZABLE", entrada.Resultado.ToString(), entrada.NumeroTicket);
+            _wfService.AsignarVariable("LABORATORISTA_ACEPTA_TRABAJO", entrada.Resultado.ToString().Equals("S") ? "1":"0", entrada.NumeroTicket);
             if(entrada.Resultado == "N")
             {
                 _wfService.AsignarVariable("MOTIVO_REPARO_TRABAJO", entrada.MotivoReparo, entrada.NumeroTicket);
             }
-            _wfService.Avanzar("FlujoInterno", EtapasFlujoInterno.IngresoDatosPaciente, entrada.NumeroTicket, User.Identity.Name);
-
-
-            return Ok("Datos guardados");
-
+            _wfService.Avanzar(_nombreProceso, EtapasFlujoInterno.EvaluarTrabajo, entrada.NumeroTicket, User.Identity.Name);
+            return Ok();
         }
 
 
@@ -189,17 +193,40 @@ namespace Doitclick.Controllers.Api
         public IActionResult GuardarEvaluacionCotizacion([FromBody] ResultadoReparoDefault entrada)
         {
 
-            _wfService.AsignarVariable("COTIZACION_REALIZABLE", entrada.Resultado.ToString(), entrada.NumeroTicket);
+            _wfService.AsignarVariable("LABORATORISTA_ACEPTA_COTIZACION", entrada.Resultado.Equals("S") ? "1":"0", entrada.NumeroTicket);
             if (entrada.Resultado == "N")
             {
                 _wfService.AsignarVariable("MOTIVO_REPARO_COTZACION", entrada.MotivoReparo, entrada.NumeroTicket);
             }
-            _wfService.Avanzar("FlujoInterno", EtapasFlujoInterno.AsignarCotizacion, entrada.NumeroTicket, User.Identity.Name);
+            _wfService.Avanzar(_nombreProceso, EtapasFlujoInterno.AsignarCotizacion, entrada.NumeroTicket, User.Identity.Name);
 
 
             return Ok("Datos guardados");
 
         }
+
+
+        [Route("informe-rechazo")]
+        [HttpPost]
+        public IActionResult GuardarInformeRechazo([FromBody] ResultadoReparoDefault entrada)
+        {
+            _wfService.Avanzar(_nombreProceso, EtapasFlujoInterno.InformeRechazo, entrada.NumeroTicket, User.Identity.Name);
+            return Ok();
+        }
+
+        [Route("cobro-servicios")]
+        [HttpPost]
+        public IActionResult GuardarCobroServicios([FromBody] ResultadoCobroServicios entrada)
+        {
+
+            
+            _wfService.Avanzar(_nombreProceso, EtapasFlujoInterno.CobroServicio, entrada.NumeroTicket, User.Identity.Name);
+            return Ok();
+        }
+
+
+
+
 
 
         [Route("listado-pacientes")]

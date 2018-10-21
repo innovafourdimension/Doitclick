@@ -1,5 +1,5 @@
-﻿@{
-    ViewData["Title"] = "Asignar Trabajo";
+@{
+    ViewData["Title"] = "Informe Rechazo";
 }
 
 <form id="frm-generico">
@@ -7,23 +7,10 @@
         <div class="col-lg-12">
             <div id="demo-panel-network" class="panel">
                 <div class="panel-heading">
-                    <div class="panel-control">
-                        <button id="demo-panel-network-refresh" class="btn btn-default btn-active-primary" data-toggle="panel-overlay" data-target="#demo-panel-network"><i class="demo-psi-repeat-2"></i></button>
-                        <div class="dropdown">
-                            <button class="dropdown-toggle btn btn-default btn-active-primary" data-toggle="dropdown" aria-expanded="false"><i class="demo-psi-dot-vertical"></i></button>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something else here</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#">Separated link</a></li>
-                            </ul>
-                        </div>
-                    </div>
                     <h3 class="panel-title">
                         <ol class="breadcrumb">
                             <li></li>
-                            <li class="active">Asignar Trabajo</li>
+                            <li class="active">Informe de Rechazo de Servicios</li>
                         </ol>
                     </h3>
                 </div>
@@ -72,23 +59,16 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
-                            <label for="selResultadoAsignacion">Asignar a</label>
-                            <div class="input-group mar-btm">
-                                <select id="selResultadoAsignacion" name="UsuarioAsignado" class="form-control">
-                                    <option value="">Selecciona Usuario</option>
-                                    
-                                </select>
-                            </div>
+                            <h5>Solicitud con Rechazo</h5>
+                            <p><strong>Motivo:</strong> @ViewBag.motivoRechazo</p>
                         </div>
                     </div>
                     
-
-
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="text-right no-print">
                                 <input type="hidden" name="NumeroTicket" value="@ViewBag.Cotizacion.NumeroTicket" />
-                                <button class="btn btn-primary" id="btn-confirmar">Guardar y Avanzar</button>
+                                <button class="btn btn-primary" id="btn-confirmar">Cierre Proceso</button>
                             </div>
                         </div>
                     </div>
@@ -100,6 +80,7 @@
     </div>
 
 </form>
+
 
 <!-- Modal -->
 <div class="modal fade" id="modal-imagen" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -124,5 +105,48 @@
 }
 @section Scripts{
     <script src="~/lib/signalr.js"></script>
-    <script src="~/js/FlujoInterno/asignar-trabajo.min.js" type="text/javascript"></script>
+    <script src="https://unpkg.com/jspdf@latest/dist/jspdf.debug.js"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            $('#frm-generico').on('submit', function (e) {
+                e.preventDefault();
+                var model = $(this).serializeFormJSON();
+                console.log(model)
+
+                $.ajax({
+                    type: "POST",
+                    url: "/api/flujo-interno/informe-rechazo",
+                    data: JSON.stringify(model),
+                    contentType: "application/json; charset=utf-8"
+                }).done(function (data) {
+                    console.log(data);
+                    $.niftyNoty({
+                        type: "success",
+                        container : "floating",
+                        title : "Notificaciones Workflow",
+                        message : "Etapa Finalizada!!",
+                        closeBtn : true,
+                        timer : 5000,
+                        onHidden: function(){
+                            location.href = '/mi-gestion'
+                        }
+                    });
+                }).fail(function (errMsg) {
+                    console.log(errMsg);
+                    $.niftyNoty({
+                        type: "warning",
+                        container : "floating",
+                        title : "Notificaciones Workflow",
+                        message : ":( Problemas al Finalizar Etapa, contacta a soporte",
+                        closeBtn : false,
+                        timer : 5000
+                    });
+                }).always(function () {
+                    //$("#btn-confirmar").prop("enabled", true).text(initialLabelText);
+                });
+
+            });
+        });
+    </script>
 }

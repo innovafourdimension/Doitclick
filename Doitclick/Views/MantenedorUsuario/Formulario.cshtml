@@ -68,7 +68,7 @@
                                   <option value="">Seleccione</option>
                                   @foreach(var itm in ViewBag.rolesList)
                                   {
-                                      @if(ViewBag.rolUsuario[0] == itm.Name)
+                                      @if(ViewBag.editando && ViewBag.rolUsuario[0] == itm.Name)
                                       {
                                         <option data-comisionista="@itm.Comisionista" value="@itm.Name" selected>@itm.Orzanizacion.Nombre / @itm.Name</option>
                                       }
@@ -76,7 +76,6 @@
                                       {
                                         <option data-comisionista="@itm.Comisionista" value="@itm.Name">@itm.Orzanizacion.Nombre / @itm.Name</option>
                                       }
-                                    
                                   }  
                             </select>
                             <p></p>

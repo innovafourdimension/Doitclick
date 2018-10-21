@@ -170,10 +170,17 @@ $(function () {
             dataType: "json"
         }).done(function (data) {
             console.log(data);
-            const user = "Chachacharles";
-            const message = new Date().toString() + " Charly";
-            connection.invoke("SendMessage", user, message).catch(err => console.error(err.toString()));
-
+            $.niftyNoty({
+                type: "success",
+                container : "floating",
+                title : "Notificaciones Workflow",
+                message : "Datos Guardados, Workflow Instanciado Nro Ticket: " + data,
+                closeBtn : false,
+                timer : 5000,
+                onHidden: function(){
+                    location.href = '/mi-gestion'
+                }
+            });
         }).fail(function (errMsg) {
             console.log(errMsg);
 
@@ -181,7 +188,9 @@ $(function () {
             $("#btn-confirmar").prop("enabled", true).text(initialLabelText);
             const user = "Chachacharles";
             const message = "Siempre paso por aqui";
-            connection.invoke("SendMessage", user, message).catch(err => console.error(err.toString()));
+            connection.invoke("SendMessage", user, message).catch(function(err){
+                console.error(err.toString());   
+            });
         });
 
         return false;
@@ -194,11 +203,13 @@ const connection = new signalR.HubConnectionBuilder()
     .withUrl("/hubs/push")
     .build();
 
-connection.on("ReceiveMessage", (user, message) => {
+connection.on("ReceiveMessage", function(user, message) {
     const msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     const encodedMsg = user + " says " + msg;
     console.log('ReceiveMessage', encodedMsg);
 });
 
 
-connection.start().catch(err => console.error(err.toString()));
+connection.start().catch(function(err){
+    console.error(err.toString())
+});

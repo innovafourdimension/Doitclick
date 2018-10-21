@@ -33,16 +33,16 @@
                         <div class="col-lg-12">
                             <a href="/MantenedorMateriales/Formulario" class="btn btn-primary">Nuevo</a>
                             <div class="table-responsive mar-top">
-                                <table id="listado" class="table table-bordered table-hover toggle-circle" data-page-size="15">
+                                <table id="listado" class="table table-bordered table-hover toggle-circle" >
                                     <thead>
                                         <tr>
-                                            <th data-toggle="true">Codigo</th>
-                                            <th data-toggle="true">Nombre</th>
-                                            <th data-toggle="true">Marca</th>
-                                            <th data-toggle="true">Unidad Medida</th>
-                                            <th data-toggle="true">Precio</th>
-                                            <th data-toggle="true">Stock Alerta</th>
-                                            <th data-toggle="true">Acciones</th>
+                                            <th>Codigo</th>
+                                            <th>Nombre</th>
+                                            <th>Marca</th>
+                                            <th>Unidad Medida</th>
+                                            <th>Precio</th>
+                                            <th>Stock Alerta</th>
+                                            <th>Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody id="bodylistar"></tbody>
@@ -61,11 +61,12 @@
     </div>
 
 </form>
+@section styles{ 
+    <link href="~/Assets/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet" />
+}
 
 @section Scripts{
-
-    <script src="~/Assets/plugins/unitegallery/js/unitegallery.min.js"></script>
-    <script src="~/Assets/plugins/unitegallery/themes/tiles/ug-theme-tiles.js"></script>
+    <script src="~/Assets/plugins/bootstrap-table/bootstrap-table.min.js"></script>
 
     <script type="text/javascript">
         $(function () {
@@ -101,13 +102,5 @@
         });
     </script>
 }
-
-
-
-
-
-
-
-
 
 

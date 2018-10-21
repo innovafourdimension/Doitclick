@@ -25,6 +25,7 @@ namespace Doitclick.Models.Helper
         public string valorDuracion{ get; set; }
         public string valorDuracionRetardo{ get; set; }
         public string valorUsuarioAsignado{ get; set; }
+        public string enlace{ get; set; }
     }
      
     public class TransicionHelper

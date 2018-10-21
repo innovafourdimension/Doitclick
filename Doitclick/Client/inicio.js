@@ -22,7 +22,7 @@ function initTable() {
                 valign: 'middle',
                 formatter: function (value, row, index) {
                     console.log(row.tarea.etapa.nombreInterno);
-                    return '<a href="/FlujoInterno/' + row.tarea.etapa.nombreInterno + '?ticket='+value+'" class="btn-link">' + value + '</a>';
+                    return '<a href="/FlujoInterno/' + row.tarea.etapa.enlace + '?ticket='+value+'" class="btn-link">' + value + '</a>';
                 }
             }, {
                 title: 'Tarea',
