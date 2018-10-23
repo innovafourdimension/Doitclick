@@ -39,11 +39,15 @@ namespace Doitclick.Controllers
 
         public async Task<IActionResult> Formulario(string id)
         {
-            var user = await _context.Users.FindAsync(id);
+            
             ViewBag.editando = !String.IsNullOrEmpty(id);
-            ViewBag.rolUsuario = await _userManager.GetRolesAsync(user);
-            ViewBag.usuario = user;
             ViewBag.rolesList = _context.Roles.Include(r => r.Orzanizacion).ToList();
+            if(ViewBag.editando){
+                var user = await _context.Users.FindAsync(id);
+                ViewBag.rolUsuario = await _userManager.GetRolesAsync(user);
+                ViewBag.usuario = user;
+            }
+            
             return View();
         }
     }

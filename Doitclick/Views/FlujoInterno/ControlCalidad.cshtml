@@ -1,24 +1,14 @@
-﻿@{
-    ViewData["Title"] = "About";
+@{
+    ViewData["Title"] = "Control de Calidad, Solicitud: " + ViewBag.Cotizacion.NumeroTicket;
+    var totalGeneral = 0;
 }
+
 <form id="frm-generico">
+    <input type="hidden" value="@ViewBag.Cotizacion.NumeroTicket" name="NumeroTicket"/>
     <div class="row">
         <div class="col-lg-12">
             <div id="demo-panel-network" class="panel">
                 <div class="panel-heading">
-                    <div class="panel-control">
-                        <button id="demo-panel-network-refresh" class="btn btn-default btn-active-primary" data-toggle="panel-overlay" data-target="#demo-panel-network"><i class="demo-psi-repeat-2"></i></button>
-                        <div class="dropdown">
-                            <button class="dropdown-toggle btn btn-default btn-active-primary" data-toggle="dropdown" aria-expanded="false"><i class="demo-psi-dot-vertical"></i></button>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something else here</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#">Separated link</a></li>
-                            </ul>
-                        </div>
-                    </div>
                     <h3 class="panel-title">
                         <ol class="breadcrumb">
                             <li></li>
@@ -47,13 +37,40 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Servicio</th>
+                                        <th>Cantidad</th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var itm in ViewBag.Servicios)
+                                    {
+                                        var total  = itm.Cantidad*itm.Servicio.ValorCosto;
+                                        totalGeneral = totalGeneral + total;
+
+                                        <tr>
+                                            <td>
+                                                <strong>@itm.Servicio.Nombre</strong><br />
+                                                <small>@itm.Servicio.Resumen</small>
+                                            </td>
+                                            <td>@itm.Cantidad</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
 
                     <div class="row">
                         <div class="col-sm-12">
-                            <label for="RutPaciente">¿Se puede realizar esta cotización?</label>
+                            <label for="RutPaciente">¿Trabajo OK?</label>
                             <div class="input-group mar-btm">
                                 <select id="selResultadoEvaluacion" name="Resultado" class="form-control">
-                                    <option value="">-</option>
                                     <option value="S">Si</option>
                                     <option value="N">No</option>
                                 </select>
@@ -67,24 +84,35 @@
                         </div>
                     </div>
 
-                    <div class="row cotiza" style="display:none;">
-                        <div class="col-sm-12 mar-btm">
-                            <label for="descripcionCotizacion">Describa Cotización</label>
-                            <textarea id="descripcionCotizacion" name="DescripcionCotizacion" class="form-control" rows="5" cols="20"></textarea>
+
+                    @if(ViewBag.ExisteReparo == "1")
+                    {
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <hr>
+                                <div class="alert alert-danger">
+                                    <strong>Con Reparos!</strong> El trabajo fue evaluado con reparos por Control de Calidad
+                                </div>
+                            </div>
+                            
                         </div>
-                        <div class="col-sm-12 mar-btm">
-                            <label for="RutPaciente">Indique Valor de Cotización</label>
-                            <div class="input-group mar-btm">
-                                <input type="text" name="ValorCotizacion" class="form-control" />
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <h5>Motivo Reparo</h5>
+                                <div class="well">
+                                    @ViewBag.MotivoReparo
+                                </div>
                             </div>
                         </div>
-                    </div>
 
+                    }
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="text-right no-print">
-                                <input type="hidden" name="NumeroTicket" value="@ViewBag.Cotizacion.NumeroTicket" />
-                                <button class="btn btn-primary" id="btn-confirmar">Guardar y Avanzar</button>
+                                <a href="/mi-gestion" class="btn btn-warning">Volver</a>
+                                <button class="btn btn-primary btn-finalizar">Finalizar</button>
                             </div>
                         </div>
                     </div>
@@ -96,6 +124,25 @@
     </div>
 
 </form>
+
+
+<!-- Modal -->
+<div class="modal fade" id="modal-imagen" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Imagen Orden de Trabajo</h4>
+            </div>
+            <div class="modal-body">
+                <img src="@ViewBag.Cotizacion.ImagenOrdenSolicitante" alt="Orden de Trabajo" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
 @section styles{
     <link href="~/Assets/plugins/chosen/chosen.min.css" rel="stylesheet">
 }
@@ -103,44 +150,39 @@
     <script src="~/lib/signalr.js"></script>
     <script type="text/javascript">
         $(function () {
-
             $("#selResultadoEvaluacion").on("change", function (event) {
                 console.log($(this).val())
-                if ($(this).val() == "N") {
-                    $(".reparos").show();
-                    $(".cotiza").hide();
-                } else if ($(this).val() == "S") {
+                if ($(this).val() == "S") {
                     $(".reparos").hide();
-                    $(".cotiza").show();
                 } else {
-                    $(".reparos").hide();
-                    $(".cotiza").hide();
+                    $(".reparos").show();
                 }
             });
-
 
             $('#frm-generico').on('submit', function (e) {
                 e.preventDefault();
                 var model = $(this).serializeFormJSON();
                 
+                 
                 $.ajax({
                     type: "POST",
-                    url: "/api/flujo-interno/evaluar-cotizacion",
+                    url: "/api/flujo-interno/control-calidad",
                     data: JSON.stringify(model),
                     contentType: "application/json; charset=utf-8"
                 }).done(function (data) {
-                    console.log(data);
                     $.niftyNoty({
                         type: "success",
                         container : "floating",
                         title : "Notificaciones Workflow",
-                        message : "Etapa Finalizada, Estamos cerrando esta tarea!!<br/><small>Este mensaje se autocierra en 5 segundos y te redirige a tu gestión</small>",
-                        closeBtn : false,
+                        message : "Etapa Finalizada. Estamos cerrando esta tarea!!<br/><small>Este mensaje se autocierra en 5 segundos y te redirige a tu gestión</small>",
+                        closeBtn : true,
                         timer : 5000,
                         onHidden: function(){
                             location.href = '/mi-gestion'
                         }
                     });
+
+                    $(".btn-finalizar").prop("disabled", true);
                 }).fail(function (errMsg) {
                     console.log(errMsg);
                     $.niftyNoty({
@@ -152,9 +194,15 @@
                         timer : 5000
                     });
                 }).always(function () {
-                    $("#btn-confirmar").prop("enabled", true).text(initialLabelText);
+                    //$("#btn-confirmar").prop("enabled", true).text(initialLabelText);
                 });
             });
+
+            $('.resultado-presupuesto').on('click', function(){
+                $('#acepta-presupuesto').val($(this).data('acepta'))
+            });
+
+            
         });
     </script>
 }
