@@ -57,9 +57,9 @@
     "sourceMap": true
   },
   {
-    "outputFileName": "wwwroot/js/WorkFlowAdmin/etapa.min.js",
+    "outputFileName": "wwwroot/js/WorkflowAdmin/etapa.min.js",
     "inputFiles": [
-      "Client/WorkFlowAdmin/etapa.js"
+      "Client/WorkflowAdmin/etapa.js"
     ],
     "minify": {
       "enabled": true,
