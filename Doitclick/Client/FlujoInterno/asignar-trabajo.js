@@ -35,8 +35,8 @@ $(function () {
                 type: "success",
                 container : "floating",
                 title : "Notificaciones Workflow",
-                message : "Trabajo Asignado Existosamente!",
-                closeBtn : false,
+                message : "Trabajo Asignado Existosamente. Estamos cerrando esta tarea!<br/><small>Este mensaje se autocierra en 5 segundos y te redirige a tu gestión</small>",
+                closeBtn : true,
                 timer : 5000,
                 onHidden: function(){
                     location.href = '/mi-gestion'

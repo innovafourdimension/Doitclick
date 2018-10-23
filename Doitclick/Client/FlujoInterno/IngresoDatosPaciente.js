@@ -174,7 +174,7 @@ $(function () {
                 type: "success",
                 container : "floating",
                 title : "Notificaciones Workflow",
-                message : "Datos Guardados, Workflow Instanciado Nro Ticket: " + data,
+                message : "Datos Guardados, Workflow Instanciado Nro Ticket: " + data + ". Estamos cerrando esta tarea!<br/><small>Este mensaje se autocierra en 5 segundos y te redirige a tu gestión</small>",
                 closeBtn : false,
                 timer : 5000,
                 onHidden: function(){
@@ -186,11 +186,6 @@ $(function () {
 
         }).always(function () {
             $("#btn-confirmar").prop("enabled", true).text(initialLabelText);
-            const user = "Chachacharles";
-            const message = "Siempre paso por aqui";
-            connection.invoke("SendMessage", user, message).catch(function(err){
-                console.error(err.toString());   
-            });
         });
 
         return false;
@@ -213,3 +208,12 @@ connection.on("ReceiveMessage", function(user, message) {
 connection.start().catch(function(err){
     console.error(err.toString())
 });
+
+/**
+ * 
+ * const user = "Chachacharles";
+            const message = "Siempre paso por aqui";
+            connection.invoke("SendMessage", user, message).catch(function(err){
+                console.error(err.toString());   
+            });
+ */

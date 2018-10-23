@@ -9,8 +9,8 @@ namespace Doitclick.Models.Application
     {
         IngresoPagoEfectivo,
         IngresoPagoCheque,
-        IngresoPagoTarjetaCredito,
-        IngresoPagoTarjetaDebito,
-        SalidaReembolsoEfectivo
+        IngresoPagoTransbank,
+        EgresoReembolsoEfectivo,
+        CargoCobroServicio
     }
 }

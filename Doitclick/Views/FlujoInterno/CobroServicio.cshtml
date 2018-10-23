@@ -1,25 +1,13 @@
 ﻿@{
     ViewData["Title"] = "Cobro de Servicios";
+    var totalGeneral = 0;
 }
 
-<form id="frm-ingreso-datos-paciente">
+<form id="frm-generico">
     <div class="row">
         <div class="col-lg-12">
             <div id="demo-panel-network" class="panel">
                 <div class="panel-heading">
-                    <div class="panel-control">
-                        <button id="demo-panel-network-refresh" class="btn btn-default btn-active-primary" data-toggle="panel-overlay" data-target="#demo-panel-network"><i class="demo-psi-repeat-2"></i></button>
-                        <div class="dropdown">
-                            <button class="dropdown-toggle btn btn-default btn-active-primary" data-toggle="dropdown" aria-expanded="false"><i class="demo-psi-dot-vertical"></i></button>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something else here</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#">Separated link</a></li>
-                            </ul>
-                        </div>
-                    </div>
                     <h3 class="panel-title">
                         <ol class="breadcrumb">
                             <li></li>
@@ -34,17 +22,17 @@
                         <div class="col-sm-12 col-md-6">
                             <label for="RutPaciente">Paciente</label>
                             <div class="input-group mar-btm">
-                                <strong>Carlos Antonio Pradenas Prexz</strong><br />
-                                <small>17.042.783-1</small><br />
-                                <small>Isapre Consalud</small>
+                                <strong>@ViewBag.Cotizacion.Cliente.Nombres</strong><br />
+                                <small>@ViewBag.Cotizacion.Cliente.Rut</small><br />
+                                <small>@ViewBag.Cotizacion.Cliente.PrevisionSalud</small>
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-6">
                             <label for="RutPaciente">Dr. Solicitante</label>
                             <div class="input-group mar-btm">
-                                <strong>Ingacio Ponceaga Lareqoi</strong><br />
-                                <small>Orden Nro: 838753954349573</small><br />
-                                <a href="#!" class="btn-link"><small>Visualizar oden de trabajo</small></a>
+                                <strong>@ViewBag.Cotizacion.DrSolicitante</strong><br />
+                                <small>Orden Nro: @ViewBag.Cotizacion.FolioSolicitante</small><br />
+                                <a href="#!" data-toggle="modal" data-target="#modal-imagen" class="btn-link"><small>Visualizar oden de trabajo</small></a>
                             </div>
                         </div>
                     </div>
@@ -60,15 +48,21 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>
-                                            <strong>Servicio de carlos 1</strong><br />
-                                            <small>Descripcion del servicio</small>
-                                        </td>
-                                        <td>1</td>
-                                        <td>30000</td>
-                                        <td>30000</td>
-                                    </tr>
+                                    @foreach (var itm in ViewBag.Servicios)
+                                    {
+                                        var total  = itm.Cantidad*itm.Servicio.ValorCosto;
+                                        totalGeneral = totalGeneral + total;
+
+                                        <tr>
+                                            <td>
+                                                <strong>@itm.Servicio.Nombre</strong><br />
+                                                <small>@itm.Servicio.Resumen</small>
+                                            </td>
+                                            <td>@itm.Cantidad</td>
+                                            <td>$@string.Format("{0:n0}", itm.Servicio.ValorCosto)</td>
+                                            <td>$@string.Format("{0:n0}",total)</td>
+                                        </tr>
+                                    }
                                 </tbody>
                             </table>
                         </div>
@@ -78,14 +72,39 @@
                             <div class="clearfix">
                                 <table class="table invoice-total">
                                     <tbody>
-                                        <tr>
+                                        <tr class="hidden">
                                             <td>Saldo Cuenta:</td>
                                             <td class="h4 showapagar">$0</td>
                                         </tr>
                                         <tr>
+                                            <td><strong>Total:</strong></td>
+                                            <td class="h4 showapagar">
+                                                $@string.Format("{0:n0}", totalGeneral)
+                                                <input type="hidden" value="@totalGeneral" name="ValorTotal" />
+                                                <input type="hidden" value="1" name="AceptaPresupuesto" id="acepta-presupuesto"/>
+                                                <input type="hidden" value="@ViewBag.Cotizacion.NumeroTicket" name="NumeroTicket"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Forma Pago:</strong></td>
+                                            <td class="text-bold h4 showapagar">
+                                                <select id="formaPago" name="FormaPago" class="form-control">
+                                                    <option value="EFC">Efectivo</option>
+                                                    <option value="TBK">Red Compra</option>
+                                                    <option value="CHQ">Cheque</option> 
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr id="swNumDoc" style="display:none;">
+                                            <td><strong>N° Documento:</strong></td>
+                                            <td class="text-bold h4 showapagar">
+                                                <input type="text" class="form-control" name="NumeroDocumento" style="text-align:right;">
+                                            </td>
+                                        </tr>
+                                        <tr>
                                             <td><strong>A Pagar:</strong></td>
                                             <td class="text-bold h4 showapagar">
-                                                <input type="text" class="form-control" value="$0" style="text-align:right;">
+                                                <input type="text" class="form-control" name="ValorPagar" value="@totalGeneral" style="text-align:right;">
                                             </td>
                                         </tr>
                                     </tbody>
@@ -100,8 +119,8 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="text-right no-print">
-                                <button class="btn btn-warning" id="btn-rechazar">Cliente Rechaza Presupuesto</button>
-                                <button class="btn btn-primary" id="btn-confirmar">Generar Recibo</button>
+                                <button class="btn btn-warning resultado-presupuesto" data-acepta="0">Cliente Rechaza Presupuesto</button>
+                                <button class="btn btn-primary resultado-presupuesto" data-acepta="1">Generar Recibo</button>
                             </div>
                         </div>
                     </div>
@@ -113,6 +132,25 @@
     </div>
 
 </form>
+
+
+<!-- Modal -->
+<div class="modal fade" id="modal-imagen" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Imagen Orden de Trabajo</h4>
+            </div>
+            <div class="modal-body">
+                <img src="@ViewBag.Cotizacion.ImagenOrdenSolicitante" alt="Orden de Trabajo" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
 @section styles{
     <link href="~/Assets/plugins/chosen/chosen.min.css" rel="stylesheet">
 }
@@ -120,20 +158,55 @@
     <script src="~/lib/signalr.js"></script>
     <script type="text/javascript">
         $(function () {
-
-            $("#selResultadoEvaluacion").on("change", function (event) {
+            $('#formaPago').on('change', function(){
                 console.log($(this).val())
-                if ($(this).val() == "N") {
-                    $(".reparos").show();
-                    $(".cotiza").hide();
-                } else if ($(this).val() == "S") {
-                    $(".reparos").hide();
-                    $(".cotiza").show();
-                } else {
-                    $(".reparos").hide();
-                    $(".cotiza").hide();
+                if($(this).val() != "EFC"){
+                    $('#swNumDoc').show();
+                }else{
+                    $('#swNumDoc').hide();
                 }
             });
+
+            $('#frm-generico').on('submit', function (e) {
+                e.preventDefault();
+                var model = $(this).serializeFormJSON();
+                 $.ajax({
+                    type: "POST",
+                    url: "/api/flujo-interno/cobro-servicios",
+                    data: JSON.stringify(model),
+                    contentType: "application/json; charset=utf-8"
+                }).done(function (data) {
+                    $.niftyNoty({
+                        type: "success",
+                        container : "floating",
+                        title : "Notificaciones Workflow",
+                        message : "Etapa Finalizada!!",
+                        closeBtn : false,
+                        timer : 5000,
+                        onHidden: function(){
+                            location.href = '/mi-gestion'
+                        }
+                    });
+                }).fail(function (errMsg) {
+                    console.log(errMsg);
+                    $.niftyNoty({
+                        type: "warning",
+                        container : "floating",
+                        title : "Notificaciones Workflow",
+                        message : ":( Problemas al Finalizar Etapa, contacta a soporte",
+                        closeBtn : false,
+                        timer : 5000
+                    });
+                }).always(function () {
+                    //$("#btn-confirmar").prop("enabled", true).text(initialLabelText);
+                });
+            });
+
+            $('.resultado-presupuesto').on('click', function(){
+                $('#acepta-presupuesto').val($(this).data('acepta'))
+            });
+
+            
         });
     </script>
 }

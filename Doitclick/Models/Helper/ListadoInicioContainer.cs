@@ -13,4 +13,14 @@ namespace Doitclick.Models.Helper
         public Tarea Tarea { get; set; }
         public Cotizacion Cotizacion { get; set; }
     }
+
+
+    public class HistorialCerradasContainer
+    {
+        public Solicitud Solicitud { get; set; }
+        public Cotizacion Cotizacion { get; set; }
+        //public IEnumerable<Variable> Variables { get; set; }
+
+        public Variable Variable { get; set; }
+    }
 }

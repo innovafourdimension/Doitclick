@@ -90,6 +90,9 @@ namespace Doitclick.Controllers
 
             ViewBag.Cotizacion = cotizacion;
             ViewBag.Servicios = servicios;
+            ViewBag.ExisteReparo = _wfservice.ObtenerVariable("TRABAJO_CON_REPAROS_CC",ticket);
+            ViewBag.MotivoReparo = _wfservice.ObtenerVariable("MOTIVO_REPARO_CC",ticket);
+
             return View();
         }
 
@@ -102,5 +105,36 @@ namespace Doitclick.Controllers
             ViewBag.Servicios = servicios;
             return View();
         }
+
+        public IActionResult ControlCalidad(string ticket)
+        {
+            var cotizacion = _context.Cotizaciones.Include(x => x.Cliente).Where(c => c.NumeroTicket == ticket).FirstOrDefault();
+            var servicios = _context.ItemsCorizar.Include(x => x.Servicio).Include(s => s.Cotizacion).Where(d => d.Cotizacion.Id == cotizacion.Id).ToList();
+
+            ViewBag.Cotizacion = cotizacion;
+            ViewBag.Servicios = servicios;
+            ViewBag.ExisteReparo = _wfservice.ObtenerVariable("TRABAJO_CON_REPAROS_CC",ticket);
+            ViewBag.MotivoReparo = _wfservice.ObtenerVariable("MOTIVO_REPARO_CC",ticket);
+
+            return View();
+        }
+
+        public IActionResult EntregaServicio(string ticket)
+        {
+            var cotizacion = _context.Cotizaciones.Include(x => x.Cliente).Where(c => c.NumeroTicket == ticket).FirstOrDefault();
+            var servicios = _context.ItemsCorizar.Include(x => x.Servicio).Include(s => s.Cotizacion).Where(d => d.Cotizacion.Id == cotizacion.Id).ToList();
+
+            ViewBag.Cotizacion = cotizacion;
+            ViewBag.Servicios = servicios;
+            
+            return View();
+        }
+
+        public IActionResult Cotizaciones()
+        {
+            return View();
+        }
+
+        
     }
 }
