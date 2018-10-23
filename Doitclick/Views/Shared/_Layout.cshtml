@@ -240,18 +240,20 @@
                                 <ul id="mainnav-menu" class="list-group">
                                     <li class="list-header">Menu</li>
                                     <li class="active-sub">
+                                        <a href="/mi-gestion">
+                                            <i class="demo-pli-home"></i>
+                                            <span class="menu-title">Mi Gestión</span>
+                                        </a>
+                                    </li>
+                                    <li class="">
                                         <a href="#">
                                             <i class="demo-pli-home"></i>
-                                            <span class="menu-title">Cotizaciones<span class="pull-right badge badge-danger">6</span></span>
+                                            <span class="menu-title">Cotizaciones</span>
                                             <i class="arrow"></i>
                                         </a>
                                         <ul class="collapse">
-                                            <li class="active-link"><a href="index.html">15.473.876-2 <span class="badge badge-warning badge-icon badge-fw pull-left"></span></a></li>
-                                            <li><a href="dashboard-2.html">8.976.177-8 <span class="badge badge-warning badge-icon badge-fw pull-left"></span></a></li>
-                                            <li><a href="dashboard-2.html">17.052.934-0 <span class="badge badge-warning badge-icon badge-fw pull-left"></span></a></li>
-                                            <li><a href="dashboard-2.html">14.174.868-8 <span class="badge badge-warning badge-icon badge-fw pull-left"></span></a></li>
-                                            <li><a href="dashboard-2.html">18.123.936-0 <span class="badge badge-warning badge-icon badge-fw pull-left"></span></a></li>
-                                            <li><a href="dashboard-2.html">16.005.148-2<span class="badge badge-warning badge-icon badge-fw pull-left"></span></a></li>
+                                            <li><a href="/FlujoInterno/IngresoDatosPaciente">Nueva</a></li>
+                                            <li class="active-link"><a href="/FlujoInterno/Cotizaciones">Cerradas</a></li>
                                         </ul>
 
                                     </li>
@@ -265,7 +267,7 @@
                                         <ul class="collapse">
                                             <li><a href="/MantenedorMarca/Listado">Marcas</a></li>
                                             <li><a href="/MantenedorTipoMedida/Listado">Unidades de Medida</a></li>
-                                            <li><a href="/MantenedorMateriales/Formulario">Materiales</a></li>
+                                            <li><a href="/MantenedorMateriales/Listado">Materiales</a></li>
                                             <li><a href="/MantenedorMaterialMensual/Listado">Material Mensual</a></li>
                                             <li><a href="/MantenedorInstrumento/Listado">Instrumentos</a></li>
                                             <li><a href="/MantenedorServicio/Listado">Trabajos / Servicios</a></li>
@@ -302,9 +304,7 @@
     <script src="~/Assets/plugins/flot-charts/jquery.flot.resize.min.js"></script>
     <script src="~/Assets/plugins/flot-charts/jquery.flot.tooltip.min.js"></script>
     <script src="~/Assets/plugins/sparkline/jquery.sparkline.min.js"></script>
-    
     <script src="~/Assets/plugins/bootstrap-select/bootstrap-select.min.js"></script>
-    
     <script src="~/Assets/plugins/dropzone/dropzone.min.js"></script>
     @RenderSection("Scripts", required: false)
 

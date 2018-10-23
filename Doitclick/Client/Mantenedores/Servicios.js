@@ -17,7 +17,7 @@ function render(){
     //$("#CodigoServicio").val(modelo.codigoServicio);
     //$("#NombreServicio").val(modelo.nombreServicio);
 
-    modelo.materiales.forEach(material => {
+    modelo.materiales.forEach(function(material){
         var _trMaterial = $("<tr>")
         
         var _tdMaterial = $("<td>").append(material.nombre)

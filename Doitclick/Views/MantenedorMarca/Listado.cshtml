@@ -31,30 +31,33 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
                             <a href="/MantenedorMarca/Formulario" class="btn btn-primary">Nueva</a>
-                            <table id="table" class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Nombre</th>
-                                        
-                                        <th>Acción</th>
-                                    </tr>
-                                </thead>
-                                @using Doitclick.Models.Helper;
-                                <tbody>
-                                    @foreach (var itm in ViewBag.marcasList)
-                                    {
+                            <div class="table-responsive mar-top">
+                                <table id="table" class="table table-hover">
+                                    <thead>
                                         <tr>
-                                            <td>@itm.Nombre</td>
-                                            <td>
-                                                <a href="#" data-id="@itm.Id" class="elimination btn btn-danger btn-sm">Eliminar</a>
-                                                <a href="/MantenedorMarca/Formulario/@itm.Id" class="edicion btn btn-primary btn-sm">Editar</a>
-                                            </td>
+                                            <th>Nombre</th>
+                                            
+                                            <th>Acción</th>
                                         </tr>
+                                    </thead>
+                                    @using Doitclick.Models.Helper;
+                                    <tbody>
+                                        @foreach (var itm in ViewBag.marcasList)
+                                        {
+                                            <tr>
+                                                <td>@itm.Nombre</td>
+                                                <td>
+                                                    <a href="#" data-id="@itm.Id" class="elimination btn btn-danger btn-sm">Eliminar</a>
+                                                    <a href="/MantenedorMarca/Formulario/@itm.Id" class="edicion btn btn-primary btn-sm">Editar</a>
+                                                </td>
+                                            </tr>
 
-                                    }
+                                        }
 
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
                         </div>
                     </div>
                 </div>

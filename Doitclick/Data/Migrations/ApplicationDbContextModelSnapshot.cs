@@ -550,6 +550,8 @@ namespace Doitclick.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Enlace");
+
                     b.Property<string>("Nombre");
 
                     b.Property<string>("NombreInterno");

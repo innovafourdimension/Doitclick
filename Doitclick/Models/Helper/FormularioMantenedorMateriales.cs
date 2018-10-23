@@ -13,5 +13,6 @@ namespace Doitclick.Models.Helper
         public int StockMaterial { get; set; }
         public string Codigo { get; set; }
         public int Marca { get; set; }
+        public int Id { get; set; }
     }
 }

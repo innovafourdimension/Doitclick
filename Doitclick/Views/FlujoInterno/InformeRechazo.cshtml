@@ -1,0 +1,152 @@
+@{
+    ViewData["Title"] = "Informe Rechazo";
+}
+
+<form id="frm-generico">
+    <div class="row">
+        <div class="col-lg-12">
+            <div id="demo-panel-network" class="panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <ol class="breadcrumb">
+                            <li></li>
+                            <li class="active">Informe de Rechazo de Servicios</li>
+                        </ol>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <label for="RutPaciente">Paciente</label>
+                            <div class="input-group mar-btm">
+                                <strong>@ViewBag.Cotizacion.Cliente.Nombres</strong><br />
+                                <small>@ViewBag.Cotizacion.Cliente.Rut</small><br />
+                                <small>@ViewBag.Cotizacion.Cliente.PrevisionSalud</small>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <label for="RutPaciente">Dr. Solicitante</label>
+                            <div class="input-group mar-btm">
+                                <strong>@ViewBag.Cotizacion.DrSolicitante</strong><br />
+                                <small>Orden Nro: @ViewBag.Cotizacion.FolioSolicitante</small><br />
+                                <a href="#!" data-toggle="modal" data-target="#modal-imagen" class="btn-link"><small>Visualizar oden de trabajo</small></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Servicio</th>
+                                        <th>Cantidad</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var itm in ViewBag.Servicios)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <strong>@itm.Servicio.Nombre</strong><br />
+                                                <small>@itm.Servicio.Resumen</small>
+                                            </td>
+                                            <td>@itm.Cantidad</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h5>Solicitud con Rechazo</h5>
+                            <p><strong>Motivo:</strong> @ViewBag.motivoRechazo</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="text-right no-print">
+                                <input type="hidden" name="NumeroTicket" value="@ViewBag.Cotizacion.NumeroTicket" />
+                                <button class="btn btn-primary" id="btn-confirmar">Cierre Proceso</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+        </div>
+    </div>
+
+</form>
+
+
+<!-- Modal -->
+<div class="modal fade" id="modal-imagen" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Imagen Orden de Trabajo</h4>
+            </div>
+            <div class="modal-body">
+                <img src="@ViewBag.Cotizacion.ImagenOrdenSolicitante" class="img-fluid rounded" style="max-width: 100%; height: auto;" alt="Orden de Trabajo" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section styles{
+    <link href="~/Assets/plugins/chosen/chosen.min.css" rel="stylesheet">
+}
+@section Scripts{
+    <script src="~/lib/signalr.js"></script>
+    <script src="https://unpkg.com/jspdf@latest/dist/jspdf.debug.js"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            $('#frm-generico').on('submit', function (e) {
+                e.preventDefault();
+                var model = $(this).serializeFormJSON();
+                console.log(model)
+
+                $.ajax({
+                    type: "POST",
+                    url: "/api/flujo-interno/informe-rechazo",
+                    data: JSON.stringify(model),
+                    contentType: "application/json; charset=utf-8"
+                }).done(function (data) {
+                    console.log(data);
+                    $.niftyNoty({
+                        type: "success",
+                        container : "floating",
+                        title : "Notificaciones Workflow",
+                        message : "Etapa Finalizada. Estamos cerrando esta tarea!!<br/><small>Este mensaje se autocierra en 5 segundos y te redirige a tu gestión</small>",
+                        closeBtn : true,
+                        timer : 5000,
+                        onHidden: function(){
+                            location.href = '/mi-gestion'
+                        }
+                    });
+                }).fail(function (errMsg) {
+                    console.log(errMsg);
+                    $.niftyNoty({
+                        type: "warning",
+                        container : "floating",
+                        title : "Notificaciones Workflow",
+                        message : ":( Problemas al Finalizar Etapa, contacta a soporte",
+                        closeBtn : false,
+                        timer : 5000
+                    });
+                }).always(function () {
+                    //$("#btn-confirmar").prop("enabled", true).text(initialLabelText);
+                });
+
+            });
+        });
+    </script>
+}

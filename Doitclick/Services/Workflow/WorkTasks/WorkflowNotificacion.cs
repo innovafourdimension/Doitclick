@@ -19,14 +19,14 @@ namespace Doitclick.Services.Workflow.WorkTasks
         {
             try
             {
-                /*connection = new HubConnectionBuilder()
+                connection = new HubConnectionBuilder()
                 .WithUrl("https://localhost:5001/hubs/push")
                 .Build();
                 
 
                 await connection.StartAsync();
                 await connection.InvokeAsync("SendMessage", "Charly", "Trabajo Ejecutado " + NumeroTicket);
-                await connection.StopAsync();*/
+                await connection.StopAsync();
 
             }
             catch (Exception ex)

@@ -1,0 +1,266 @@
+@{
+    ViewData["Title"] = ViewBag.editando ? "Etapa: " + ViewBag.etapa.Nombre : "Nueva Etapa";
+    var modelo = new {
+        Id = ViewBag.editando ? ViewBag.etapa.Id : "",
+        Nombre = ViewBag.editando ? ViewBag.etapa.Nombre : "",
+        TipoEtapa = ViewBag.editando ? ViewBag.etapa.TipoEtapa : "",
+        TipoUsuarioAsignado = ViewBag.editando ? ViewBag.etapa.TipoUsuarioAsignado : "",
+        ValorUsuarioAsignado = ViewBag.editando ? ViewBag.etapa.ValorUsuarioAsignado : "",
+        TipoDuracion = ViewBag.editando ? ViewBag.etapa.TipoDuracion : "",
+        ValorDuracion = ViewBag.editando ? ViewBag.etapa.ValorDuracion : "",
+        TipoDuracionRetardo = ViewBag.editando ? ViewBag.etapa.TipoDuracionRetardo : "",
+        ValorDuracionRetardo = ViewBag.editando ? ViewBag.etapa.ValorDuracionRetardo : "",
+        Enlace = ViewBag.editando ? ViewBag.etapa.Enlace : ""
+    };
+}
+
+
+@section Scripts{
+    <!--Page Script-->
+    <script src="~/js/WorkflowAdmin/etapa.min.js"></script>
+}
+
+
+<form id="frm-generico">
+    <div class="row">
+        <div class="col-lg-12">
+            <div id="demo-panel-network" class="panel">
+                <div class="panel-heading">
+                    <div class="panel-control">
+                        <button id="demo-panel-network-refresh" class="btn btn-default btn-active-primary" data-toggle="panel-overlay" data-target="#demo-panel-network"><i class="demo-psi-repeat-2"></i></button>
+                        <div class="dropdown">
+                            <button class="dropdown-toggle btn btn-default btn-active-primary" data-toggle="dropdown" aria-expanded="false"><i class="demo-psi-dot-vertical"></i></button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">Separated link</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <h3 class="panel-title">
+                        <ol class="breadcrumb">
+                            <li></li>
+                            <li class="active">@ViewData["Title"]</li>
+                        </ol>
+                    </h3>
+                </div>
+                <div class="panel-body">
+
+                    <h4>Etapa</h4>
+                    <hr />
+
+                    <div class="row">
+                         <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Nombre</label>
+                                <input type="text" value="@modelo.Nombre" name="nombre" class="form-control" autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Tipo Etapa</label>
+                                <select class="form-control" name="tipoEtapa">
+                                    @foreach(var item in ViewBag.tiposEtapa)
+                                    {
+                                        @if(ViewBag.editando && modelo.TipoEtapa == item)
+                                        {
+                                            <option value="@item" selected="selected">@item</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item">@item</option>
+                                        }
+                                    }    
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                         <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Tipo Asignación</label>
+                                <select class="form-control" name="tipoUsuarioAsignado">
+                                    @foreach(var item in ViewBag.tiposAsignado)
+                                    {
+                                        @if(ViewBag.editando && modelo.TipoUsuarioAsignado == item)
+                                        {
+                                            <option value="@item" selected="selected">@item</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item">@item</option>
+                                        }
+                                    }    
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Valor Asignación</label>
+                                <input type="text" value="@modelo.ValorUsuarioAsignado" name="valorUsuarioAsignado" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                   
+                    <div class="row">
+                         <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Tipo Duración</label>
+                                <select class="form-control" name="tipoDuracion">
+                                    @foreach(var item in ViewBag.tiposDuracion)
+                                    {
+                                        @if(ViewBag.editando && modelo.TipoDuracion == item)
+                                        {
+                                            <option value="@item" selected="selected">@item</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item">@item</option>
+                                        }
+                                    }    
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Valor Duración</label>
+                                <input type="text" value="@modelo.ValorDuracion" name="valorDuracion" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                 
+
+                    <div class="row">
+                         <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Tipo Duración Retardada</label>
+                                <select class="form-control" name="tipoDuracionRetardo">
+                                    @foreach(var item in ViewBag.tiposDuracion)
+                                    {
+                                        @if(ViewBag.editando && modelo.TipoDuracionRetardo == item)
+                                        {
+                                            <option value="@item" selected="selected">@item</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item">@item</option>
+                                        }
+                                    }    
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Valor Duración Retardada</label>
+                                <input type="text" value="@modelo.ValorDuracionRetardo" name="valorDuracionRetardo" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Enlace</label>
+                                <input type="text" value="@modelo.Enlace" name="Enlace" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4>Tránsito</h4>
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <button type="button" data-target="#modal-destinos" data-toggle="modal" class="btn btn-primary">Agregar Destino</button>
+                            <div class="table-responsive mar-top">
+                                <table id="table" class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre Etapa Destino</th>
+                                            <th>Namespace</th>
+                                            <th>Clase</th>
+                                            <th>Metodo</th>
+                                            <th>Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabla-destinos"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer text-right">
+                    <input type="hidden" name="Id" id="Id" value="@ViewBag.Id" />
+                    <input type="hidden" name="Proceso" id="Proceso" value="@ViewBag.ProcesoId" />
+                    
+                    <a href="javascript:history.back();" class="btn btn-primary" >Volver</a>
+                    <button class="btn btn-success submit-generico" type="submit">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<!--Default Bootstrap Modal-->
+<!--===================================================-->
+<div class="modal fade" id="modal-destinos" role="dialog" tabindex="-1" aria-labelledby="modal-destinos" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!--Modal header-->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+                <h4 class="modal-title">Información de Transito de Etapa</h4>
+            </div>
+
+            <!--Modal body-->
+            <div class="modal-body">
+                <div class="row">
+                         <div class="col-md-12">
+                            <div class="form-group">
+                                <input type="hidden" id="IdTr" value="0" />
+                                <label class="control-label">Etapa Destino</label>
+                                <select class="form-control" id="etapaDestino">
+                                    <option value="">Selecciona Etapa</option>
+                                    @foreach(var item in ViewBag.listadoEtapas)
+                                    {
+                                        <option value="@item.Id">@item.Nombre</option>
+                                    }    
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Namespace Validación</label>
+                                <input type="text" value="Doitclick.Services.Workflow.Transition" id="namespaceValidacion" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Clase Validación</label>
+                                <input type="text" value="WorkflowApproved" id="claseValidacion" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Método Validación</label>
+                                <input type="text" value="Validar" id="metodoValidacion" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+            </div>
+
+            <!--Modal footer-->
+            <div class="modal-footer">
+                <button data-dismiss="modal" class="btn btn-default" type="button">Cerrar</button>
+                <button id="agregar-destino" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--===================================================-->
+<!--End Default Bootstrap Modal-->

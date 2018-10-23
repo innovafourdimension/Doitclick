@@ -32,30 +32,33 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
                             <a href="/MantenedorRol/Formulario" class="btn btn-primary">Nuevo</a>
-                            <table id="table" class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Nombre</th>
-                                        <th>Organización</th>
-                                        <th>Accion</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var itm in ViewBag.rolesList)
-                                    {
+                            <div class="table-responsive mar-top">
+                                <table id="table" class="table table-hover">
+                                    <thead>
                                         <tr>
-                                            <td>@itm.Name</td>
-                                            <td>@itm.Orzanizacion.Nombre</td>
-                                            <td>
-                                                <a href="#" data-id="@itm.Id" class="elimination btn btn-danger btn-sm">Eliminar</a>
-                                                <a href="/MantenedorRol/Formulario/@itm.Id" class="edicion btn btn-primary btn-sm">Editar</a>
-                                            </td>
+                                            <th>Nombre</th>
+                                            <th>Organización</th>
+                                            <th>Accion</th>
                                         </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var itm in ViewBag.rolesList)
+                                        {
+                                            <tr>
+                                                <td>@itm.Name</td>
+                                                <td>@itm.Orzanizacion.Nombre</td>
+                                                <td>
+                                                    <a href="#" data-id="@itm.Id" class="elimination btn btn-danger btn-sm">Eliminar</a>
+                                                    <a href="/MantenedorRol/Formulario/@itm.Id" class="edicion btn btn-primary btn-sm">Editar</a>
+                                                </td>
+                                            </tr>
 
-                                    }
+                                        }
 
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
                         </div>
                     </div>
                 </div>

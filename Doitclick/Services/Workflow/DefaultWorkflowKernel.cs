@@ -80,13 +80,19 @@ namespace Doitclick.Services.Workflow
             //Tercero obtengo la solicitud
             Solicitud solicitud = proceso.Solicitudes.FirstOrDefault(d => d.NumeroTicket == numeroTicket);
 
+            var usuarioAsignado = etapa.ValorUsuarioAsignado;
+            if(etapa.TipoUsuarioAsignado == TipoUsuarioAsignado.Variable)
+            {
+                usuarioAsignado = GetVariableValue(etapa.ValorUsuarioAsignado, numeroTicket);
+            }
+
             Tarea tarea = new Tarea
             {
                 Etapa = etapa,
                 Estado = EstadoTarea.Activada,
                 FechaInicio = DateTime.Now,
                 Solicitud = solicitud,
-                AsignadoA = etapa.ValorUsuarioAsignado
+                AsignadoA = usuarioAsignado
             };
             
             _context.Tareas.Add(tarea);
@@ -114,13 +120,19 @@ namespace Doitclick.Services.Workflow
             //Tercero obtengo la solicitud
             Solicitud solicitud = proceso.Solicitudes.FirstOrDefault(d => d.NumeroTicket == numeroTicket);
 
+            var usuarioAsignado = etapa.ValorUsuarioAsignado;
+            if(etapa.TipoUsuarioAsignado == TipoUsuarioAsignado.Variable)
+            {
+                usuarioAsignado = GetVariableValue(etapa.ValorUsuarioAsignado, numeroTicket);
+            }
+
             Tarea tarea = new Tarea
             {
                 Etapa = etapa,
                 Estado = EstadoTarea.Activada,
                 FechaInicio = DateTime.Now,
                 Solicitud = solicitud,
-                AsignadoA = etapa.ValorUsuarioAsignado
+                AsignadoA = usuarioAsignado
             };
 
             _context.Tareas.Add(tarea);
@@ -141,6 +153,13 @@ namespace Doitclick.Services.Workflow
             tareaActual.EjecutadoPor = identificacionUsuario;
             tareaActual.FechaTerminoFinal = DateTime.Now;
             tareaActual.Estado = EstadoTarea.Finalizada;
+
+            if(tareaActual.Etapa.TipoEtapa == TipoEtapa.Fin)
+            {
+                solicitud.FechaTermino = DateTime.Now;
+                solicitud.Estado = EstadoSolicitud.Finalizada;
+                _context.Solicitudes.Update(solicitud);
+            }
 
             _context.Entry(tareaActual).State = EntityState.Modified;
             _context.SaveChanges();
@@ -250,7 +269,7 @@ namespace Doitclick.Services.Workflow
         public string GetVariableValue(string key, string numeroTicket)
         {
             Variable variable = _context.Variables.FirstOrDefault(d => d.Clave == key && d.NumeroTicket == numeroTicket);
-            return variable.Valor;
+            return variable != null ? variable.Valor : "";
         }
     }
 }

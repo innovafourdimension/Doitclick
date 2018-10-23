@@ -8,6 +8,7 @@ using Doitclick.Data;
 using Doitclick.Models.Application;
 using Doitclick.Services.Workflow;
 using Microsoft.EntityFrameworkCore;
+using Doitclick.Models.Helper;
 
 namespace Doitclick.Controllers.Api
 {
@@ -25,24 +26,34 @@ namespace Doitclick.Controllers.Api
 
 
         [HttpPost]
-        public async Task<IActionResult> GuardarIngresoMateriales([FromBody]  Doitclick.Models.Helper.FormularioMantenedorMateriales material)
+        public async Task<IActionResult> GuardarIngresoMateriales([FromBody]  FormularioMantenedorMateriales material)
         {
-            //Generar modelo de cliente que en este caso es un paciente que viene a la oficina
-            MaterialDisponible _material = new MaterialDisponible
-            {
-                Nombre = material.NombreMaterial,
-                UnidadMedida = _context.TiposUnidadMedidas.Find(material.sslUnidadMedida),
-                PrecioUnidad = material.PrecioMaterial,
-                StockAlerta=material.StockMaterial,
-                Codigo = material.Codigo,
-                Marca = await _context.Marcas.FindAsync(material.Marca),
-                Activa = true
-            };
-            
-            _context.MaterialesDiponibles.Add(_material);
-            var respuesta = await _context.SaveChangesAsync();
+            var mtrl = _context.MaterialesDiponibles.Find(material.Id);
 
-            return Ok("Datos guardados");
+            if(mtrl != null){
+                mtrl.Marca = await _context.Marcas.FindAsync(material.Marca);
+                mtrl.UnidadMedida = await _context.TiposUnidadMedidas.FindAsync(material.sslUnidadMedida);
+                mtrl.Nombre = material.NombreMaterial;
+                mtrl.PrecioUnidad = material.PrecioMaterial;
+                mtrl.StockAlerta=material.StockMaterial;
+                mtrl.Codigo = material.Codigo;
+                 _context.MaterialesDiponibles.Update(mtrl);
+            }else{
+                mtrl = new MaterialDisponible
+                {
+                    Nombre = material.NombreMaterial,
+                    UnidadMedida = _context.TiposUnidadMedidas.Find(material.sslUnidadMedida),
+                    PrecioUnidad = material.PrecioMaterial,
+                    StockAlerta=material.StockMaterial,
+                    Codigo = material.Codigo,
+                    Marca = await _context.Marcas.FindAsync(material.Marca),
+                    Activa = true
+                };
+                _context.MaterialesDiponibles.Add(mtrl);
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok();
 
         }
 

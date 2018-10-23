@@ -10,6 +10,6 @@ namespace Doitclick.Models.Workflow
         Usuario,
         Rol,
         Boot,
-        Funk
+        Variable
     }
 }

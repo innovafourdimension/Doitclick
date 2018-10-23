@@ -75,8 +75,8 @@
                             <label for="selResultadoAsignacion">Asignar a</label>
                             <div class="input-group mar-btm">
                                 <select id="selResultadoAsignacion" name="UsuarioAsignado" class="form-control">
-                                    <option value="17042783-1">Carlos Pradenas</option>
-                                    <option value="18872956-8">Ivonne Alexandra</option>
+                                    <option value="">Selecciona Usuario</option>
+                                    
                                 </select>
                             </div>
                         </div>
@@ -110,7 +110,7 @@
                 <h4 class="modal-title" id="myModalLabel">Imagen Orden de Trabajo</h4>
             </div>
             <div class="modal-body">
-                <img src="@ViewBag.Cotizacion.ImagenOrdenSolicitante" alt="Orden de Trabajo" />
+                <img src="@ViewBag.Cotizacion.ImagenOrdenSolicitante" class="img-fluid rounded" style="max-width: 100%; height: auto;" alt="Orden de Trabajo" />
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
@@ -124,47 +124,5 @@
 }
 @section Scripts{
     <script src="~/lib/signalr.js"></script>
-    <script type="text/javascript">
-        $(function () {
-
-            $("#selResultadoEvaluacion").on("change", function (event) {
-                console.log($(this).val())
-                if ($(this).val() == "S") {
-                    $(".reparos").hide();
-                } else {
-                    $(".reparos").show();
-                }
-            });
-
-            $('#frm-generico').on('submit', function (e) {
-                e.preventDefault();
-                var model = $(this).serializeFormJSON();
-                console.log(model)
-
-                $.ajax({
-                    type: "POST",
-                    url: "/api/flujo-interno/asignar-trabajo",
-                    data: JSON.stringify(model),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json"
-                }).done(function (data) {
-                    console.log(data);
-
-
-                    const user = "Chachacharles";
-                    const message = new Date().toString() + " Charly";
-                    connection.invoke("SendMessage", user, message).catch(err => console.error(err.toString()));
-
-                }).fail(function (errMsg) {
-                    console.log(errMsg);
-
-                }).always(function () {
-                    $("#btn-confirmar").prop("enabled", true).text(initialLabelText);
-                    const user = "Chachacharles";
-                    const message = "Siempre paso por aqui";
-                    connection.invoke("SendMessage", user, message).catch(err => console.error(err.toString()));
-                });
-            });
-        });
-    </script>
+    <script src="~/js/FlujoInterno/asignar-trabajo.min.js" type="text/javascript"></script>
 }

@@ -20,24 +20,73 @@
     "minify": {
       "enabled": true,
       "outputMode": "singleLine"
-    }
+    },
+    "sourceMap": true
   },
   {
     "outputFileName": "wwwroot/js/inicio.min.js",
     "inputFiles": [
       "Client/inicio.js"
-    ]
+    ],
+    "minify": {
+      "enabled": true,
+      "outputMode": "singleLine"
+    },
+    "sourceMap": true
   },
   {
     "outputFileName": "wwwroot/js/Mantenedores/Servicios.min.js",
     "inputFiles": [
       "Client/Mantenedores/Servicios.js"
-    ]
+    ],
+    "minify": {
+      "enabled": true,
+      "outputMode": "singleLine"
+    },
+    "sourceMap": true
   },
   {
     "outputFileName": "wwwroot/js/Mantenedores/Cliente.min.js",
     "inputFiles": [
       "Client/Mantenedores/Clientes.js"
-    ]
+    ],
+    "minify": {
+      "enabled": true,
+      "outputMode": "singleLine"
+    },
+    "sourceMap": true
+  },
+  {
+    "outputFileName": "wwwroot/js/WorkflowAdmin/etapa.min.js",
+    "inputFiles": [
+      "Client/WorkflowAdmin/etapa.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "outputMode": "singleLine"
+    },
+    "sourceMap": true
+  },
+  {
+    "outputFileName": "wwwroot/js/FlujoInterno/asignar-trabajo.min.js",
+    "inputFiles": [
+      "Client/FlujoInterno/asignar-trabajo.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "outputMode": "singleLine"
+    },
+    "sourceMap": true
+  },
+  {
+    "outputFileName": "wwwroot/js/FlujoInterno/asignar-cotizacion.min.js",
+    "inputFiles": [
+      "Client/FlujoInterno/asignar-cotizacion.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "outputMode": "singleLine"
+    },
+    "sourceMap": true
   }
 ]
