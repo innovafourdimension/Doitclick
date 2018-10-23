@@ -337,7 +337,7 @@ namespace Doitclick.Controllers.Api
         {
             var salida = _context.Tareas
                         .Include(tarea => tarea.Etapa)    
-                        .Where(tarea => tarea.Solicitud.NumeroTicket == ticket).ToList()
+                        .Where(tarea => tarea.Solicitud.NumeroTicket == ticket).ToList();
             return Ok(salida);
         }
 
