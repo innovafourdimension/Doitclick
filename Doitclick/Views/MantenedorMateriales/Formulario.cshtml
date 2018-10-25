@@ -119,50 +119,98 @@
 
 @section Scripts{
     <script src="~/Assets/plugins/fooTable/dist/footable.all.min.js"></script>
-    <script>
+    <script src="~/Assets/plugins/bootstrap-validator/bootstrapValidator.min.js" ></script>
+
+
+ <script>
         $(function () {
-            $('#frm-ingreso-datos-materiales').on("submit", function () {
-                $(".submit-generico").html("Cargando...");
-                const model = $(this).serializeFormJSON();
-
-
-                console.log({model})
-
+         $('#frm-ingreso-datos-materiales').bootstrapValidator({
+                excluded: [':disabled', ':not(:visible)'],
+                feedbackIcons: [],
+                fields: {
+                    NombreMaterial: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Debe ingresar un Nombre'
+                            }
+                            }
+                         },
+                   sslUnidadMedida: {
+                        validators: {
+                          notEmpty: {
+                                message: 'Debe Seleccionar Unidad de Medida'
+                             }   
+                            }
+                         },
+                    PrecioMaterial: {
+                        validators: {
+                            integer: {
+                                        message: 'Debe Ingresar un Número'
+                                    },
+                          notEmpty: {
+                                message: 'Debe Ingresar Precio'
+                             }   
+                            }
+                         },
+                         StockMaterial: {
+                        validators: {
+                             integer: {
+                                        message: 'Debe Ingresar un Número'
+                                    },
+                          notEmpty: {
+                                message: 'Debe Ingresar un Stock'
+                             }   
+                            }
+                         },
+                          Codigo: {
+                        validators: {
+                            
+                          notEmpty: {
+                                message: 'Debe Ingresar un Código'
+                             }   
+                            }
+                         },
+                           Marca: {
+                        validators: {
+                          notEmpty: {
+                                message: 'Debe Ingresar una Marca'
+                             }   
+                            }
+                         }
+                    }
+            }).on('success.form.bv', function (e) {
+                // Prevén que se mande el formulario
+                e.preventDefault();
+                var $form = $(e.target);
+                let model = $form.serializeFormJSON();
                 $.ajax({
                     type: "POST",
                     url: "/api/mantenedor/materiales",
                     data: JSON.stringify(model),
-                    contentType: "application/json; charset=utf-8",
-                    success: function (data) { 
-                        $.niftyNoty({
-                            type: "success",
-                            container : "floating",
-                            title : "Suceso Exitoso",
-                            message : "Los datos del Material se han guardado correctamente",
-                            closeBtn : true,
-                            timer : 5000,
-                            onHide: function(){
-                                location.reload();
-                            }
-                        });
-                        $(".submit-generico").html("Guardar");
-                    },
-                    failure: function (errMsg) {
-                         $.niftyNoty({
-                            type: "warning",
-                            container : "floating",
-                            title : "Suceso Erroneo",
-                            message : "Los datos del Material NO se han guardado correctamente: " + errMsg,
-                            closeBtn : false,
-                            timer : 5000
-                        });
-                        $(".submit-generico").html("Guardar");
-                    }
+                    contentType: "application/json; charset=utf-8" 
+                }).done(function (data) {
+                    $.niftyNoty({
+                        type: "success",
+                        container : "floating",
+                        title : "Suceso Exitoso",
+                       message : "Los datos del Material se han guardado correctamente",
+                        closeBtn : false,
+                        timer : 5000
+                    });
+                    $form.data('bootstrapValidator').resetForm(true);
+                }).fail(function (xhr, textStatus) {
+                    $.niftyNoty({
+                        type: "warning",
+                        container : "floating",
+                        title : "Suceso Erroneo",
+                        message : "Está mal: " + textStatus,
+                        closeBtn : false,
+                        timer : 5000
+                    });
+                }).always(function () {
+                    $(".submit-ingreso-datos-materiales").html("Guardar");
                 });
-
-                return false;
             });
-
         });
     </script>
 
