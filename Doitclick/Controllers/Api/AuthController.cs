@@ -52,7 +52,12 @@ namespace Doitclick.Controllers.Api
                 var result = await _signInManager.PasswordSignInAsync(infoUsuario.Identificacion, infoUsuario.Llave, isPersistent: false, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    return BuildToken(infoUsuario);
+                    var userData = await _userManager.FindByNameAsync(infoUsuario.Identificacion);
+                    return Ok(new {
+                        nombres = userData.Nombres,
+                        email = userData.Email,
+                        identificador = userData.Identificador
+                    });
                 }
                 else
                 {
@@ -123,7 +128,7 @@ namespace Doitclick.Controllers.Api
                 var result = await _userManager.CreateAsync(user, model.Llave);
                 if (result.Succeeded)
                 {
-                    return BuildToken(model);
+                    return Ok();
                 }
                 else
                 {

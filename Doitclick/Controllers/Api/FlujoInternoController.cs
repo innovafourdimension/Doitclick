@@ -11,7 +11,6 @@ using Doitclick.Models.Helper;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.IdentityModel.Tokens.Jwt;
 using Doitclick.Models.Workflow;
 
@@ -19,7 +18,7 @@ namespace Doitclick.Controllers.Api
 {
     [Route("api/flujo-interno")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize]
     public class FlujoInternoController : ControllerBase
     {
 

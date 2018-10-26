@@ -120,7 +120,7 @@
                         <div class="col-sm-12">
                             <div class="text-right no-print">
                                 <button class="btn btn-warning resultado-presupuesto" data-acepta="0">Cliente Rechaza Presupuesto</button>
-                                <button class="btn btn-primary resultado-presupuesto" data-acepta="1">Generar Recibo</button>
+                                <button class="btn btn-primary resultado-presupuesto" id="btn-confirmar" data-acepta="1">Generar Recibo</button>
                             </div>
                         </div>
                     </div>
@@ -169,6 +169,9 @@
 
             $('#frm-generico').on('submit', function (e) {
                 e.preventDefault();
+                const initialLabelText = $("#btn-confirmar").text();
+                $("#btn-confirmar").prop("enabled", false).text("...Cargando");
+        
                 var model = $(this).serializeFormJSON();
                  $.ajax({
                     type: "POST",
@@ -180,8 +183,8 @@
                         type: "success",
                         container : "floating",
                         title : "Notificaciones Workflow",
-                        message : "Etapa Finalizada!!",
-                        closeBtn : false,
+                        message : "Etapa Finalizada. Estamos cerrando esta tarea!!<br/><small>Este mensaje se autocierra en 5 segundos y te redirige a tu gestión</small>",
+                        closeBtn : true,
                         timer : 5000,
                         onHidden: function(){
                             location.href = '/mi-gestion'
@@ -198,7 +201,7 @@
                         timer : 5000
                     });
                 }).always(function () {
-                    //$("#btn-confirmar").prop("enabled", true).text(initialLabelText);
+                    $("#btn-confirmar").prop("enabled", true).text(initialLabelText);
                 });
             });
 

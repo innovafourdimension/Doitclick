@@ -64,14 +64,14 @@
 
             
 
-            if(localStorage.getItem('tokenExpiration') != null)
+            /*if(localStorage.getItem('tokenExpiration') != null)
             {
                 var expDate = new Date(localStorage.getItem('tokenExpiration'))
                 var nowDate = new Date();
                 if(expDate > nowDate){
                     location.href = '/mi-gestion';
                 }
-            }
+            }*/
            
 
             $("#frm").on("submit", function () {
@@ -91,9 +91,7 @@
                     contentType: "application/json; charset=utf-8",
                     success: function (data) {
                         console.log(data);
-                        localStorage.setItem('token', data.token);
-                        localStorage.setItem('tokenExpiration', data.expiration);
-                        localStorage.setItem('userData', JSON.stringify(data.userData));
+                        localStorage.setItem('userData', JSON.stringify(data));
                         $('.botonyweas').html(oldText);
                         location.href = '/mi-gestion';
                     },
