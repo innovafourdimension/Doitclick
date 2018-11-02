@@ -156,6 +156,7 @@ namespace Doitclick.Controllers.Api
         public IActionResult GuardarAsignacionTrabajo([FromBody] ResultadoAsignacionDefault entrada)
         {
             _wfService.AsignarVariable("USUARIO_EVALUA_TRABAJO", entrada.UsuarioAsignado, entrada.NumeroTicket);
+            _wfService.AsignarVariable("USUARIO_EVALUA_COTIZACION", entrada.UsuarioAsignado, entrada.NumeroTicket);
             _wfService.Avanzar(_nombreProceso, EtapasFlujoInterno.AsignarTrabajo, entrada.NumeroTicket, User.Identity.Name);
             
             return Ok();
@@ -166,6 +167,7 @@ namespace Doitclick.Controllers.Api
         [HttpPost]
         public IActionResult GuardarAsignacionEvaluacion([FromBody] ResultadoAsignacionDefault entrada)
         {
+            _wfService.AsignarVariable("USUARIO_EVALUA_TRABAJO", entrada.UsuarioAsignado, entrada.NumeroTicket);
             _wfService.AsignarVariable("USUARIO_EVALUA_COTIZACION", entrada.UsuarioAsignado, entrada.NumeroTicket);
             _wfService.Avanzar(_nombreProceso, EtapasFlujoInterno.AsignarCotizacion, entrada.NumeroTicket, User.Identity.Name);
             
@@ -267,6 +269,9 @@ namespace Doitclick.Controllers.Api
                     case "CHQ": 
                         movPago.TipoTransanccion = TipoTransaccionCuentaCorriente.IngresoPagoCheque;
                         break;
+                    case "TRA":
+                        movPago.TipoTransanccion = TipoTransaccionCuentaCorriente.IngresoTransferenciaBancaria;
+                        break;
                 }
                 _context.MovimientosCuentasCorrientes.Add(movPago);
 
@@ -299,8 +304,10 @@ namespace Doitclick.Controllers.Api
 
         [Route("entrega-servicio")]
         [HttpPost]
-        public IActionResult GuardarEntregaServicio([FromBody] ResultadoDefault entrada)
+        
+        public IActionResult GuardarEntregaServicio([FromBody] ResultadoCobroServicios entrada)
         {
+            /*TODO  Al entregar servicio puede que se genere un pago asi que hay que implementarlo */
             _wfService.Avanzar(_nombreProceso, EtapasFlujoInterno.EntregaServicio, entrada.NumeroTicket, User.Identity.Name);
             return Ok();
         }
@@ -365,7 +372,7 @@ namespace Doitclick.Controllers.Api
                           .Include(t => t.Etapa)
                           join cotiza in _context.Cotizaciones
                           .Include(x=>x.Cliente) on tarea.Solicitud.NumeroTicket equals cotiza.NumeroTicket
-                          where tarea.Solicitud.Proceso.Id == 1 && tarea.Estado == EstadoTarea.Activada && tarea.AsignadoA == rut
+                          where tarea.Solicitud.Proceso.Id == 1 && tarea.Estado == EstadoTarea.Activada && (tarea.AsignadoA == rut || (tarea.Etapa.TipoUsuarioAsignado == TipoUsuarioAsignado.Rol && User.IsInRole(tarea.AsignadoA)))
                           select new ListadoInicioContainer { Tarea = tarea, Cotizacion = cotiza };
                           
 

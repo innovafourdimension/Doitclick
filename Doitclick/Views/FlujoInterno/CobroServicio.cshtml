@@ -1,6 +1,9 @@
 ﻿@{
     ViewData["Title"] = "Cobro de Servicios";
-    var totalGeneral = 0;
+    var totalGeneral = 0f;
+    var totalFinal = 0f;
+    var iva = 0f;
+    var prcIva = 0.19f;
 }
 
 <form id="frm-generico">
@@ -30,7 +33,7 @@
                         <div class="col-sm-12 col-md-6">
                             <label for="RutPaciente">Dr. Solicitante</label>
                             <div class="input-group mar-btm">
-                                <strong>@ViewBag.Cotizacion.DrSolicitante</strong><br />
+                                <strong>@ViewBag.DrMandante.Nombres</strong><br />
                                 <small>Orden Nro: @ViewBag.Cotizacion.FolioSolicitante</small><br />
                                 <a href="#!" data-toggle="modal" data-target="#modal-imagen" class="btn-link"><small>Visualizar oden de trabajo</small></a>
                             </div>
@@ -88,10 +91,11 @@
                                         <tr>
                                             <td><strong>Forma Pago:</strong></td>
                                             <td class="text-bold h4 showapagar">
-                                                <select id="formaPago" name="FormaPago" class="form-control">
+                                                <select id="formaPago" name="FormaPago" class="form-control" required>
                                                     <option value="EFC">Efectivo</option>
                                                     <option value="TBK">Red Compra</option>
                                                     <option value="CHQ">Cheque</option> 
+                                                    <option value="TRA">Transferencia</option> 
                                                 </select>
                                             </td>
                                         </tr>
@@ -104,7 +108,7 @@
                                         <tr>
                                             <td><strong>A Pagar:</strong></td>
                                             <td class="text-bold h4 showapagar">
-                                                <input type="text" class="form-control" name="ValorPagar" value="@totalGeneral" style="text-align:right;">
+                                                <input type="text" class="form-control" name="ValorPagar" value="@totalGeneral" style="text-align:right;" required>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -179,6 +183,7 @@
                     data: JSON.stringify(model),
                     contentType: "application/json; charset=utf-8"
                 }).done(function (data) {
+                    console.log(data)
                     $.niftyNoty({
                         type: "success",
                         container : "floating",
@@ -187,7 +192,9 @@
                         closeBtn : true,
                         timer : 5000,
                         onHidden: function(){
+                            
                             location.href = '/mi-gestion'
+                            window.open('/FlujoInterno/VerComprobante?ticket=@ViewBag.Cotizacion.NumeroTicket')
                         }
                     });
                 }).fail(function (errMsg) {

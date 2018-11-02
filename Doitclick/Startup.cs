@@ -20,6 +20,7 @@ using Doitclick.Services;
 using Doitclick.Services.Notification;
 using Doitclick.Services.Workflow;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Rotativa.AspNetCore;
 
 namespace Doitclick
 {
@@ -62,7 +63,9 @@ namespace Doitclick
             });
 
             services.AddSignalR();
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddJsonOptions(ConfigureJson);
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .AddJsonOptions(ConfigureJson);
         }
 
         private void ConfigureJson(MvcJsonOptions obj)
@@ -100,6 +103,7 @@ namespace Doitclick
                     name: "default",
                     template: "{controller=Acceso}/{action=Login}/{id?}");
             });
+            RotativaConfiguration.Setup(env);
 
         }
     }

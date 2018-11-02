@@ -15,7 +15,7 @@ $(function () {
         url: '/api/Auth/listar-comisionistas'
     }).done(function(data){
         $.each(data, function(i,e){
-            $('#selResultadoAsignacion').append(`<option value="${e.identificador}">${e.nombres}</option>`)
+            $('#selResultadoAsignacion').append(`<option value="${e.comisionista.identificador}" data-carga="${e.carga}">${e.comisionista.nombres} | ${e.carga}/${e.total}</option>`)
         });
     });
 

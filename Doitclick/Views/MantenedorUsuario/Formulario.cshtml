@@ -62,13 +62,12 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-12 col-md-6">
-                            <label for="rol">Rol</label>
-                            <select id="rol" name="Rol" class="form-control">
-                                  <option value="">Seleccione</option>
+                        <div class="col-sm-12 col-md-12">
+                            <label for="rol">Roles</label>
+                            <select id="rol" name="Rol" class="form-control" multiple>
                                   @foreach(var itm in ViewBag.rolesList)
                                   {
-                                      @if(ViewBag.editando && ViewBag.rolUsuario[0] == itm.Name)
+                                      @if(ViewBag.editando && ViewBag.rolUsuario.Contains(itm.Name))
                                       {
                                         <option data-comisionista="@itm.Comisionista" value="@itm.Name" selected>@itm.Orzanizacion.Nombre / @itm.Name</option>
                                       }
@@ -82,7 +81,7 @@
                         </div>
 
                         <div class="col-sm-12 col-md-4 comisionist" style="display:none;">
-                            <label for="PorcentajeComision">% Comision</label>
+                            <label for="PorcentajeComision">% Comision Laboratorista</label>
                             <div class="input-group mar-btm">
                                 <span class="input-group-addon"><i class="demo-pli-male"></i></span>
                                 <input type="text" value="@(ViewBag.editando ? ViewBag.usuario.PorcentajeComision : "")" id="PorcentajeComision" name="PorcentajeComision" class="form-control">
@@ -104,22 +103,36 @@
     </div>
 
 </form>
+
 @section styles{
     <link href="~/Assets/plugins/chosen/chosen.min.css" rel="stylesheet">
 }
 @section Scripts{
+       
+    <script src="~/Assets/plugins/chosen/chosen.jquery.min.js"></script>
     <script type="text/javascript">
         $(function () {
 
-            $("#rol").on("change", function(){
-                if($(this).find("option:selected").data("comisionista") == "True" )
+
+            $('#rol').chosen({width:'100%'});
+
+            $("#rol").on("change", function(event){
+
+                let existComisionista = false;
+                $(this).find("option:selected").each(function(i, e){
+                    if($(this).data("comisionista") == "True" && !existComisionista )
+                    {
+                        existComisionista = true;
+                    }
+                }); 
+
+                if(existComisionista)
                 {
                     $(".comisionist").show("slow");
                 }else{
                     $(".comisionist").hide("slow");
                     $("#PorcentajeComision").val("");
-
-                }
+                }               
             });
 
             $("#rol").trigger("change");
@@ -127,6 +140,18 @@
             $('#frm-generico').on('submit', function (e) {
                 e.preventDefault();
                 var model = $(this).serializeFormJSON();
+                
+
+                if(!Array.isArray(model.Rol))
+                {
+                    if(typeof model.Rol != 'undefined')
+                    {
+                         model.Rol = new Array(model.Rol);
+                    }else{
+                         model.Rol = [];
+                    }
+                }
+            
                 $(".submit-generico").html("Cargando...");
                 
                 $.ajax({
@@ -139,7 +164,7 @@
                         type: "success",
                         container : "floating",
                         title : "Suceso Exitoso",
-                        message : "Los datos del Rol se han guardado correctamente",
+                        message : "Los datos del Usuario se han Guardado Correctamente<br/><small>Este mensaje se autocierra en 5 segundos y te redirige a tu gestión</small>",
                         closeBtn : false,
                         timer : 5000,
                         onHide: function(){

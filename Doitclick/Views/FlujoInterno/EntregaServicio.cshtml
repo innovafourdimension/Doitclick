@@ -31,7 +31,7 @@
                         <div class="col-sm-12 col-md-6">
                             <label for="RutPaciente">Dr. Solicitante</label>
                             <div class="input-group mar-btm">
-                                <strong>@ViewBag.Cotizacion.DrSolicitante</strong><br />
+                                <strong>@ViewBag.DrMandante.Nombres</strong><br />
                                 <small>Orden Nro: @ViewBag.Cotizacion.FolioSolicitante</small><br />
                                 <a href="#!" data-toggle="modal" data-target="#modal-imagen" class="btn-link"><small>Visualizar oden de trabajo</small></a>
                             </div>
@@ -44,7 +44,8 @@
                                     <tr>
                                         <th>Servicio</th>
                                         <th>Cantidad</th>
-                                        
+                                        <th>Precio</th>
+                                        <th>Total Parcial</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -59,14 +60,109 @@
                                                 <small>@itm.Servicio.Resumen</small>
                                             </td>
                                             <td>@itm.Cantidad</td>
+                                            <td>$@string.Format("{0:n0}", itm.Servicio.ValorCosto)</td>
+                                            <td>$@string.Format("{0:n0}",total)</td>
                                         </tr>
                                     }
+
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td>
+                                            <strong>Total</strong>
+                                        </td>
+                                        <td>
+                                            <strong>$@string.Format("{0:n0}",totalGeneral)</strong><br/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h4>Detalle de Pagos</h4>
+                            <hr/>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Tipo Movimiento</th>
+                                        <th>Monto</th>
+                                        <th>Código Movimeinto</th>
+                                        <th>Fecha</th>
+                                        <th>Descripción</th>
+                                        <th>Num. Documento</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var itm in ViewBag.Movimientos)
+                                    {
+                                        
+                                        <tr>
+                                            <td>
+                                                <strong>@System.Text.RegularExpressions.Regex.Replace(itm.TipoTransanccion.ToString(), "([A-Z])", " $1", System.Text.RegularExpressions.RegexOptions.Compiled).Trim()</strong>
+                                            </td>
+                                            <td>$@string.Format("{0:n0}", itm.MontoTransaccion)</td>
+                                            <td>@itm.NumeroTransaccion</td>
+                                            <td>@itm.FechaTransaccion</td>
+                                            <td>@itm.Resumen</td>
+                                            <td>@itm.NumeroDocumento</td>
+                                        </tr>
+                                    }
+
                                 </tbody>
                             </table>
                         </div>
                     </div>
 
-                    
+                    @if(ViewBag.CalculoBalance.Balance > 0)
+                    {
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="clearfix">
+                                    <div class="alert alert-danger">
+                                        <p>Hay un monto pendiente el cual debe cancelarse para entregar</p>
+                                    </div>
+                                    <table class="table invoice-total">
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Total Pendiente:</strong></td>
+                                                <td class="h4 showapagar">
+                                                    $@string.Format("{0:n0}", ViewBag.CalculoBalance.Balance)
+                                                    <input type="hidden" value="@totalGeneral" name="ValorTotal" />
+                                                    <input type="hidden" value="1" name="AceptaPresupuesto" id="acepta-presupuesto"/>
+                                                    <input type="hidden" value="@ViewBag.Cotizacion.NumeroTicket" name="NumeroTicket"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Forma Pago:</strong></td>
+                                                <td class="text-bold h4 showapagar">
+                                                    <select id="formaPago" name="FormaPago" class="form-control" required>
+                                                        <option value="EFC">Efectivo</option>
+                                                        <option value="TBK">Red Compra</option>
+                                                        <option value="CHQ">Cheque</option> 
+                                                        <option value="TRA">Transferencia</option> 
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr id="swNumDoc" style="display:none;">
+                                                <td><strong>N° Documento:</strong></td>
+                                                <td class="text-bold h4 showapagar">
+                                                    <input type="text" class="form-control" name="NumeroDocumento" style="text-align:right;">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>A Pagar:</strong></td>
+                                                <td class="text-bold h4 showapagar">
+                                                    <input type="text" class="form-control" name="ValorPagar" value="@ViewBag.CalculoBalance.Balance" style="text-align:right;" required>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    }
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="text-right no-print">
@@ -124,8 +220,8 @@
                 const initialLabelText = $("#btn-confirmar").text();
                 $("#btn-confirmar").prop("enabled", false).text("...Cargando");
                 
-                 
-                $.ajax({
+                 console.log(model)
+                /*$.ajax({
                     type: "POST",
                     url: "/api/flujo-interno/entrega-servicio",
                     data: JSON.stringify(model),
@@ -156,7 +252,7 @@
                     });
                 }).always(function () {
                     $("#btn-confirmar").prop("enabled", true).text(initialLabelText);
-                });
+                });*/
             });
 
             $('.resultado-presupuesto').on('click', function(){

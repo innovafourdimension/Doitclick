@@ -117,7 +117,7 @@ namespace Doitclick.Controllers.Api
             // String.IsNullOrEmpty(elUsuario.UserName)
             if(elUsuario == null)
             {
-                float prcc = !String.IsNullOrEmpty(entrada.PorcentajeComision) ? Convert.ToSingle(entrada.PorcentajeComision) : 0f; 
+                float prcc = !String.IsNullOrEmpty(entrada.PorcentajeComision) ? Convert.ToSingle(entrada.PorcentajeComision.Replace('.',',')) : 0f; 
                 var user = new Usuario { 
                     UserName = entrada.Identificacion, 
                     Email = entrada.Correo, 
@@ -130,7 +130,8 @@ namespace Doitclick.Controllers.Api
 
                 if (result.Succeeded)
                 {
-                    var rs = await _userManager.AddToRoleAsync(user, entrada.Rol);
+                    
+                    var rs = await _userManager.AddToRolesAsync(user, entrada.Rol);
                     
                     if(rs.Succeeded){
                         return Ok("Correcto!");
@@ -149,19 +150,18 @@ namespace Doitclick.Controllers.Api
                 elUsuario.Nombres = entrada.Nombres;
                 elUsuario.Email = entrada.Correo;
                 elUsuario.PhoneNumber = entrada.Telefono;
-                elUsuario.PorcentajeComision = !string.IsNullOrEmpty(entrada.PorcentajeComision) ? Convert.ToSingle(entrada.PorcentajeComision.Replace('.',',')) : 0;
-                var roledelete = await _context.UserRoles.FirstOrDefaultAsync(x => x.UserId == elUsuario.Id);
-                if(roledelete != null)
+                elUsuario.PorcentajeComision = !string.IsNullOrEmpty(entrada.PorcentajeComision) ? Convert.ToSingle(entrada.PorcentajeComision.Replace('.',',')) : 0f;
+                var roledeslete = await _userManager.GetRolesAsync(elUsuario);
+                if(roledeslete.Count > 0)
                 {
-                    var role = await _context.Roles.FirstOrDefaultAsync(r => r.Id == roledelete.RoleId);
-                    var rs1 = await _userManager.RemoveFromRoleAsync(elUsuario, role.Name);
+                    var rs1 = await _userManager.RemoveFromRolesAsync(elUsuario, roledeslete);
                 }
-                var rs = await _userManager.AddToRoleAsync(elUsuario, entrada.Rol);
+                var rs = await _userManager.AddToRolesAsync(elUsuario, entrada.Rol);
 
                 var result = await _userManager.UpdateAsync(elUsuario);
                 if (result.Succeeded)
                 {
-                    return Ok("Correcto!");
+                    return Ok();
                 }
                 else
                 {

@@ -239,7 +239,7 @@
                                 </div>
                                 <ul id="mainnav-menu" class="list-group">
                                     <li class="list-header">Menu</li>
-                                    <li class="active-sub">
+                                    <li>
                                         <a href="/mi-gestion">
                                             <i class="demo-pli-home"></i>
                                             <span class="menu-title">Mi Gestión</span>
@@ -253,31 +253,35 @@
                                         </a>
                                         <ul class="collapse">
                                             <li><a href="/FlujoInterno/IngresoDatosPaciente">Nueva</a></li>
-                                            <li class="active-link"><a href="/FlujoInterno/Cotizaciones">Cerradas</a></li>
+                                            <li><a href="/FlujoInterno/Cotizaciones">Cerradas</a></li>
                                         </ul>
 
                                     </li>
 
-                                    <li class="">
-                                        <a href="#">
-                                            <i class="demo-pli-building"></i>
-                                            <span class="menu-title">Mantenedores</span>
-                                            <i class="arrow"></i>
-                                        </a>
-                                        <ul class="collapse">
-                                            <li><a href="/MantenedorMarca/Listado">Marcas</a></li>
-                                            <li><a href="/MantenedorTipoMedida/Listado">Unidades de Medida</a></li>
-                                            <li><a href="/MantenedorMateriales/Listado">Materiales</a></li>
-                                            <li><a href="/MantenedorMaterialMensual/Listado">Material Mensual</a></li>
-                                            <li><a href="/MantenedorInstrumento/Listado">Instrumentos</a></li>
-                                            <li><a href="/MantenedorServicio/Listado">Trabajos / Servicios</a></li>
-                                            <li><a href="/MantenedorCliente/Listado">Clientes</a></li>
-                                            
-                                            <li><a href="/MantenedorOrganizacion/Listado">Organizaciones</a></li>
-                                            <li><a href="/MantenedorRol/Listado">Roles</a></li>
-                                            <li><a href="/MantenedorUsuario/Listado">Usuarios</a></li>
-                                        </ul>
-                                    </li>
+                                    @if(User.IsInRole("Administrador"))
+                                    {
+                                        <li class="">
+                                            <a href="#">
+                                                <i class="demo-pli-building"></i>
+                                                <span class="menu-title">Mantenedores</span>
+                                                <i class="arrow"></i>
+                                            </a>
+                                            <ul class="collapse">
+                                                <li><a href="/MantenedorMarca/Listado">Marcas</a></li>
+                                                <li><a href="/MantenedorTipoMedida/Listado">Unidades de Medida</a></li>
+                                                <li><a href="/MantenedorMateriales/Listado">Materiales</a></li>
+                                                <li><a href="/MantenedorMaterialMensual/Listado">Material Mensual</a></li>
+                                                <li><a href="/MantenedorInstrumento/Listado">Instrumentos</a></li>
+                                                <li><a href="/MantenedorServicio/Listado">Trabajos / Servicios</a></li>
+                                                <li><a href="/MantenedorCliente/Listado">Clientes</a></li>
+                                                
+                                                <li><a href="/MantenedorOrganizacion/Listado">Organizaciones</a></li>
+                                                <li><a href="/MantenedorRol/Listado">Roles</a></li>
+                                                <li><a href="/MantenedorUsuario/Listado">Usuarios</a></li>
+                                            </ul>
+                                        </li>
+                                    }
+                                    
                                 </ul>
                             </div>
                         </div>
@@ -300,12 +304,7 @@
     <script src="~/Assets/js/bootstrap.min.js"></script>
     <script src="~/Assets/js/nifty.min.js"></script>
     <script src="~/js/ext.min.js"></script>
-    <script src="~/Assets/plugins/flot-charts/jquery.flot.min.js"></script>
-    <script src="~/Assets/plugins/flot-charts/jquery.flot.resize.min.js"></script>
-    <script src="~/Assets/plugins/flot-charts/jquery.flot.tooltip.min.js"></script>
-    <script src="~/Assets/plugins/sparkline/jquery.sparkline.min.js"></script>
-    <script src="~/Assets/plugins/bootstrap-select/bootstrap-select.min.js"></script>
-    <script src="~/Assets/plugins/dropzone/dropzone.min.js"></script>
+    
     @RenderSection("Scripts", required: false)
 
 
