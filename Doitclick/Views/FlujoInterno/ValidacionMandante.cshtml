@@ -1,6 +1,7 @@
-﻿@{
-    ViewData["Title"] = "Evaluar Cotización";
+@{
+    ViewData["Title"] = "Validar Trabajo";
 }
+
 <form id="frm-generico">
     <div class="row">
         <div class="col-lg-12">
@@ -14,8 +15,6 @@
                     </h3>
                 </div>
                 <div class="panel-body">
-
-
                     <div class="row">
                         <div class="col-sm-12 col-md-6">
                             <label for="RutPaciente">Paciente</label>
@@ -34,13 +33,35 @@
                             </div>
                         </div>
                     </div>
-
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Servicio</th>
+                                        <th>Cantidad</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var itm in ViewBag.Servicios)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <strong>@itm.Servicio.Nombre</strong><br />
+                                                <small>@itm.Servicio.Resumen</small>
+                                            </td>
+                                            <td>@itm.Cantidad</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-sm-12">
-                            <label for="RutPaciente">¿Se puede realizar esta cotización?</label>
+                            <label for="RutPaciente">¿El trabajo cumple con todos los requerimientos?</label>
                             <div class="input-group mar-btm">
                                 <select id="selResultadoEvaluacion" name="Resultado" class="form-control">
-                                    <option value="">-</option>
                                     <option value="S">Si</option>
                                     <option value="N">No</option>
                                 </select>
@@ -51,19 +72,6 @@
                         <div class="col-sm-12 mar-btm">
                             <label for="motivoReparo">Indique cuales son los motivos</label>
                             <textarea id="motivoReparo" name="MotivoReparo" class="form-control" rows="5" cols="20"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="row cotiza" style="display:none;">
-                        <div class="col-sm-12 mar-btm">
-                            <label for="descripcionCotizacion">Describa Cotización</label>
-                            <textarea id="descripcionCotizacion" name="DescripcionCotizacion" class="form-control" rows="5" cols="20"></textarea>
-                        </div>
-                        <div class="col-sm-12 mar-btm">
-                            <label for="RutPaciente">Indique Valor de Cotización</label>
-                            <div class="input-group mar-btm">
-                                <input type="text" name="ValorCotizacion" class="form-control" />
-                            </div>
                         </div>
                     </div>
 
@@ -83,6 +91,26 @@
     </div>
 
 </form>
+
+
+<!-- Modal -->
+<div class="modal fade" id="modal-imagen" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Imagen Orden de Trabajo</h4>
+            </div>
+            <div class="modal-body">
+                <img src="@ViewBag.Cotizacion.ImagenOrdenSolicitante" alt="Orden de Trabajo" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section styles{
     <link href="~/Assets/plugins/chosen/chosen.min.css" rel="stylesheet">
 }
@@ -93,26 +121,22 @@
 
             $("#selResultadoEvaluacion").on("change", function (event) {
                 console.log($(this).val())
-                if ($(this).val() == "N") {
-                    $(".reparos").show();
-                    $(".cotiza").hide();
-                } else if ($(this).val() == "S") {
+                if ($(this).val() == "S") {
                     $(".reparos").hide();
-                    $(".cotiza").show();
                 } else {
-                    $(".reparos").hide();
-                    $(".cotiza").hide();
+                    $(".reparos").show();
                 }
             });
 
-
             $('#frm-generico').on('submit', function (e) {
                 e.preventDefault();
+                var initialLabelText = $("#btn-confirmar").html();
+                $("#btn-confirmar").prop("enabled", false).html("Cargando...");
                 var model = $(this).serializeFormJSON();
-                
+                console.log(model)
                 $.ajax({
                     type: "POST",
-                    url: "/api/flujo-interno/evaluar-cotizacion",
+                    url: "/api/flujo-interno/validar-mandante",
                     data: JSON.stringify(model),
                     contentType: "application/json; charset=utf-8"
                 }).done(function (data) {
@@ -121,7 +145,7 @@
                         type: "success",
                         container : "floating",
                         title : "Notificaciones Workflow",
-                        message : "Etapa Finalizada, Estamos cerrando esta tarea!!<br/><small>Este mensaje se autocierra en 5 segundos y te redirige a tu gestión</small>",
+                        message : "Etapa Finalizada. Estamos cerrando esta tarea!!<br/><small>Este mensaje se autocierra en 5 segundos y te redirige a tu gestión</small>",
                         closeBtn : true,
                         timer : 5000,
                         onHidden: function(){
@@ -139,7 +163,7 @@
                         timer : 5000
                     });
                 }).always(function () {
-                    $("#btn-confirmar").prop("enabled", true).text(initialLabelText);
+                    $("#btn-confirmar").prop("enabled", true).html(initialLabelText);
                 });
             });
         });

@@ -274,6 +274,7 @@ namespace Doitclick.Controllers.Api
                         break;
                 }
                 _context.MovimientosCuentasCorrientes.Add(movPago);
+                _context.SaveChanges();
 
             }
             
@@ -308,7 +309,54 @@ namespace Doitclick.Controllers.Api
         public IActionResult GuardarEntregaServicio([FromBody] ResultadoCobroServicios entrada)
         {
             /*TODO  Al entregar servicio puede que se genere un pago asi que hay que implementarlo */
+            if(entrada.SaldoPendiente > 0)
+            {
+                _wfService.AsignarVariable("MONTO_CANCELADO_ENTREGA", entrada.ValorPagar.ToString(), entrada.NumeroTicket);
+                var cotizacion = _context.Cotizaciones.Include(d => d.Cliente).FirstOrDefault(c => c.NumeroTicket == entrada.NumeroTicket);
+                /* Existe cuenta corriente para el cliente */
+                var cuentaCorriente = _context.CuentasCorrientes.FirstOrDefault(x => x.Cliente == cotizacion.Cliente);
+                /*Genero pago de cliente */
+                var movPago = new MovimientoCuentaCorriente{
+                    CuentaCorriente = cuentaCorriente,
+                    FechaTransaccion = DateTime.Now,
+                    MontoTransaccion  = entrada.ValorPagar,
+                    NumeroTicket = entrada.NumeroTicket,
+                    NumeroDocumento = entrada.NumeroDocumento.Length > 0 ? entrada.NumeroDocumento : null,
+                    NumeroTransaccion = "A"+DateTime.Now.Ticks.ToString(),
+                    Resumen = "Abono servicio de laboratorio prestado"
+                }; 
+
+                switch(entrada.FormaPago)
+                {
+                    case "EFC":
+                        movPago.TipoTransanccion = TipoTransaccionCuentaCorriente.IngresoPagoEfectivo;
+                        break;
+                    case "TBK":
+                        movPago.TipoTransanccion = TipoTransaccionCuentaCorriente.IngresoPagoTransbank;
+                        break;
+                    case "CHQ": 
+                        movPago.TipoTransanccion = TipoTransaccionCuentaCorriente.IngresoPagoCheque;
+                        break;
+                    case "TRA":
+                        movPago.TipoTransanccion = TipoTransaccionCuentaCorriente.IngresoTransferenciaBancaria;
+                        break;
+                }
+                _context.MovimientosCuentasCorrientes.Add(movPago);
+                _context.SaveChanges();
+            }
             _wfService.Avanzar(_nombreProceso, EtapasFlujoInterno.EntregaServicio, entrada.NumeroTicket, User.Identity.Name);
+            return Ok();
+        }
+
+        [HttpPost("validar-mandante")]
+        public IActionResult EvaluarTrabajo([FromBody] ResultadoReparoDefault entrada)
+        {
+            _wfService.AsignarVariable("TRABAJO_CON_REPAROS_MANDANTE", entrada.Resultado.Equals("S") ? "0":"1", entrada.NumeroTicket);
+            if (entrada.Resultado == "N")
+            {
+                _wfService.AsignarVariable("MOTIVO_REPARO_MANDANTE", entrada.MotivoReparo, entrada.NumeroTicket);
+            }
+            _wfService.Avanzar(_nombreProceso, EtapasFlujoInterno.ValidacionMandante, entrada.NumeroTicket, User.Identity.Name);
             return Ok();
         }
 

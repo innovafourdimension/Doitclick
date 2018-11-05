@@ -193,6 +193,17 @@ namespace Doitclick.Controllers
             return View();
         }
 
+        public async Task<IActionResult> ValidacionMandante(string ticket)
+        {
+            var cotizacion = _context.Cotizaciones.Include(x => x.Cliente).Where(c => c.NumeroTicket == ticket).FirstOrDefault();
+            var servicios = _context.ItemsCorizar.Include(x => x.Servicio).Include(s => s.Cotizacion).Where(d => d.Cotizacion.Id == cotizacion.Id).ToList();
+
+            ViewBag.Cotizacion = cotizacion;
+            ViewBag.Servicios = servicios;
+            ViewBag.DrMandante = await _userManager.FindByNameAsync(cotizacion.DrSolicitante);
+            return View();
+        }
+
         public IActionResult Cotizaciones()
         {
             return View();

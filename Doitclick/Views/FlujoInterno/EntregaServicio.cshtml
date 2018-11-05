@@ -38,80 +38,84 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12 col-md-12">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Servicio</th>
-                                        <th>Cantidad</th>
-                                        <th>Precio</th>
-                                        <th>Total Parcial</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var itm in ViewBag.Servicios)
-                                    {
-                                        var total  = itm.Cantidad*itm.Servicio.ValorCosto;
-                                        totalGeneral = totalGeneral + total;
+                        <div class="col-sm-12 col-md-12 ">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Servicio</th>
+                                            <th>Cantidad</th>
+                                            <th>Precio</th>
+                                            <th>Total Parcial</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var itm in ViewBag.Servicios)
+                                        {
+                                            var total  = itm.Cantidad*itm.Servicio.ValorCosto;
+                                            totalGeneral = totalGeneral + total;
+
+                                            <tr>
+                                                <td>
+                                                    <strong>@itm.Servicio.Nombre</strong><br />
+                                                    <small>@itm.Servicio.Resumen</small>
+                                                </td>
+                                                <td>@itm.Cantidad</td>
+                                                <td>$@string.Format("{0:n0}", itm.Servicio.ValorCosto)</td>
+                                                <td>$@string.Format("{0:n0}",total)</td>
+                                            </tr>
+                                        }
 
                                         <tr>
+                                            <td></td>
+                                            <td></td>
                                             <td>
-                                                <strong>@itm.Servicio.Nombre</strong><br />
-                                                <small>@itm.Servicio.Resumen</small>
+                                                <strong>Total</strong>
                                             </td>
-                                            <td>@itm.Cantidad</td>
-                                            <td>$@string.Format("{0:n0}", itm.Servicio.ValorCosto)</td>
-                                            <td>$@string.Format("{0:n0}",total)</td>
+                                            <td>
+                                                <strong>$@string.Format("{0:n0}",totalGeneral)</strong><br/>
+                                            </td>
                                         </tr>
-                                    }
-
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td>
-                                            <strong>Total</strong>
-                                        </td>
-                                        <td>
-                                            <strong>$@string.Format("{0:n0}",totalGeneral)</strong><br/>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
                             <h4>Detalle de Pagos</h4>
                             <hr/>
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Tipo Movimiento</th>
-                                        <th>Monto</th>
-                                        <th>Código Movimeinto</th>
-                                        <th>Fecha</th>
-                                        <th>Descripción</th>
-                                        <th>Num. Documento</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var itm in ViewBag.Movimientos)
-                                    {
-                                        
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
                                         <tr>
-                                            <td>
-                                                <strong>@System.Text.RegularExpressions.Regex.Replace(itm.TipoTransanccion.ToString(), "([A-Z])", " $1", System.Text.RegularExpressions.RegexOptions.Compiled).Trim()</strong>
-                                            </td>
-                                            <td>$@string.Format("{0:n0}", itm.MontoTransaccion)</td>
-                                            <td>@itm.NumeroTransaccion</td>
-                                            <td>@itm.FechaTransaccion</td>
-                                            <td>@itm.Resumen</td>
-                                            <td>@itm.NumeroDocumento</td>
+                                            <th>Tipo Movimiento</th>
+                                            <th>Monto</th>
+                                            <th>Código Movimeinto</th>
+                                            <th>Fecha</th>
+                                            <th>Descripción</th>
+                                            <th>Num. Documento</th>
                                         </tr>
-                                    }
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var itm in ViewBag.Movimientos)
+                                        {
+                                            
+                                            <tr>
+                                                <td>
+                                                    <strong>@System.Text.RegularExpressions.Regex.Replace(itm.TipoTransanccion.ToString(), "([A-Z])", " $1", System.Text.RegularExpressions.RegexOptions.Compiled).Trim()</strong>
+                                                </td>
+                                                <td>$@string.Format("{0:n0}", itm.MontoTransaccion)</td>
+                                                <td>@itm.NumeroTransaccion</td>
+                                                <td>@itm.FechaTransaccion</td>
+                                                <td>@itm.Resumen</td>
+                                                <td>@itm.NumeroDocumento</td>
+                                            </tr>
+                                        }
 
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>                            
                         </div>
                     </div>
 
@@ -129,9 +133,10 @@
                                                 <td><strong>Total Pendiente:</strong></td>
                                                 <td class="h4 showapagar">
                                                     $@string.Format("{0:n0}", ViewBag.CalculoBalance.Balance)
+                                                    <input type="hidden" value="@ViewBag.CalculoBalance.Balance" name="SaldoPendiente" />
                                                     <input type="hidden" value="@totalGeneral" name="ValorTotal" />
                                                     <input type="hidden" value="1" name="AceptaPresupuesto" id="acepta-presupuesto"/>
-                                                    <input type="hidden" value="@ViewBag.Cotizacion.NumeroTicket" name="NumeroTicket"/>
+                                                    
                                                 </td>
                                             </tr>
                                             <tr>
@@ -221,7 +226,7 @@
                 $("#btn-confirmar").prop("enabled", false).text("...Cargando");
                 
                  console.log(model)
-                /*$.ajax({
+                $.ajax({
                     type: "POST",
                     url: "/api/flujo-interno/entrega-servicio",
                     data: JSON.stringify(model),
@@ -236,6 +241,7 @@
                         timer : 5000,
                         onHidden: function(){
                             location.href = '/mi-gestion'
+                            window.open('/FlujoInterno/VerComprobante?ticket=@ViewBag.Cotizacion.NumeroTicket')
                         }
                     });
 
@@ -252,7 +258,7 @@
                     });
                 }).always(function () {
                     $("#btn-confirmar").prop("enabled", true).text(initialLabelText);
-                });*/
+                });
             });
 
             $('.resultado-presupuesto').on('click', function(){
