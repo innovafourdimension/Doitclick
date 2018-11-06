@@ -1,24 +1,11 @@
 ﻿@{
-    ViewData["Title"] = "About";
+    ViewData["Title"] = "Evaluar Cotización";
 }
 <form id="frm-generico">
     <div class="row">
         <div class="col-lg-12">
             <div id="demo-panel-network" class="panel">
                 <div class="panel-heading">
-                    <div class="panel-control">
-                        <button id="demo-panel-network-refresh" class="btn btn-default btn-active-primary" data-toggle="panel-overlay" data-target="#demo-panel-network"><i class="demo-psi-repeat-2"></i></button>
-                        <div class="dropdown">
-                            <button class="dropdown-toggle btn btn-default btn-active-primary" data-toggle="dropdown" aria-expanded="false"><i class="demo-psi-dot-vertical"></i></button>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something else here</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#">Separated link</a></li>
-                            </ul>
-                        </div>
-                    </div>
                     <h3 class="panel-title">
                         <ol class="breadcrumb">
                             <li></li>
@@ -41,7 +28,7 @@
                         <div class="col-sm-12 col-md-6">
                             <label for="RutPaciente">Dr. Solicitante</label>
                             <div class="input-group mar-btm">
-                                <strong>@ViewBag.Cotizacion.DrSolicitante</strong><br />
+                                <strong>@ViewBag.DrMandante.Nombres</strong><br />
                                 <small>Orden Nro: @ViewBag.Cotizacion.FolioSolicitante</small><br />
                                 <a href="#!" data-toggle="modal" data-target="#modal-imagen" class="btn-link"><small>Visualizar oden de trabajo</small></a>
                             </div>
@@ -135,7 +122,7 @@
                         container : "floating",
                         title : "Notificaciones Workflow",
                         message : "Etapa Finalizada, Estamos cerrando esta tarea!!<br/><small>Este mensaje se autocierra en 5 segundos y te redirige a tu gestión</small>",
-                        closeBtn : false,
+                        closeBtn : true,
                         timer : 5000,
                         onHidden: function(){
                             location.href = '/mi-gestion'

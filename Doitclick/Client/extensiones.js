@@ -105,4 +105,13 @@ String.prototype.OrdenaNombre = function () {
         });
         return o;
     };
+
+    let $li = $(`a[href="${location.pathname}"]`).closest("li");
+    let $ul = $li.closest("ul");
+    $li.addClass("active-link")
+    if ($ul.hasClass('collapse')) {
+        $parentLi = $ul.closest("li");
+        $parentLi.addClass("active-sub");
+        $ul.addClass("in");
+    }
 })(jQuery);

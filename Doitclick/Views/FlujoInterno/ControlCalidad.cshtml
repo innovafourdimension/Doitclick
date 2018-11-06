@@ -31,7 +31,7 @@
                         <div class="col-sm-12 col-md-6">
                             <label for="RutPaciente">Dr. Solicitante</label>
                             <div class="input-group mar-btm">
-                                <strong>@ViewBag.Cotizacion.DrSolicitante</strong><br />
+                                <strong>@ViewBag.DrMandante.Nombres</strong><br />
                                 <small>Orden Nro: @ViewBag.Cotizacion.FolioSolicitante</small><br />
                                 <a href="#!" data-toggle="modal" data-target="#modal-imagen" class="btn-link"><small>Visualizar oden de trabajo</small></a>
                             </div>
@@ -112,7 +112,7 @@
                         <div class="col-sm-12">
                             <div class="text-right no-print">
                                 <a href="/mi-gestion" class="btn btn-warning">Volver</a>
-                                <button class="btn btn-primary btn-finalizar">Finalizar</button>
+                                <button class="btn btn-primary btn-finalizar" id="btn-confirmar">Finalizar</button>
                             </div>
                         </div>
                     </div>
@@ -159,10 +159,14 @@
                 }
             });
 
+            
+
             $('#frm-generico').on('submit', function (e) {
                 e.preventDefault();
                 var model = $(this).serializeFormJSON();
-                
+                const initialLabelText = $("#btn-confirmar").text();
+                $("#btn-confirmar").prop("enabled", false).text("...Cargando");
+        
                  
                 $.ajax({
                     type: "POST",
@@ -194,7 +198,7 @@
                         timer : 5000
                     });
                 }).always(function () {
-                    //$("#btn-confirmar").prop("enabled", true).text(initialLabelText);
+                    $("#btn-confirmar").prop("enabled", true).text(initialLabelText);
                 });
             });
 

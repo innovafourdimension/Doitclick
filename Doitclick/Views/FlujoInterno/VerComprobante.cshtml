@@ -1,0 +1,194 @@
+@model Doitclick.Models.Helper.CotizacionViewModel; 
+@{
+    Layout = null;
+    var totalGeneral = 0;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
+    <link href="~/Assets/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        .intermedia{
+            width: auto;
+        }
+        .fecha{
+            margin-bottom: 50px;
+            text-align: right;
+        }
+        .texto-derecha{
+            text-align: right;
+        }
+        .logo{
+            width: 30%;
+        }
+        .datos-empresa{
+            width: 36%;
+            text-align: right;
+        }
+        .totales{
+            position: relative;
+            float: right;
+        }
+        .totales table{
+            text-align: right;
+            text-justify: auto;
+
+        }
+        .titulo-final{
+            font-size: 20px;
+            text-align: right;
+        }
+        .monto-total{
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    
+<table>
+    <tr>
+        <td class="logo">
+            <img src="~/img/Innova4D-04.png"><br />
+            <strong>Fecha Emisión: @DateTime.Now</strong>
+        </td>
+        <td class="intermedia">
+            <h2>Comprobante de Pago</h2>
+            
+        </td>
+        <td class="datos-empresa"></td>
+    </tr>
+</table>
+
+
+<div class="fecha">
+   
+</div>
+
+
+<h4>Datos Cliente y Mandante</h4>
+<table class="table">
+    <tr>
+        <td>
+            <div>
+                <label for="RutPaciente">Paciente</label>
+                <div class="input-group mar-btm">
+                    <strong>@Model.Cotizacion.Cliente.Nombres</strong><br />
+                    <p>@Model.Cotizacion.Cliente.Rut</p><br />
+                    <p>@Model.Cotizacion.Cliente.PrevisionSalud</p>
+                </div>
+            </div>
+        </td>
+        <td>
+            <div>
+                <label for="RutPaciente">Dr. Solicitante</label>
+                <div class="input-group mar-btm">
+                    <strong>@Model.DrMandante.Nombres</strong><br />
+                    <p>Orden Nro: @Model.Cotizacion.FolioSolicitante</p>
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+<div class="fecha"></div>
+
+<h4>Detalle de Servicios</h4>
+<hr/>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Servicio</th>
+            <th>Cantidad</th>
+            <th>Precio</th>
+            <th>Total Parcial</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var itm in Model.Servicios)
+        {
+            var total  = itm.Cantidad*itm.Servicio.ValorCosto;
+            totalGeneral = totalGeneral + total;
+
+            <tr>
+                <td>
+                    <strong>@itm.Servicio.Nombre</strong><br />
+                    <small>@itm.Servicio.Resumen</small>
+                </td>
+                <td>@itm.Cantidad</td>
+                <td>$@string.Format("{0:n0}", itm.Servicio.ValorCosto)</td>
+                <td>$@string.Format("{0:n0}",total)</td>
+            </tr>
+        }
+
+        <tr>
+            <td></td>
+            <td></td>
+            <td>
+                <strong>Total</strong>
+            </td>
+            <td>
+                <strong>$@string.Format("{0:n0}",totalGeneral)</strong><br/>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+
+<h4>Detalle de Pago</h4>
+<hr/>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Tipo Movimiento</th>
+            <th>Monto</th>
+            <th>Código Movimeinto</th>
+            <th>Fecha</th>
+            <th>Descripción</th>
+            <th>Num. Documento</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var itm in Model.Movimientos)
+        {
+            
+            <tr>
+                <td>
+                    <strong>@System.Text.RegularExpressions.Regex.Replace(itm.TipoTransanccion.ToString(), "([A-Z])", " $1", System.Text.RegularExpressions.RegexOptions.Compiled).Trim()</strong>
+                </td>
+                <td>$@string.Format("{0:n0}", itm.MontoTransaccion)</td>
+                <td>@itm.NumeroTransaccion</td>
+                <td>@itm.FechaTransaccion</td>
+                <td>@itm.Resumen</td>
+                <td>@itm.NumeroDocumento</td>
+            </tr>
+        }
+
+        <tr>
+            <td>
+                <strong>Saldo Pendiente</strong>
+            </td>
+            <td>$@string.Format("{0:n0}", Model.CalculoBalance.Balance)</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+
+    </tbody>
+</table>
+
+<hr />
+ <p style="text-align:right;">
+    Laboratorio Innova4D Chile S.A. <br/> 
+    Dir: La Capitanía #80 oficina 212, Las Condes Santiago. <br/>
+    Tel: +56 2 2973 2153, Cel: +56 9 8722 8329, Mail: ventas@innova4d.cl
+</p>
+
+</body>
+</html>
