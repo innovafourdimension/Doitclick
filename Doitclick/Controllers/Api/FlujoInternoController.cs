@@ -242,7 +242,7 @@ namespace Doitclick.Controllers.Api
                     MontoTransaccion  = entrada.ValorTotal,
                     NumeroTicket = entrada.NumeroTicket,
                     NumeroTransaccion = "C"+DateTime.Now.Ticks.ToString(),
-                    Resumen = "Cargo de valor servicio de laboratorio prestado",
+                    Resumen = "Cargo por Servicios",
                     TipoTransanccion = TipoTransaccionCuentaCorriente.CargoCobroServicio   
                 };   
                 _context.MovimientosCuentasCorrientes.Add(movCobro);             
@@ -255,7 +255,7 @@ namespace Doitclick.Controllers.Api
                     NumeroTicket = entrada.NumeroTicket,
                     NumeroDocumento = entrada.NumeroDocumento.Length > 0 ? entrada.NumeroDocumento : null,
                     NumeroTransaccion = "A"+DateTime.Now.Ticks.ToString(),
-                    Resumen = "Abono servicio de laboratorio prestado"
+                    Resumen = "Abono Servicios"
                 }; 
 
                 switch(entrada.FormaPago)
@@ -323,7 +323,7 @@ namespace Doitclick.Controllers.Api
                     NumeroTicket = entrada.NumeroTicket,
                     NumeroDocumento = entrada.NumeroDocumento.Length > 0 ? entrada.NumeroDocumento : null,
                     NumeroTransaccion = "A"+DateTime.Now.Ticks.ToString(),
-                    Resumen = "Abono servicio de laboratorio prestado"
+                    Resumen = "Abono Servicios"
                 }; 
 
                 switch(entrada.FormaPago)
