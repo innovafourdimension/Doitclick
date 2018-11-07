@@ -22,7 +22,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.3" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.1" />
-    <PackageReference Include="Rotativa.AspNetCore" Version="1.0.6" />
+    <PackageReference Include="Rotativa.Pdf" Version="1.0.7" />
+    <!--<PackageReference Include="Rotativa.AspNetCore" Version="1.0.6" />-->
     <PackageReference Include="WebPush" Version="1.0.11" />
     <DotNetCliToolReference Include="BundlerMinifier.Core" Version="2.6.362" />
   </ItemGroup>
