@@ -40,9 +40,10 @@ namespace Doitclick.Controllers
                 DrMandante = await _userManager.FindByNameAsync(cotizacion.DrSolicitante)
             };
         
-            return new ViewAsPdf(Model){
+            return View(Model);
+            /*return new ViewAsPdf(Model){
                 PageSize = Rotativa.AspNetCore.Options.Size.Letter
-            };
+            };*/
         }
 
         public async Task<IActionResult> VerComprobante(string ticket)
@@ -60,11 +61,10 @@ namespace Doitclick.Controllers
                 Pagos = Model.Movimientos.Where(mov => mov.TipoTransanccion != TipoTransaccionCuentaCorriente.CargoCobroServicio && mov.TipoTransanccion != TipoTransaccionCuentaCorriente.EgresoReembolsoEfectivo).Sum(mov => mov.MontoTransaccion)
             };
 
-            //&& (!mv.TipoTransanccion.HasFlag(TipoTransaccionCuentaCorriente.EgresoReembolsoEfectivo) || !mv.TipoTransanccion.HasFlag(TipoTransaccionCuentaCorriente.CargoCobroServicio))
-    
-            return new ViewAsPdf(Model){
+            return View(Model);
+            /*return new ViewAsPdf(Model){
                 PageSize = Rotativa.AspNetCore.Options.Size.Letter
-            };
+            };*/
         }
 
 
