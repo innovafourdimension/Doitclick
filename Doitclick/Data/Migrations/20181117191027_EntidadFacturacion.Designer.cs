@@ -3,14 +3,16 @@ using System;
 using Doitclick.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Doitclick.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181117191027_EntidadFacturacion")]
+    partial class EntidadFacturacion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,7 +30,8 @@ namespace Doitclick.Data.Migrations
 
                     b.Property<string>("Nombres");
 
-                    b.Property<int?>("PrevisionSaludId");
+                    b.Property<int?>("PrevisionSaludId")
+                        .IsRequired();
 
                     b.Property<string>("Rut");
 
@@ -866,7 +869,8 @@ namespace Doitclick.Data.Migrations
 
                     b.HasOne("Doitclick.Models.Application.PrevisionSalud", "PrevisionSalud")
                         .WithMany("Clientes")
-                        .HasForeignKey("PrevisionSaludId");
+                        .HasForeignKey("PrevisionSaludId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Doitclick.Models.Application.Contacto", b =>

@@ -43,6 +43,7 @@ namespace Doitclick.Data
         public DbSet<MovimientoMaterialMensual> MovimientosMaterialesMensuales{get;set;}
         public DbSet<TipoUnidadMedida> TiposUnidadMedidas{get;set;}
         public DbSet<Marca> Marcas { get; set; }
+        public DbSet<EntidadFacturacion> EntidadesFacturacion { get; set; }
        
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -254,7 +255,7 @@ namespace Doitclick.Data
             builder.Entity<PrevisionSalud>()
                 .HasMany(t => t.Clientes)
                 .WithOne(c => c.PrevisionSalud)
-                .IsRequired();
+                .IsRequired(false);
 
             builder.Entity<Tarea>()
                 .Property(d => d.Estado)
