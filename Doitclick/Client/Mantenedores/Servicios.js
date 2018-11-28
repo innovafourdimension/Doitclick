@@ -106,10 +106,12 @@ $(function () {
                     container : "floating",
                     title : "Suceso Exitoso",
                     message : "Los datos del Servicio se han guardado correctamente",
-                    closeBtn : false,
-                    timer : 5000
+                    closeBtn : true,
+                    timer : 5000,
+                    onHidden: function(){
+                        location.reload();
+                    }
                 });
-                location.reload();
                 
             },
             failure: function (errMsg) {

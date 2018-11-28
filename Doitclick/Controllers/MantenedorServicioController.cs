@@ -16,9 +16,21 @@ namespace Doitclick.Controllers
         {
             _context = context;
         }
-        public IActionResult Formulario()
+        public IActionResult Formulario(string id="")
         {
             ViewBag.MaterialesDisponibles = _context.MaterialesDiponibles.Where(x => x.Activa == true).Include(f => f.UnidadMedida).ToList();
+            
+            ViewBag.editando = !string.IsNullOrEmpty(id); 
+            if(!string.IsNullOrEmpty(id))
+            {
+                var svc = _context.Servicios
+                            .Include(sr => sr.MaterialesPresupuestados)
+                            .ThenInclude(mp => mp.MaterialDisponible)
+                            .ThenInclude(md => md.UnidadMedida)
+                            .FirstOrDefault(sr => sr.Id == Convert.ToInt32(id));
+                ViewBag.servicio = svc;
+            }
+            
             return View();
         }
 
