@@ -24,7 +24,6 @@ namespace Doitclick.Data
         public DbSet<TareaAutomatica> TareasAutomaticas { get; set; }
         public DbSet<Transito> Transiciones { get; set; }
         public DbSet<Variable> Variables { get; set; }
-
         public DbSet<Cliente> Clientes { get; set; }
         public DbSet<PrevisionSalud> PrevisionesSalud { get; set; }
         public DbSet<Contacto> Contactos { get; set; }
@@ -44,6 +43,8 @@ namespace Doitclick.Data
         public DbSet<TipoUnidadMedida> TiposUnidadMedidas{get;set;}
         public DbSet<Marca> Marcas { get; set; }
         public DbSet<EntidadFacturacion> EntidadesFacturacion { get; set; }
+        public DbSet<CotizacionExterno> CotizacionesExternos { get; set; }
+        public DbSet<Factura> Facturas { get; set; }
        
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

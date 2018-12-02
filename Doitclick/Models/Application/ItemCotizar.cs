@@ -9,6 +9,7 @@ namespace Doitclick.Models.Application
     {
         public int Id { get; set; }
         public Cotizacion Cotizacion { get; set; }
+        public CotizacionExterno CotizacionExterno { get; set; }
         public Servicio Servicio { get; set; }
         public string Descripcion { get; set; }
         public int Cantidad { get; set; }

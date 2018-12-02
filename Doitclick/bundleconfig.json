@@ -88,5 +88,16 @@
       "outputMode": "singleLine"
     },
     "sourceMap": true
+  },
+  {
+    "outputFileName": "wwwroot/js/FlujoExterno/ingreso-solicitud.min.js",
+    "inputFiles": [
+      "Client/FlujoExterno/ingreso-solicitud.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "outputMode": "singleLine"
+    },
+    "sourceMap": true
   }
 ]

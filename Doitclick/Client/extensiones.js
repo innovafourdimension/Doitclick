@@ -106,6 +106,19 @@ String.prototype.OrdenaNombre = function () {
         return o;
     };
 
+    $.fn.toggleHide = function() {
+        if(this.hasClass("hidden"))
+        {
+            this.removeClass("hidden");
+        }
+        else
+        {
+            this.addClass("hidden");
+        }
+        return this;
+    };
+
+    //Marcador de Menus
     let $li = $(`a[href="${location.pathname}"]`).closest("li");
     let $ul = $li.closest("ul");
     $li.addClass("active-link")
