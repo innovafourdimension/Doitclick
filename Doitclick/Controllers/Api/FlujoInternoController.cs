@@ -409,6 +409,7 @@ namespace Doitclick.Controllers.Api
 
         }
 
+        /* Deprecada, se movio para el controlador de inicio */
         [Route("bandeja-tareas")]
         [HttpGet]
         public IActionResult BandejaTareas(int limit = 10, int offset = 0, string search = "")
@@ -423,16 +424,25 @@ namespace Doitclick.Controllers.Api
                           where tarea.Solicitud.Proceso.Id == 1 && tarea.Estado == EstadoTarea.Activada && (tarea.AsignadoA == rut || (tarea.Etapa.TipoUsuarioAsignado == TipoUsuarioAsignado.Rol && User.IsInRole(tarea.AsignadoA)))
                           select new ListadoInicioContainer { Tarea = tarea, Cotizacion = cotiza };
                           
-
+            var bandeja2 = from tarea in _context.Tareas
+                        .Include(t => t.Solicitud).ThenInclude(s => s.Proceso)
+                        .Include(t => t.Etapa)
+                        join cotiza in _context.CotizacionesExternos on tarea.Solicitud.NumeroTicket equals cotiza.NumeroTicket  
+                        where tarea.Solicitud.Proceso.Id == 2 && tarea.Estado == EstadoTarea.Activada && (tarea.AsignadoA == rut || (tarea.Etapa.TipoUsuarioAsignado == TipoUsuarioAsignado.Rol && User.IsInRole(tarea.AsignadoA)))
+                        select new ListadoInicioContainer { Tarea = tarea, CotizacionExterno = cotiza };    
             
+
+            var bandejaFinal = bandeja.Union(bandeja2);
+
+
             if (!string.IsNullOrEmpty(search))
             {
-                bandeja = bandeja.Where(x => x.Tarea.Solicitud.NumeroTicket.Contains(search) || x.Cotizacion.Cliente.Rut.Contains(search) || x.Cotizacion.Cliente.Nombres.Contains(search));
+                bandejaFinal = bandejaFinal.Where(x => x.Tarea.Solicitud.NumeroTicket.Contains(search) || x.Cotizacion.Cliente.Rut.Contains(search) || x.Cotizacion.Cliente.Nombres.Contains(search));
             }
 
             BootstrapTableResult<ListadoInicioContainer> salida = new BootstrapTableResult<ListadoInicioContainer>();
-            salida.total = bandeja.Count();
-            salida.rows = bandeja.Skip(offset).Take(limit).ToList();
+            salida.total = bandejaFinal.Count();
+            salida.rows = bandejaFinal.Skip(offset).Take(limit).ToList();
             
             return Ok(salida);
         }

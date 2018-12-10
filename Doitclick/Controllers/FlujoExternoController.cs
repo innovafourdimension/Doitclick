@@ -105,9 +105,84 @@ namespace Doitclick.Controllers
             
         }
         
-        [HttpGet("retiro-y-entrega")]
-        public IActionResult RetiroYEntrega(){
+        [HttpGet("retiro-y-entrega/{numeroTicket?}")]
+        public IActionResult RetiroYEntrega(string numeroTicket = ""){
             return View();
+        }
+
+        [HttpPost("retiro-y-entrega")]
+        public IActionResult RetiroYEntrega([FromBody] dynamic postData){
+            return Ok(postData);
+        }
+
+        [HttpGet("recepcion/{numeroTicket?}")]
+        public IActionResult Recepcion(string numeroTicket = ""){
+            return View();
+        }
+
+        [HttpPost("recepcion")]
+        public IActionResult Recepcion([FromBody] dynamic postData){
+            return Ok(postData);
+        }
+
+        [HttpGet("analisis-y-asignacion/{numeroTicket?}")]
+        public IActionResult AnalisisYAsignacion(string numeroTicket = ""){
+            return View();
+        }
+
+        [HttpPost("analisis-y-asignacion")]
+        public IActionResult AnalisisYAsignacion([FromBody] dynamic postData){
+            return Ok(postData);
+        }
+
+        [HttpGet("evaluacion-trabajo/{numeroTicket?}")]
+        public IActionResult Evaluacion(string numeroTicket = ""){
+            return View();
+        }
+
+        [HttpPost("evaluacion-trabajo")]
+        public IActionResult Evaluacion([FromBody] dynamic postData){
+            return Ok(postData);
+        }
+
+        [HttpGet("ejecucion-trabajo/{numeroTicket?}")]
+        public IActionResult Ejecucion(string numeroTicket = ""){
+            return View();
+        }
+
+        [HttpPost("ejecucion-trabajo")]
+        public IActionResult Ejecucion([FromBody] dynamic postData){
+            return Ok(postData);
+        }
+
+        [HttpGet("vb-mandante/{numeroTicket?}")]
+        public IActionResult VbMandante(string numeroTicket = ""){
+            return View();
+        }
+
+        [HttpPost("vb-mandante")]
+        public IActionResult VbMandante([FromBody] dynamic postData){
+            return Ok(postData);
+        }
+
+        [HttpGet("vb-control/{numeroTicket?}")]
+        public IActionResult VbControl(string numeroTicket = ""){
+            return View();
+        }
+
+        [HttpPost("vb-control")]
+        public IActionResult VbControl([FromBody] dynamic postData){
+            return Ok(postData);
+        }
+
+        [HttpGet("preparar-despacho/{numeroTicket?}")]
+        public IActionResult PrepararDespacho(string numeroTicket = ""){
+            return View();
+        }
+
+        [HttpPost("preparar-despacho")]
+        public IActionResult PrepararDespacho([FromBody] dynamic postData){
+            return Ok(postData);
         }
     }
 }

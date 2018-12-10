@@ -1,0 +1,60 @@
+@{
+    ViewData["Title"] = "Preparar Despacho";
+}
+
+<form id="frm-generico">
+    <div class="row">
+        <div class="col-lg-12">
+            <div id="demo-panel-network" class="panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <ol class="breadcrumb">
+                            <li></li>
+                            <li class="active">@ViewData["Title"]</li>
+                        </ol>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <partial name="_EncaezadoSolicitudPartial" />
+
+                    <div class="row">
+                        <div class="col-sm-12 pad-top">
+                            <div class="text-right no-print">
+                                <button class="btn btn-primary" id="btn-confirmar"><i class="demo-pli-printer icon-lg"> </i> Entregado a Motoboy</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+        </div>
+    </div>
+
+</form>
+
+<!-- Modal -->
+<div class="modal fade" id="modal-imagen" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Imagen Orden de Trabajo</h4>
+            </div>
+            <div class="modal-body">
+               <img id="img-previsualiza" src="" alt="Previsualizacion Imagen" style="display: none; max-width: 95%;">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section styles{
+    <link href="~/Assets/plugins/chosen/chosen.min.css" rel="stylesheet">
+}
+@section Scripts{
+    <script src="~/Assets/plugins/chosen/chosen.jquery.min.js"></script>
+    <script src="~/js/FlujoExterno/ingreso-solicitud.min.js" type="text/javascript"></script>
+}

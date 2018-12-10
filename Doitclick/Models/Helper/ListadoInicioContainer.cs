@@ -12,6 +12,7 @@ namespace Doitclick.Models.Helper
     {
         public Tarea Tarea { get; set; }
         public Cotizacion Cotizacion { get; set; }
+        public CotizacionExterno CotizacionExterno { get; set; }
     }
 
 
