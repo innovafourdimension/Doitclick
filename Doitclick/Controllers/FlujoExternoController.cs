@@ -111,8 +111,28 @@ namespace Doitclick.Controllers
         }
 
         [HttpPost("retiro-y-entrega")]
-        public IActionResult RetiroYEntrega([FromBody] dynamic postData){
-            return Ok(postData);
+        public async Task<IActionResult> RetiroYEntrega([FromBody] dynamic postData)
+        {
+            string stepName = "ANALISIS_Y_ASIGNACION_DE_SOLICITUD";
+            string numeroTicket = postData.numeroTicket;
+            var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                
+                _wfservice.Avanzar("FlujoExternos", stepName, numeroTicket, User.Identity.Name);
+                transaction.Commit();
+                return Ok(postData);
+            }
+            catch(Exception ex)
+            {
+                transaction.Rollback();
+                return BadRequest(ex.Message);
+            }
+
+
+
+
+            
         }
 
         [HttpGet("recepcion/{numeroTicket?}")]

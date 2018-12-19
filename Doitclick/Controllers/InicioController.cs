@@ -76,8 +76,9 @@ namespace Doitclick.Controllers
                         .Include(t => t.Solicitud).ThenInclude(s => s.Proceso)
                         .Include(t => t.Etapa)
                         join cotiza in _context.CotizacionesExternos on tarea.Solicitud.NumeroTicket equals cotiza.NumeroTicket  
+                        join usr in _context.Users on cotiza.EntidadSolicitante equals usr.Identificador 
                         where tarea.Solicitud.Proceso.Id == 2 && tarea.Estado == EstadoTarea.Activada && (tarea.AsignadoA == rut || (tarea.Etapa.TipoUsuarioAsignado == TipoUsuarioAsignado.Rol && User.IsInRole(tarea.AsignadoA)))
-                        select new ListadoInicioContainer { Tarea = tarea, CotizacionExterno = cotiza };    
+                        select new ListadoInicioContainer { Tarea = tarea, CotizacionExterno = cotiza, Mandante = usr };    
             
 
             if (!string.IsNullOrEmpty(search))

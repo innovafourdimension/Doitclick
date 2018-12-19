@@ -89,21 +89,19 @@ function initTable() {
                 valign: 'middle',
                 formatter: function (value, row, index) {
                     //console.log(row.tarea.etapa.nombreInterno);
-                    return '<a href="/FlujoInterno/' + row.tarea.etapa.enlace + '?ticket='+value+'" class="btn-link">' + value + '</a>';
+                    return '<a href="/procesos/ext/' + row.tarea.etapa.enlace + '/'+value+'" class="btn-link">' + value + '</a>';
                 }
             }, {
                 title: 'Tarea',
                 field: 'tarea.etapa.nombre',
                 align: 'center',
                 valign: 'middle'
-            }, {
-                title: 'Paciente',
-                field: 'cotizacion.cliente.nombres',
+            }, 
+            {
+                title: 'Mandante',
+                field: 'mandante.nombres',
                 align: 'center',
-                valign: 'middle',
-                formatter: function (value, row, index) {
-                    return row.cotizacion.cliente.rut + ', ' + row.cotizacion.cliente.nombres;
-                }
+                valign: 'middle'
             },  {
                 title: 'Iniciado el',
                 field: 'tarea.fechaInicio',
