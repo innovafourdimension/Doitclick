@@ -28,6 +28,24 @@ namespace Doitclick.Controllers.Api
         [HttpPost]
         public async Task<IActionResult> GuardarIngresoServicio([FromBody] ServicioFormularioIngreso servicios)
         {
+               
+            //Generar modelo de cliente que en este caso es un paciente que viene a la oficina
+           
+           if(servicios.id > 0)
+           {
+               var serv = _context.Servicios.FirstOrDefault(x=>x.Id==servicios.id);
+               serv.Codigo=servicios.CodigoServicio;
+               serv.Nombre=servicios.NombreServicio;
+               serv.Resumen=servicios.DescripcionServicio;
+                serv.ValorManoObra=servicios.VManoObra;
+                _context.Servicios.Update(serv);
+                var respuesta = await _context.SaveChangesAsync();
+                return Ok();
+           } 
+           else
+           {
+               Servicio _servicio = new Servicio
+
 
             var serv = _context.Servicios.Include(s => s.MaterialesPresupuestados).FirstOrDefault(s => s.Id == servicios.Id);
 
@@ -59,6 +77,7 @@ namespace Doitclick.Controllers.Api
             {
                  //Generar modelo de cliente que en este caso es un paciente que viene a la oficina
                 Servicio _servicio = new Servicio
+
                 {
                         Nombre=servicios.NombreServicio,
                         Resumen=servicios.DescripcionServicio,
@@ -67,6 +86,15 @@ namespace Doitclick.Controllers.Api
                         PorcentajeComision=0,
                         Activa = true,
                         ValorCosto = servicios.ValorCosto
+
+                        
+                };
+            _servicio.MaterialesPresupuestados = new List<MaterialPresupuestado>();
+            float valorMateriales = 0;
+            foreach(var x in servicios.Materiales){
+                MaterialPresupuestado mp = new MaterialPresupuestado{
+                    CantidadMaterial = x.Cantidad,
+                    MaterialDisponible = _context.MaterialesDiponibles.FirstOrDefault(z => z.Id == x.MaterialId)
                 };
 
                 _servicio.MaterialesPresupuestados = new List<MaterialPresupuestado>();
@@ -92,7 +120,8 @@ namespace Doitclick.Controllers.Api
             
             var respuesta = await _context.SaveChangesAsync();
             return Ok();
-        }
+           }
+         }
 
        [HttpGet]
        public IActionResult ObtenerServiciosAll()

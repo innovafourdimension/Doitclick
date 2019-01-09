@@ -28,6 +28,7 @@
                             <label for="x">Código</label>
                             <div class="input-group mar-btm">
                                 <span class="input-group-addon"><i class="demo-pli-list-view"></i></span>
+
                                 <input type="text" id="CodigoServicio" name="CodigoServicio" class="form-control" value="@mostrar.codigo">
                             </div>
                         </div>
@@ -62,7 +63,7 @@
                             <label for="x">Mano de Obra $</label>
                             <div class="input-group mar-btm">
                                 <span class="input-group-addon"><i class="demo-pli-add-user-star"></i></span>
-                                <input type="text" id="VManoObra" name="VManoObra" class="form-control" value="0">
+                                <input type="text" id="VManoObra" name="VManoObra" value="@(ViewBag.editando ? ViewBag.servicio.ValorManoObra: "")"  class="form-control" value="0">
                             </div>
                         </div>
                          <div class="col-sm-12 col-md-6">
@@ -111,6 +112,7 @@
                             <input type="hidden" name="Id" id="id" value="@mostrar.id" />
                             <a href="/MantenedorServicio/Listado" class="btn btn-warning">Volver</a>
                             <button type="submit" class="btn btn-primary">Guardar</button>
+                            <input type="hidden" name="id" value="@(ViewBag.editando ? ViewBag.servicio.Id:"")" />
                         </div>
                     </div>
                 </div>
