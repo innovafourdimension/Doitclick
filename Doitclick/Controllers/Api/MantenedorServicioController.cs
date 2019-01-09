@@ -27,20 +27,33 @@ namespace Doitclick.Controllers.Api
         [HttpPost]
         public async Task<IActionResult> GuardarIngresoServicio([FromBody] ServicioFormularioIngreso servicios)
         {
-
+               
             //Generar modelo de cliente que en este caso es un paciente que viene a la oficina
-           Servicio _servicio = new Servicio
+           
+           if(servicios.id > 0)
            {
-                Nombre=servicios.NombreServicio,
-                Resumen=servicios.DescripcionServicio,
-                Codigo=servicios.CodigoServicio,
-                ValorManoObra= 0,
-                PorcentajeComision=0,
-                Activa = true,
-                ValorCosto = servicios.ValorCosto
-                
-           };
-
+               var serv = _context.Servicios.FirstOrDefault(x=>x.Id==servicios.id);
+               serv.Codigo=servicios.CodigoServicio;
+               serv.Nombre=servicios.NombreServicio;
+               serv.Resumen=servicios.DescripcionServicio;
+                serv.ValorManoObra=servicios.VManoObra;
+                _context.Servicios.Update(serv);
+                var respuesta = await _context.SaveChangesAsync();
+                return Ok();
+           } 
+           else
+           {
+               Servicio _servicio = new Servicio
+                {
+                        Nombre=servicios.NombreServicio,
+                        Resumen=servicios.DescripcionServicio,
+                        Codigo=servicios.CodigoServicio,
+                        ValorManoObra= 0,
+                        PorcentajeComision=0,
+                        Activa = true,
+                        ValorCosto = servicios.ValorCosto
+                        
+                };
             _servicio.MaterialesPresupuestados = new List<MaterialPresupuestado>();
             float valorMateriales = 0;
             foreach(var x in servicios.Materiales){
@@ -56,7 +69,8 @@ namespace Doitclick.Controllers.Api
             _context.Servicios.Add(_servicio);
             var respuesta = await _context.SaveChangesAsync();
             return Ok();
-        }
+           }
+         }
 
        [HttpGet]
        public IActionResult ObtenerServiciosAll()

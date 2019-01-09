@@ -36,14 +36,14 @@
                             <label for="x">Código</label>
                             <div class="input-group mar-btm">
                                 <span class="input-group-addon"><i class="demo-pli-list-view"></i></span>
-                                <input type="text" id="CodigoServicio" name="CodigoServicio" class="form-control">
+                                <input type="text" id="CodigoServicio" name="CodigoServicio" value="@(ViewBag.editando ? ViewBag.servicio.Codigo: "")" class="form-control">
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-6">
                             <label for="x">Nombre</label>
                             <div class="input-group mar-btm">
                                 <span class="input-group-addon"><i class="demo-pli-list-view"></i></span>
-                                <input type="text" id="NombreServicio" name="NombreServicio" class="form-control">
+                                <input type="text" id="NombreServicio" name="NombreServicio"  value="@(ViewBag.editando ? ViewBag.servicio.Nombre: "")" class="form-control">
                             </div>
                         </div>
 
@@ -51,7 +51,7 @@
                             <label for="x">Costo del Servicio</label>
                             <div class="input-group mar-btm">
                                 <span class="input-group-addon"><i class="demo-pli-list-view"></i></span>
-                                <input type="text" id="ValorCosto" name="ValorCosto" class="form-control">
+                                <input type="text" id="ValorCosto" name="ValorCosto"  value="@(ViewBag.editando ? ViewBag.servicio.ValorCosto: "")" class="form-control">
                             </div>
                         </div>
                         
@@ -60,7 +60,7 @@
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">
                                 <label for="x">Descripción</label>
-                                <textarea id="DescripcionServicio" name="DescripcionServicio" class="form-control" placeholder="Ingresar descripción de servicio solicitado"></textarea>
+                                <textarea id="DescripcionServicio" name="DescripcionServicio"   class="form-control" placeholder="Ingresar descripción de servicio solicitado">@(ViewBag.editando ? ViewBag.servicio.Resumen: "")</textarea>
                             </div>
                             
                         </div>
@@ -70,7 +70,7 @@
                             <label for="x">Mano de Obra $</label>
                             <div class="input-group mar-btm">
                                 <span class="input-group-addon"><i class="demo-pli-add-user-star"></i></span>
-                                <input type="text" id="VManoObra" name="VManoObra" class="form-control" value="0">
+                                <input type="text" id="VManoObra" name="VManoObra" value="@(ViewBag.editando ? ViewBag.servicio.ValorManoObra: "")"  class="form-control" value="0">
                             </div>
                         </div>
                          <div class="col-sm-12 col-md-6">
@@ -108,6 +108,7 @@
                         <div class="text-right no-print">
                             <a href="/MantenedorServicio/Listado" class="btn btn-warning">Volver</a>
                             <button type="submit" class="btn btn-primary">Guardar</button>
+                            <input type="hidden" name="id" value="@(ViewBag.editando ? ViewBag.servicio.Id:"")" />
                         </div>
                     </div>
                 </div>
