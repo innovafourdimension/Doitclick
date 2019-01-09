@@ -6,7 +6,7 @@ namespace Doitclick.Models.Helper.Mantenedores
 {
     public class ServicioFormularioIngreso
     {
-        public int id {get;set;}
+        public int Id   {get;set;}
         public string NombreServicio     {get;set;}
         public string DescripcionServicio{get;set;}
         public string CodigoServicio     {get;set;}

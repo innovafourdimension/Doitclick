@@ -37,6 +37,23 @@ function sumaCantidad(e) {
     $(document).trigger('doitclick.events.onCambiaValor', { opts, type: 'suma' });
 }
 
+function eliminaServicio(e){
+    let $that = $(this);
+    let prnt = $that.closest('tr');
+    let opts = JSON.parse($(prnt).data('opts'));
+    let svcIndex = _servicios_detalle_cotizacion.findIndex(function(element){
+        return element.id == opts.id;
+    });
+    _servicios_detalle_cotizacion.splice(svcIndex, 1);
+    prnt.remove();
+    $('.mensaje-otros').is(":visible") && $('.mensaje-otros').hide('slow')
+    $(document).trigger('doitclick.events.onCambiaValor', { opts, type: 'borra' });
+
+
+    console.log({e, that: $that, prnt, opts, svcIndex});
+
+}
+
 function previsualizarImagen() {
     var preview = document.querySelector('#img-previsualiza');
     var file = document.querySelector('input[type=file]').files[0];
@@ -60,7 +77,8 @@ function previsualizarImagen() {
 
 $(function () {
 
-    $('#demo-cs-multiselect').chosen();
+    $('#demo-cs-multiselect').chosen({width:'95%'});
+    $('#DrSolicitante').chosen({width:'95%'});
 
 
     $(document).on('doitclick.events.onCambiaValor', function (event, extra) {
@@ -86,7 +104,7 @@ $(function () {
 
             const opts = {
                 id: 'Otro',
-                texto: "Evaluación Otras Prestaciones",
+                texto: "Evaluación de Otras Prestaciones",
                 descripcion: $('#DescripcionEvaluacionOP').val(),
                 valor: 0,
                 cantidad: 1
@@ -94,7 +112,13 @@ $(function () {
 
             var _tr = $('<tr>').data("opts", JSON.stringify(opts));
             var _td_descripcion = $('<td>');
-            _td_descripcion.append($('<strong>').text(opts.texto)).append($('<small>').text(opts.descripcion))
+            _td_descripcion
+                .append($('<div>')
+                            .append($('<button>').prop({ type: 'button' }).addClass('btn btn-xs btn-danger').text('x').on("click", eliminaServicio))
+                            .append($('<strong>').css({'padding-left':'7px'}).text(opts.texto))
+                ).append($('<small>').css({'padding-left':'25px'}).text(opts.descripcion));    
+            
+            //.append($('<strong>').text(opts.texto)).append($('<small>').text(opts.descripcion))
             _tr.append(_td_descripcion);
 
             var _td_valor = $('<td>').addClass('text-center').text('Por Evaluar');
@@ -109,7 +133,6 @@ $(function () {
             _servicios_detalle_cotizacion.push(opts);
             $("#detalles-cotizacion").append(_tr);
 
-            $('#btn-confirmar').text("Enviar a evaluación")
             $('.mensaje-otros').show('slow')
 
             return;
@@ -122,28 +145,38 @@ $(function () {
             valor: $('#demo-cs-multiselect option:selected').data("valor"),
             cantidad: 1
         }
-        _servicios_detalle_cotizacion.push(opts);
+        let idxSvc = _servicios_detalle_cotizacion.findIndex(function(element){
+            return opts.id == element.id;
+        });
+        if(idxSvc == -1)
+        {
+            _servicios_detalle_cotizacion.push(opts);
+            var _tr = $('<tr>').data("opts", JSON.stringify(opts));
+            var _td_descripcion = $('<td>');
+            _td_descripcion
+                .append($('<div>')
+                            .append($('<button>').prop({ type: 'button' }).addClass('btn btn-xs btn-danger').text('x').on("click", eliminaServicio))
+                            .append($('<strong>').css({'padding-left':'7px'}).text(opts.texto))
+                ).append($('<small>').css({'padding-left':'25px'}).text(opts.descripcion))
+            _tr.append(_td_descripcion);
 
-        var _tr = $('<tr>').data("opts", JSON.stringify(opts));
-        var _td_descripcion = $('<td>');
-        _td_descripcion.append($('<strong>').text(opts.texto)).append($('<small>').text(opts.descripcion))
-        _tr.append(_td_descripcion);
+            var _td_valor = $('<td>').addClass('text-center').text('$' + opts.valor.toMoney());
+            _tr.append(_td_valor);
 
-        var _td_valor = $('<td>').addClass('text-center').text('$' + opts.valor.toMoney());
-        _tr.append(_td_valor);
+            var _td_cantidad = $('<td>').addClass('text-center');
+            _td_cantidad
+                .append($('<button>').prop({ type: 'button' }).addClass('btn btn-xs btn-primary').text('<').on("click", restaCantidad))
+                .append($('<span>').addClass("pad-hor showcan").text(opts.cantidad))
+                .append($('<button>').prop({ type: 'button' }).addClass('btn btn-xs btn-primary').text('>').on("click", sumaCantidad))
+                
+            _tr.append(_td_cantidad);
 
-        var _td_cantidad = $('<td>').addClass('text-center');
-        _td_cantidad
-            .append($('<button>').prop({ type: 'button' }).addClass('btn btn-xs btn-primary').text('<').on("click", restaCantidad))
-            .append($('<span>').addClass("pad-hor showcan").text(opts.cantidad))
-            .append($('<button>').prop({ type: 'button' }).addClass('btn btn-xs btn-primary').text('>').on("click", sumaCantidad))
-        _tr.append(_td_cantidad);
+            var _td_total = $('<td>').addClass('text-right showtot').text('$' + opts.valor.toMoney());
+            _tr.append(_td_total);
 
-        var _td_total = $('<td>').addClass('text-right showtot').text('$' + opts.valor.toMoney());
-        _tr.append(_td_total);
-
-        $("#detalles-cotizacion").append(_tr);
-        $(document).trigger('doitclick.events.onCambiaValor', { opts, type: 'nuevo' });
+            $("#detalles-cotizacion").append(_tr);
+            $(document).trigger('doitclick.events.onCambiaValor', { opts, type: 'nuevo' });
+        }
     });
 
 
@@ -155,10 +188,12 @@ $(function () {
         }
     });
 
-    $('#frm-ingreso-datos-paciente').on("submit", function () {
+    $('#frm-ingreso-datos-paciente').on("submit", function (event) {
+        event.preventDefault();
+        let $form = $(this); 
         const initialLabelText = $("#btn-confirmar").text();
         $("#btn-confirmar").prop("enabled", false).text("...Cargando");
-        let model = $(this).serializeFormJSON();
+        let model = $form.serializeFormJSON();
         model.SrcImagen = $("#img-previsualiza").prop("src");
         model.Servicios = _servicios_detalle_cotizacion;
 
@@ -168,16 +203,17 @@ $(function () {
             data: JSON.stringify(model),
             contentType: "application/json; charset=utf-8"
         }).done(function (data) {
-            console.log(data);
+            //console.log({data})
             $.niftyNoty({
                 type: "success",
                 container : "floating",
                 title : "Notificaciones Workflow",
-                message : "Datos Guardados, Workflow Instanciado Nro Ticket: " + data + ". Estamos cerrando esta tarea!<br/><small>Este mensaje se autocierra en 5 segundos y te redirige a tu gestión</small>",
+                message : "Datos Guardados, Workflow Instanciado Nro Ticket: " + data.numeroTicket + ".<br/> <strong>Estamos generando el PDF con el comprobante!</strong><br/><small>Este mensaje se autocierra en 5 segundos y te redirige a tu gestión</small>",
                 closeBtn : false,
                 timer : 5000,
                 onHidden: function(){
                     location.href = '/mi-gestion'
+                    window.open('/FlujoInterno/VerCotizacion?ticket=' + data.numeroTicket)
                 }
             });
         }).fail(function (errMsg) {

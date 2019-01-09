@@ -8,19 +8,6 @@
         <div class="col-lg-12">
             <div id="demo-panel-network" class="panel">
                 <div class="panel-heading">
-                    <div class="panel-control">
-                        <button id="demo-panel-network-refresh" class="btn btn-default btn-active-primary" data-toggle="panel-overlay" data-target="#demo-panel-network"><i class="demo-psi-repeat-2"></i></button>
-                        <div class="dropdown">
-                            <button class="dropdown-toggle btn btn-default btn-active-primary" data-toggle="dropdown" aria-expanded="false"><i class="demo-psi-dot-vertical"></i></button>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something else here</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#">Separated link</a></li>
-                            </ul>
-                        </div>
-                    </div>
                     <h3 class="panel-title">
                         <ol class="breadcrumb">
                             <li></li>
@@ -114,10 +101,26 @@
                     type: "GET",
                     url:`/api/mantenedores/servicios/eliminar/${id}`
                 }).done(function (data) {
-                    alert("Eliminado exitoso");
-                     location.reload();
+                     $.niftyNoty({
+                        type: "success",
+                        container : "floating",
+                        title : "Suceso Exitoso",
+                        message : "Los datos del Servicio se han ELIMINADO correctamente",
+                        closeBtn : false,
+                        timer : 3000,
+                        onHide: function(){
+                            location.reload();
+                        }
+                    });
                 }).fail(function (errMsg) {
-                    console.log(errMsg);
+                    $.niftyNoty({
+                        type: "warning",
+                        container : "floating",
+                        title : "Suceso Erroneo",
+                        message : "Los datos del Servicio NO se han ELIMINADO",
+                        closeBtn : false,
+                        timer : 5000
+                    });
                 }).always(function () {
                    
                 });

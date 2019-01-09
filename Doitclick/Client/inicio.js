@@ -1,4 +1,5 @@
-﻿var $table = $('#table');
+﻿var $table = $('#table-internos');
+var $tableXternos = $('#table-externos');
 
 function initTable() {
     var token = localStorage.getItem('token')
@@ -21,7 +22,7 @@ function initTable() {
                 align: 'center',
                 valign: 'middle',
                 formatter: function (value, row, index) {
-                    console.log(row.tarea.etapa.nombreInterno);
+                    //console.log(row.tarea.etapa.nombreInterno);
                     return '<a href="/FlujoInterno/' + row.tarea.etapa.enlace + '?ticket='+value+'" class="btn-link">' + value + '</a>';
                 }
             }, {
@@ -65,9 +66,76 @@ function initTable() {
     $table.on('all.bs.table', function (e, name, args) {
         console.log(name, args);
     });
+
+
+    /*AASAS*/
+    $tableXternos.bootstrapTable({
+        height: getHeight(),
+        ajaxOptions: {
+            headers: {
+                Authorization: "bearer " + token
+            }
+        },
+        columns: [
+            {
+                title: 'Proceso',
+                field: 'tarea.solicitud.proceso.nombre',
+                align: 'center',
+                valign: 'middle'
+            }, {
+                title: 'Ticket',
+                field: 'tarea.solicitud.numeroTicket',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    //console.log(row.tarea.etapa.nombreInterno);
+                    return '<a href="/procesos/ext/' + row.tarea.etapa.enlace + '/'+value+'" class="btn-link">' + value + '</a>';
+                }
+            }, {
+                title: 'Tarea',
+                field: 'tarea.etapa.nombre',
+                align: 'center',
+                valign: 'middle'
+            }, 
+            {
+                title: 'Mandante',
+                field: 'mandante.nombres',
+                align: 'center',
+                valign: 'middle'
+            },  {
+                title: 'Iniciado el',
+                field: 'tarea.fechaInicio',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    console.log(row);
+                    return new Date(value).toLocaleString();
+                }
+            }
+        ]
+    });
+    // sometimes footer render error.
+    setTimeout(function () {
+        $table.bootstrapTable('resetView');
+    }, 200);
+    
+    $tableXternos.on('expand-row.bs.table', function (e, index, row, $detail) {
+        if (index % 2 == 1) {
+            $detail.html('Loading from ajax request...');
+            $.get('LICENSE', function (res) {
+                $detail.html(res.replace(/\n/g, '<br>'));
+            });
+        }
+    });
+    $tableXternos.on('all.bs.table', function (e, name, args) {
+        console.log(name, args);
+    });
     
     $(window).resize(function () {
         $table.bootstrapTable('resetView', {
+            height: getHeight()
+        });
+        $tableXternos.bootstrapTable('resetView', {
             height: getHeight()
         });
     });

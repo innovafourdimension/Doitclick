@@ -105,4 +105,42 @@ String.prototype.OrdenaNombre = function () {
         });
         return o;
     };
+
+    $.fn.toggleHide = function() {
+        if(this.hasClass("hidden"))
+        {
+            this.removeClass("hidden");
+        }
+        else
+        {
+            this.addClass("hidden");
+        }
+        return this;
+    };
+
+    //Marcador de Menus
+    let $li = $(`a[href="${location.pathname}"]`).closest("li");
+    let $ul = $li.closest("ul");
+    $li.addClass("active-link")
+    if ($ul.hasClass('collapse')) {
+        $parentLi = $ul.closest("li");
+        $parentLi.addClass("active-sub");
+        $ul.addClass("in");
+    }
 })(jQuery);
+
+/*Cargando... */
+$(document).ajaxStart(function () {
+    var target = $("body"),
+        panelOv = $('<div id="principal-loader" class="panel-overlay"></div>');
+    target.addClass('panel-overlay-wrap'),
+        icon = '<span class="panel-overlay-icon text-main"><i class="fa fa-refresh fa-spin fa-2x"></i></span>';
+    target.data('overlayTemplate', '<div class="panel-overlay-content pad-all unselectable">' + icon + '<h4 class="panel-overlay-title"></h4><p></p></div>');
+
+    panelOv.appendTo(target).html(target.data('overlayTemplate'));
+});
+
+$(document).ajaxStop(function () {
+    $("body").removeClass('panel-overlay-wrap');
+    $("#principal-loader").hide().remove();
+});

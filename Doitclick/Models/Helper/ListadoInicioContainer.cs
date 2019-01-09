@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Doitclick.Models.Application;
+using Doitclick.Models.Security;
 using Doitclick.Models.Workflow;
 
 
@@ -12,6 +13,8 @@ namespace Doitclick.Models.Helper
     {
         public Tarea Tarea { get; set; }
         public Cotizacion Cotizacion { get; set; }
+        public CotizacionExterno CotizacionExterno { get; set; }
+        public Usuario Mandante { get; set; }
     }
 
 

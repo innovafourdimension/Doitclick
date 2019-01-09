@@ -40,6 +40,8 @@ namespace Doitclick.Controllers
 
         public IActionResult Listado()
         {
+            var listadoMateriales = _context.MaterialesDiponibles.Include(d => d.UnidadMedida).Include(m => m.Marca).Where(matd => matd.Activa == true).ToList();
+            ViewBag.materialesDisponibles = listadoMateriales;
             return View();
         }
     }

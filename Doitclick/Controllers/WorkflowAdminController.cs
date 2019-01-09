@@ -19,10 +19,12 @@ namespace Doitclick.Controllers
         public WorkflowAdminController(ApplicationDbContext context)
         {
             _context = context;
+            
         }
 
         public IActionResult Procesos()
         {
+            
             ViewBag.procesos = _context.Procesos.ToList();
             return View();
         }

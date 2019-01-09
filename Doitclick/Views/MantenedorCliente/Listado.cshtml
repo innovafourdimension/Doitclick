@@ -50,11 +50,11 @@
                                             <td>@itm.Rut</td>
                                             <td>@itm.Nombres</td>
                                             <td>@itm.TipoCliente</td>
-                                            <td>@itm.EsPersonalidadJuridica</td>
-                                            <td>@itm.PrevisionSalud.Nombre</td>
+                                            <td>@(itm.EsPersonalidadJuridica ? "Si" : "No" )</td>
+                                            <td>@(itm.PrevisionSalud != null ? itm.PrevisionSalud.Nombre : "N/A")</td>
                                             <td>
                                                 <a href="#" data-id="@itm.Id" class="elimination btn btn-danger btn-sm">Eliminar</a>
-                                                <a href="/MantenedorTipoMedida/Formulario/@itm.Id" class="edicion btn btn-primary btn-sm">Editar</a>
+                                                <a href="/MantenedorCliente/Formulario/@itm.Id" class="edicion btn btn-primary btn-sm">Editar</a>
                                             </td>
                                         </tr>
 
@@ -101,9 +101,6 @@
 
 @section Scripts{
 
-    <script src="~/Assets/plugins/unitegallery/js/unitegallery.min.js"></script>
-    <script src="~/Assets/plugins/unitegallery/themes/tiles/ug-theme-tiles.js"></script>
-
     <script type="text/javascript">
         $(function () {
 
@@ -120,7 +117,7 @@
                 }).fail(function (errMsg) {
                     console.log(errMsg);
                 }).always(function () {
-                    location.reload();
+                    //location.reload();
                 });
 
             });

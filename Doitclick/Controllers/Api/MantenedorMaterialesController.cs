@@ -57,8 +57,25 @@ namespace Doitclick.Controllers.Api
 
         }
 
+        [HttpGet("[Action]/{Id}")]
+        public async Task<IActionResult> EliminarMaterial([FromRoute]  string Id)
+        {
+            if(string.IsNullOrEmpty(Id))
+            {
+                return BadRequest("Parámetro Id Vacío");
+            }
+
+            var mtrl = _context.MaterialesDiponibles.Find(Convert.ToInt32(Id));
+            if(mtrl != null){
+                mtrl.Activa=false;
+                await _context.SaveChangesAsync();
+            }
+            
+            return Ok();
+        }
+
         [HttpGet]
-        public ActionResult<ICollection<MaterialDisponible>> ListarMateriales()
+        public ActionResult<IEnumerable<MaterialDisponible>> ListarMateriales()
         {
             return _context.MaterialesDiponibles.Include(d => d.UnidadMedida).Include(m => m.Marca).ToList();
         }

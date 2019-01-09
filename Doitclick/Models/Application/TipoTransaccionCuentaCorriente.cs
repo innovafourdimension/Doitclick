@@ -11,6 +11,7 @@ namespace Doitclick.Models.Application
         IngresoPagoCheque,
         IngresoPagoTransbank,
         EgresoReembolsoEfectivo,
-        CargoCobroServicio
+        CargoCobroServicio,
+        IngresoTransferenciaBancaria
     }
 }

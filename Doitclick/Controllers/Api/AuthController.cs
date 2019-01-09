@@ -12,6 +12,8 @@ using Doitclick.Models.Security;
 using Microsoft.Extensions.Configuration;
 using System.Security.Claims;
 using Doitclick.Data;
+using Doitclick.Models.Workflow;
+using Doitclick.Models.Application;
 
 namespace Doitclick.Controllers.Api
 {
@@ -52,7 +54,12 @@ namespace Doitclick.Controllers.Api
                 var result = await _signInManager.PasswordSignInAsync(infoUsuario.Identificacion, infoUsuario.Llave, isPersistent: false, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    return BuildToken(infoUsuario);
+                    var userData = await _userManager.FindByNameAsync(infoUsuario.Identificacion);
+                    return Ok(new {
+                        nombres = userData.Nombres,
+                        email = userData.Email,
+                        identificador = userData.Identificador
+                    });
                 }
                 else
                 {
@@ -123,7 +130,7 @@ namespace Doitclick.Controllers.Api
                 var result = await _userManager.CreateAsync(user, model.Llave);
                 if (result.Succeeded)
                 {
-                    return BuildToken(model);
+                    return Ok();
                 }
                 else
                 {
@@ -213,7 +220,11 @@ namespace Doitclick.Controllers.Api
         [Route("listar-comisionistas")]
         public IActionResult ListarComisionistas()
         {
-            var comisionistas = _userManager.Users.Where(x => x.PorcentajeComision > 0).ToList();
+            var comisionistas = _userManager.Users.Where(x => x.PorcentajeComision > 0).Select(comis => new {
+                Comisionista = comis,
+                Carga = _context.Tareas.Where(t => t.AsignadoA == comis.Identificador && t.Estado == EstadoTarea.Activada && t.Etapa.NombreInterno == EtapasFlujoInterno.EjecutarTrabajo).Count(),
+                Total =  _context.Tareas.Where(t => t.Estado == EstadoTarea.Activada && t.Etapa.NombreInterno == EtapasFlujoInterno.EjecutarTrabajo).Count()
+            }).ToList();
             return Ok(comisionistas);
         }
     }

@@ -16,13 +16,29 @@ namespace Doitclick.Controllers
         {
             _context = context;
         }
-
+        public IActionResult Formulario(string id="")
+        {
+            ViewBag.MaterialesDisponibles = _context.MaterialesDiponibles.Where(x => x.Activa == true).Include(f => f.UnidadMedida).ToList();
+            
+            ViewBag.editando = !string.IsNullOrEmpty(id); 
+            if(!string.IsNullOrEmpty(id))
+            {
+                var svc = _context.Servicios
+                            .Include(sr => sr.MaterialesPresupuestados)
+                            .ThenInclude(mp => mp.MaterialDisponible)
+                            .ThenInclude(md => md.UnidadMedida)
+                            .FirstOrDefault(sr => sr.Id == Convert.ToInt32(id));
+                ViewBag.servicio = svc;
+            }
+            
+            return View();
+        }
         public IActionResult Listado()
         {
             ViewBag.servList = _context.Servicios.Where(x => x.Activa == true).ToList();//.Organizaciones.ToList();
             return View();
         }
-         public IActionResult Formulario(int id = 0)
+/*         public IActionResult Formulario(int id = 0)
         {
             ViewBag.Id = id;
             ViewBag.editando = (id > 0);
@@ -34,6 +50,6 @@ namespace Doitclick.Controllers
             
 
             return View();
-        }
+        }*/
     }
 }

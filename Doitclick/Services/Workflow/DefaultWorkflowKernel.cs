@@ -210,7 +210,13 @@ namespace Doitclick.Services.Workflow
         private string GeneraTicket(string IdProceso)
         {
             DateTime now = DateTime.Now;
-            return now.Year.ToString() + now.Month.ToString().PadLeft(2, '0') + now.Day.ToString().PadLeft(2, '0') + IdProceso.PadLeft(2, '0') + (now.Hour.ToString() + now.Minute.ToString() + now.Second.ToString() + now.Millisecond.ToString()).PadLeft(10, '0');
+            
+            int solicitudesDia = _context.Solicitudes.Where(sol => 
+                        sol.Proceso.Id == Convert.ToInt32(IdProceso)
+                    &&  sol.FechaInicio.Date == now.Date
+            ).Count();
+            
+            return now.Year.ToString().Substring(2) + now.Month.ToString().PadLeft(2, '0') + now.Day.ToString().PadLeft(2, '0') + IdProceso + (solicitudesDia+1).ToString().PadLeft(2, '0');
         }
 
         private bool EjecutaValidacion(string elnamespace, string laclase, string elmetodo, string numeroTicket)

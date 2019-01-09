@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Doitclick.Controllers
 {
-  //  [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize]
     public class MantenedorClienteController : Controller
     {
          private readonly ApplicationDbContext _context;
@@ -24,16 +24,26 @@ namespace Doitclick.Controllers
             ViewBag.clienList = _context.Clientes.Include(x=>x.PrevisionSalud).ToList();
             return View();
         }
-        public IActionResult Formulario(int id=0)//para listar los combos
+        public IActionResult Formulario(int id=0)
         {
-            ViewBag.Id = id;
-
-            var Clien = _context.Clientes.FirstOrDefault(x => x.Id == id);
-            ViewBag.Cli = Clien;
-
-
+            var editando = id > 0;
+            ViewBag.editando = editando;
             ViewBag.tiposList = (TipoCliente[])Enum.GetValues(typeof(TipoCliente));
-            ViewBag.PrevisionesSalud = _context.PrevisionesSalud.Where(x => x.Activa == true).ToList();
+            ViewBag.previsionesSalud = _context.PrevisionesSalud.Where(x => x.Activa == true).ToList();
+            ViewBag.id = id;
+
+            if(editando)
+            {
+                var cliente = _context.Clientes.Include(x => x.EntidadFacturacion).FirstOrDefault(cli => cli.Id == id);
+                var telefono = _context.Contactos.Include(con => con.Cliente).FirstOrDefault(d => d.Cliente.Rut == cliente.Rut && d.TipoContacto == TipoContacto.TelefonoMovil); 
+                var correo = _context.Contactos.Include(con => con.Cliente).FirstOrDefault(d => d.Cliente.Rut == cliente.Rut && d.TipoContacto == TipoContacto.CorreoElectronico); 
+                ViewBag.telefono = telefono != null ? telefono.Resumen : "";
+                ViewBag.correo = correo != null ? correo.Resumen : "";
+                ViewBag.Cli = cliente;
+                ViewBag.cliente = cliente;
+            }
+            
+            
             return View();
         }
     }

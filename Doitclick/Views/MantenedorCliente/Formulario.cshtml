@@ -2,107 +2,234 @@
 @{
     ViewData["Title"] = "Ingreso de Clientes";
 }
+<div class="row">
+    <div class="col-lg-12">
+        <div id="demo-panel-network" class="panel">
+            <div class="panel-heading">
+                @*<div class="panel-control">
+                    <button id="demo-panel-network-refresh" class="btn btn-default btn-active-primary" data-toggle="panel-overlay" data-target="#demo-panel-network"><i class="demo-psi-repeat-2"></i></button>
+                    <div class="dropdown">
+                        <button class="dropdown-toggle btn btn-default btn-active-primary" data-toggle="dropdown" aria-expanded="false"><i class="demo-psi-dot-vertical"></i></button>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a href="#">Action</a></li>
+                            <li><a href="#">Another action</a></li>
+                            <li><a href="#">Something else here</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">Separated link</a></li>
+                        </ul>
+                    </div>
+                </div>*@
+                <h3 class="panel-title">
+                    <ol class="breadcrumb">
+                        <li></li>
+                        <li class="active">@ViewData["Title"]</li>
+                    </ol>
+                </h3>
+            </div>
+            <div class="panel-body">
 
-<form id="frm-generico">
-    <div class="row">
-        <div class="col-lg-12">
-            <div id="demo-panel-network" class="panel">
-                <div class="panel-heading">
-                    <div class="panel-control">
-                        <button id="demo-panel-network-refresh" class="btn btn-default btn-active-primary" data-toggle="panel-overlay" data-target="#demo-panel-network"><i class="demo-psi-repeat-2"></i></button>
-                        <div class="dropdown">
-                            <button class="dropdown-toggle btn btn-default btn-active-primary" data-toggle="dropdown" aria-expanded="false"><i class="demo-psi-dot-vertical"></i></button>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something else here</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#">Separated link</a></li>
-                            </ul>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Tipo Cliente</label>
+                            <select class="form-control" id="tipo-cliente" name="tipocliente">
+                                <option value="">Selecciona</option>
+                                @foreach (var type in ViewBag.tiposList)
+                                {
+                                    @if (ViewBag.editando && ViewBag.cliente.TipoCliente == type)
+                                    {
+                                        <option value="@type" selected>@type</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@type">@type</option>
+                                    }
+                                }
+                            </select>
                         </div>
                     </div>
-                    <h3 class="panel-title">
-                        <ol class="breadcrumb">
-                            <li></li>
-                            <li class="active">@ViewData["Title"]</li>
-                        </ol>
-                    </h3>
                 </div>
-                <div class="panel-body">
 
+
+                <form id="form-paciente" class="ocultus">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h5>Datos Personales</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">Rut</label>
+                                <input type="text" value="@(ViewBag.editando ? ViewBag.cliente.Rut : "")" id="paciente-rut" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Prevision Salud</label>
+                                <select class="form-control" id="paciente-prevision" >
+                                    @foreach (var pre in ViewBag.previsionesSalud)
+                                    {
+                                            <option value="@pre.Id">@pre.Nombre</option>
+                                    }
+                                </select>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label class="control-label">Nombres</label>
+                                <input type="text" value="@(ViewBag.editando ? ViewBag.cliente.Nombres : "")" id="paciente-nombres" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6 hidden">
+                            <div class="form-group">
+                                <label class="control-label">Apellidos</label>
+                                <input type="text" value="" id="paciente-apellidos" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h5>Datos de Contacto</h5>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="control-label">Tipo Cliente</label>
-                                <select class="form-control" name="tipocliente">
-                                    @foreach (var type in ViewBag.tiposList)
-                                    {
-                                        @if (ViewBag.Id > 0 && ViewBag.Cli.TipoCliente == type)
-                                        {
-                                            <option value="@type" selected>@type</option>
-                                        }
-                                        else
-                                        {
-                                            <option value="@type">@type</option>
-                                        }
-                                    }
-                                </select>
+                                <label class="control-label">Telefono</label>
+                                <input type="text" value="@(ViewBag.editando ? ViewBag.telefono : "")" id="paciente-telefono" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Email</label>
+                                <input type="text" value="@(ViewBag.editando ? ViewBag.correo : "")" id="paciente-email" class="form-control">
                             </div>
                         </div>
                     </div>
+                </form>
 
+                <form id="form-doctor" class="ocultus">
                     <div class="row">
-                       <div class="col-md-3">
+                        <div class="col-sm-12">
+                            <h5>Datos Personales</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Rut</label>
-                               <input type="text" value="@(ViewBag.Id > 0 ? ViewBag.cli.Rut : "")" id="RutCliente" name="Rutcliente" class="form-control">
+                                <input type="text" value="@(ViewBag.editando ? ViewBag.cliente.Rut : "")" id="doctor-rut" class="form-control">
+                            </div>
+                        </div>                        
+                    </div>
+
+                    <div class="row">
+                        
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label class="control-label">Nombres</label>
+                                <input type="text" value="@(ViewBag.editando ? ViewBag.cliente.Nombres : "")" id="doctor-nombres" class="form-control">
                             </div>
                         </div>
-                      <div class="col-md-6">
+                        <div class="col-md-6 hidden">
                             <div class="form-group">
-                                <label class="control-label">Nombre</label>
-                               <input type="text" value="@(ViewBag.Id > 0 ? ViewBag.cli.Nombres : "")" id="NombreCliente" name="NombreCliente" class="form-control">
+                                <label class="control-label">Apellidos</label>
+                                <input type="text" value="" id="doctor-apellidos" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h5>Datos de Contacto</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Telefono</label>
+                                <input type="text" value="@(ViewBag.editando ? ViewBag.telefono : "")" id="doctor-telefono" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Email</label>
+                                <input type="text" value="@(ViewBag.editando ? ViewBag.correo : "")" id="doctor-email" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h5>Datos de Facturación</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Rut Facturación</label>
+                                <input type="text" value="@(ViewBag.editando ? ViewBag.cliente.EntidadFacturacion.Rut : "")" id="rut-facturacion" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Razón Solcial</label>
+                                <input type="text" value="@(ViewBag.editando ? ViewBag.cliente.EntidadFacturacion.RazonSocial : "")" id="razon-social-facturacion" class="form-control">
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                      
-                      <div class="col-md-2">
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <label class="control-label">¿Es Juridica?</label>
-                                <select class="form-control" name="optradio">
-                                    <option value="">Seleccionar</option>
-                                    <option value="0">Natural</option>
-                                    <option value="1">Juridica</option>
-                                </select>
-
+                                <label class="control-label">Teléfono</label>
+                                <input type="text" value="@(ViewBag.editando ? ViewBag.cliente.EntidadFacturacion.Telefono : "")" id="telefono-facturacion" class="form-control">
                             </div>
                         </div>
-                         <div class="col-md-2">
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <label class="control-label">Tipo Cliente</label>
-                                <select class="form-control" name="prevision">
-                                    @foreach (var pre in ViewBag.PrevisionesSalud)
-                                    {
-                                         <option value="@pre.Id">@pre.Nombre</option>
-                                    }
-                                </select>
-
+                                <label class="control-label">Dirección</label>
+                                <input type="text" value="@(ViewBag.editando ? ViewBag.cliente.EntidadFacturacion.Direccion : "")" id="direccion-facturacion" class="form-control">
                             </div>
                         </div>
                     </div>
-
-                    <div class="panel-footer text-right">
-                        <input type="hidden" name="Id" value="@ViewBag.Id" />
-                        <a href="/MantenedorCliente/Listado" class="btn btn-primary" >Volver</a>
-                        <button class="btn btn-success" type="submit">Guardar</button>
+                     <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Giro</label>
+                                <input type="text" value="@(ViewBag.editando ? ViewBag.cliente.EntidadFacturacion.Giro : "")" id="giro-facturacion" class="form-control">
+                            </div>
+                        </div>
                     </div>
+                </form>
+
+                
+
+                <div class="panel-footer text-right">
+                    <input type="hidden" id="id" value="@ViewBag.id" />
+                    <a href="/MantenedorCliente/Listado" class="btn btn-primary" >Volver</a>
+                    <button class="btn btn-success" type="submit" id="btn-guardar-datos">Guardar</button>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-</form>
+@section styles{
+    <style>
+        .ocultus{
+            display: none;
+
+        }
+    </style>
+}
 
 @section Scripts{
 
@@ -112,40 +239,90 @@
 
     <script type="text/javascript">
         $(function () {
-
-            $('#frm-generico').on('submit', function (e) {
+            
+            $('#btn-guardar-datos').on('click', function (e) {
                 e.preventDefault();
-                var model = $(this).serializeFormJSON();
-                console.log(model)
+                //var model = $(this).serializeFormJSON();
 
+                let tipoCliente = $('#tipo-cliente').val();
+                var model = {
+                    id: $('#id').val(),
+                    rutCliente: tipoCliente == 'Paciente' ? $('#paciente-rut').val():$('#doctor-rut').val(),
+                    nombreCliente:  tipoCliente == 'Paciente' ? $('#paciente-nombres').val() + ' ' +$('#paciente-apellidos').val() : $('#doctor-nombres').val() + ' ' + $('#doctor-apellidos').val(),
+                    tipocliente: tipoCliente,
+                    esJuridico: tipoCliente != 'Paciente',
+                    prevision: tipoCliente == 'Paciente' && $('#paciente-prevision').val(),
+                    telefono: tipoCliente == 'Paciente' ? $('#paciente-telefono').val():$('#doctor-telefono').val(),
+                    email: tipoCliente == 'Paciente' ? $('#paciente-email').val():$('#doctor-email').val(),
+                    rutFacturacon: tipoCliente != 'Paciente' && $('#rut-facturacion').val(),
+                    razonSocialFacturacion: tipoCliente != 'Paciente' && $('#razon-social-facturacion').val(),
+                    telefonoFacturacion: tipoCliente != 'Paciente' && $('#telefono-facturacion').val(),
+                    direccionFacturacion: tipoCliente != 'Paciente' && $('#direccion-facturacion').val(),
+                    giroFacturacion: tipoCliente != 'Paciente' && $('#giro-facturacion').val()
+                }
+                
+                
                 $.ajax({
                     type: "POST",
                     url: "/api/mantenedores/cliente/guardar",
                     data: JSON.stringify(model),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json"
+                    contentType: "application/json; charset=utf-8"
                 }).done(function (data) {
                     console.log(data);
                     $.niftyNoty({
                         type: "success",
                         container : "floating",
                         title : "Suceso Exitoso",
-                        message : "Los datos del Cliente se han guardado correctamente",
+                        message : "Los datos del Cliente se han guardado correctamente <br/><small>Este mensaje se autocierra en 5 segurndos.</small>",
                         closeBtn : false,
-                        timer : 5000
+                        timer : 5000,
+                        onHidden: function(){
+                            location.href = '/MantenedorCliente/Listado'
+                        }
                     });
                 }).fail(function (errMsg) {
-                    console.log(errMsg);
-                }).always(function () {
-                    console.log("HOLAA!")
-                    alert("Cliente Registrado");
-                    $('#frm-generico')[0].reset();
+                    $.niftyNoty({
+                        type: "danger",
+                        container : "floating",
+                        title : "Error al Guardar",
+                        message : "Los datos del Cliente se han guardado correctamente <br/><small>Este mensaje se autocierra en 5 segurndos.</small>",
+                        closeBtn : false,
+                        timer : 5000,
+                        onHidden: function(){
+                            location.href = '/MantenedorCliente/Listado'
+                        }
+                    });
                 });
 
             });
 
-        });
-    </script>
+
+            $('#tipo-cliente').on('change', function(e){
+
+                
+                let value = $(this).val().toLowerCase();
+                let select = value;
+                switch(value)
+                {
+                    case "doctor":
+                    case "clinica":
+                    case "universidad":
+                    select = "doctor";
+                    break;
+
+                }
+                let selector = `#form-${select}`; 
+                $('form').hide();
+                $(selector).show();
+
+                console.log($(selector))
+
+                console.log({e, value, selector})
+            });
+
+
+            $('#tipo-cliente').trigger('change');
+        });</script>
     }
 
 

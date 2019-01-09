@@ -18,5 +18,6 @@ namespace Doitclick.Models.Application
         public const string EjecutarTrabajo = "EJECUCION_DE_TRABAJO";
         public const string ControlCalidad = "CONTROL_DE_CALIDAD";
         public const string EntregaServicio = "ENTREGA_SERVICIO";
+        public const string ValidacionMandante = "VALIDACION_MANDANTE";
     }
 }

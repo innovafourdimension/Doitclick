@@ -5,30 +5,62 @@
 
 <div class="row">
     <div class="col-lg-12">
-        <div id="demo-panel-network" class="panel">
+
+        <div class="panel">
+            <!--Panel heading-->
             <div class="panel-heading">
-                <h3 class="panel-title">
+                <div class="panel-control">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tabs-box-internal" data-toggle="tab" aria-expanded="true">Internos</a></li>
+                        <li class=""><a href="#tabs-box-external" data-toggle="tab" aria-expanded="false">Externos</a></li>
+                    </ul>
+                </div>
+                 <h3 class="panel-title">
                     <ol class="breadcrumb">
                         <li></li>
                         <li class="active">Mi Gestión</li>
                     </ol>
                 </h3>
             </div>
+
+            <!--Panel body-->
             <div class="panel-body">
-                <div class="row">
-                    <div class="col-sm-12 col-md-12">
-                        <table id="table"
-                               data-search="true"
-                               data-show-refresh="true"
-                               data-show-export="true"
-                               data-minimum-count-columns="1"
-                               data-show-pagination-switch="true"
-                               data-pagination="true"
-                               data-id-field="Id"
-                               data-page-list="[10]"
-                               data-show-footer="false"
-                               data-side-pagination="server"
-                               data-url="/api/flujo-interno/bandeja-tareas"></table>
+                <div class="tab-content">
+                    <div class="tab-pane fade active in" id="tabs-box-internal">
+                         <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <table id="table-internos"
+                                    data-search="true"
+                                    data-show-refresh="true"
+                                    data-show-export="true"
+                                    data-minimum-count-columns="1"
+                                    data-show-pagination-switch="true"
+                                    data-pagination="true"
+                                    data-id-field="Id"
+                                    data-page-list="[10]"
+                                    data-show-footer="false"
+                                    data-side-pagination="server"
+                                    data-url="/mi-gestion/bandeja-tareas/internos"></table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-box-external">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <table id="table-externos"
+                                    data-search="true"
+                                    data-show-refresh="true"
+                                    data-show-export="true"
+                                    data-minimum-count-columns="1"
+                                    data-show-pagination-switch="true"
+                                    data-pagination="true"
+                                    data-id-field="Id"
+                                    data-page-list="[10]"
+                                    data-show-footer="false"
+                                    data-side-pagination="server"
+                                    data-url="/mi-gestion/bandeja-tareas/externos"></table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

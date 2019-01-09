@@ -15,5 +15,6 @@ namespace Doitclick.Models.Security
         public string Nombres { get; set; }
         public float PorcentajeComision { get; set; }
 
+
     }
 }

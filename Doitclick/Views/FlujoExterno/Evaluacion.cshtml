@@ -1,0 +1,85 @@
+@{
+    ViewData["Title"] = "Evaluación";
+}
+
+<form id="frm-generico">
+    <div class="row">
+        <div class="col-lg-12">
+            <div id="demo-panel-network" class="panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <ol class="breadcrumb">
+                            <li></li>
+                            <li class="active">@ViewData["Title"]</li>
+                        </ol>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <partial name="_EncaezadoSolicitudPartial" />
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 from-group">
+                                    <label class="control-label text-bold">Análisis del Trabajo</label>
+                                    <div class="mar-btm">
+                                        <textarea class="form-control" rows="5" required></textarea>
+                                        <small>Max 500 caracteres.</small>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-8 from-group">
+                                    <label class="control-label text-bold">Resultado del Análisis</label>
+                                    <div class="input-group mar-btm">
+                                        <span class="input-group-addon"><i class="demo-pli-male"></i></span>
+                                        <select name="ResultadoAnalisis" class="form-control" required>
+                                            <option value="">Selecciona una Opción</option>
+                                            <option value="S1">Si se puede ejecutar</option>
+                                            <option value="N1">No se puede ejecutar, Quebrado o Roto</option>
+                                            <option value="N2">No se puede ejecutar, Faltan materiales o no hay herramientas</option>
+                                            <option value="N0">No se puede ejecutar, Otros</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 pad-top">
+                            <div class="text-right no-print">
+                                <button class="btn btn-primary" id="btn-confirmar"><i class="demo-pli-printer icon-lg"> </i> Terminar Actividad</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+        </div>
+    </div>
+
+</form>
+
+<!-- Modal -->
+<div class="modal fade" id="modal-imagen" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Imagen Orden de Trabajo</h4>
+            </div>
+            <div class="modal-body">
+               <img id="img-previsualiza" src="" alt="Previsualizacion Imagen" style="display: none; max-width: 95%;">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section styles{
+    <link href="~/Assets/plugins/chosen/chosen.min.css" rel="stylesheet">
+}
+@section Scripts{
+    <script src="~/Assets/plugins/chosen/chosen.jquery.min.js"></script>
+    <script src="~/js/FlujoExterno/analisis-y-asignacion.min.js" type="text/javascript"></script>
+}

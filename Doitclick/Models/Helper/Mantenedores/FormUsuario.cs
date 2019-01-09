@@ -13,7 +13,7 @@ namespace Doitclick.Models.Helper.Mantenedores
         public string Llave { get; set; }
         public string TipoUsuario { get; set; }
         public string PorcentajeComision { get; set; }
-        public string Rol {get; set;}
+        public IEnumerable<string> Rol {get; set;}
         public string Telefono { get; set; }
     }
 }

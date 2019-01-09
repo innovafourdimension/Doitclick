@@ -22,12 +22,13 @@ namespace Doitclick.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<Guid?>("EntidadFacturacionId");
+
                     b.Property<bool>("EsPersonalidadJuridica");
 
                     b.Property<string>("Nombres");
 
-                    b.Property<int?>("PrevisionSaludId")
-                        .IsRequired();
+                    b.Property<int?>("PrevisionSaludId");
 
                     b.Property<string>("Rut");
 
@@ -35,6 +36,8 @@ namespace Doitclick.Data.Migrations
                         .IsRequired();
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EntidadFacturacionId");
 
                     b.HasIndex("PrevisionSaludId");
 
@@ -93,6 +96,42 @@ namespace Doitclick.Data.Migrations
                     b.ToTable("Cotizaciones");
                 });
 
+            modelBuilder.Entity("Doitclick.Models.Application.CotizacionExterno", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(100);
+
+                    b.Property<string>("DireccionRetiro");
+
+                    b.Property<string>("EntidadSolicitante");
+
+                    b.Property<DateTime>("FechaCreacion");
+
+                    b.Property<string>("NombrePaciente");
+
+                    b.Property<string>("NumeroTicket");
+
+                    b.Property<string>("OrdenFolio");
+
+                    b.Property<string>("OrdenImagen");
+
+                    b.Property<float>("PrecioTotal");
+
+                    b.Property<bool>("RequiereRetiro");
+
+                    b.Property<string>("Resumen")
+                        .HasMaxLength(500);
+
+                    b.Property<string>("RutPaciente")
+                        .IsRequired()
+                        .HasMaxLength(30);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CotizacionesExternos");
+                });
+
             modelBuilder.Entity("Doitclick.Models.Application.CuentaCorriente", b =>
                 {
                     b.Property<int>("Id")
@@ -107,6 +146,51 @@ namespace Doitclick.Data.Migrations
                     b.HasIndex("ClienteId");
 
                     b.ToTable("CuentasCorrientes");
+                });
+
+            modelBuilder.Entity("Doitclick.Models.Application.EntidadFacturacion", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Direccion");
+
+                    b.Property<string>("Giro");
+
+                    b.Property<string>("RazonSocial");
+
+                    b.Property<string>("Rut");
+
+                    b.Property<string>("Telefono");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EntidadesFacturacion");
+                });
+
+            modelBuilder.Entity("Doitclick.Models.Application.Factura", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(100);
+
+                    b.Property<bool>("Cerrada");
+
+                    b.Property<string>("CotizacionFacturaId");
+
+                    b.Property<DateTime>("FechaFacturacion");
+
+                    b.Property<Guid?>("PagadorFacturaId");
+
+                    b.Property<float>("ValorFactura");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CotizacionFacturaId");
+
+                    b.HasIndex("PagadorFacturaId");
+
+                    b.ToTable("Facturas");
                 });
 
             modelBuilder.Entity("Doitclick.Models.Application.Instrumento", b =>
@@ -140,6 +224,8 @@ namespace Doitclick.Data.Migrations
 
                     b.Property<int>("Cantidad");
 
+                    b.Property<string>("CotizacionExternoId");
+
                     b.Property<int?>("CotizacionId");
 
                     b.Property<string>("Descripcion");
@@ -147,6 +233,8 @@ namespace Doitclick.Data.Migrations
                     b.Property<int?>("ServicioId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CotizacionExternoId");
 
                     b.HasIndex("CotizacionId");
 
@@ -837,10 +925,13 @@ namespace Doitclick.Data.Migrations
 
             modelBuilder.Entity("Doitclick.Models.Application.Cliente", b =>
                 {
+                    b.HasOne("Doitclick.Models.Application.EntidadFacturacion", "EntidadFacturacion")
+                        .WithMany()
+                        .HasForeignKey("EntidadFacturacionId");
+
                     b.HasOne("Doitclick.Models.Application.PrevisionSalud", "PrevisionSalud")
                         .WithMany("Clientes")
-                        .HasForeignKey("PrevisionSaludId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("PrevisionSaludId");
                 });
 
             modelBuilder.Entity("Doitclick.Models.Application.Contacto", b =>
@@ -864,6 +955,17 @@ namespace Doitclick.Data.Migrations
                         .HasForeignKey("ClienteId");
                 });
 
+            modelBuilder.Entity("Doitclick.Models.Application.Factura", b =>
+                {
+                    b.HasOne("Doitclick.Models.Application.CotizacionExterno", "CotizacionFactura")
+                        .WithMany()
+                        .HasForeignKey("CotizacionFacturaId");
+
+                    b.HasOne("Doitclick.Models.Application.EntidadFacturacion", "PagadorFactura")
+                        .WithMany()
+                        .HasForeignKey("PagadorFacturaId");
+                });
+
             modelBuilder.Entity("Doitclick.Models.Application.Instrumento", b =>
                 {
                     b.HasOne("Doitclick.Models.Application.Marca", "Marca")
@@ -873,6 +975,10 @@ namespace Doitclick.Data.Migrations
 
             modelBuilder.Entity("Doitclick.Models.Application.ItemCotizar", b =>
                 {
+                    b.HasOne("Doitclick.Models.Application.CotizacionExterno", "CotizacionExterno")
+                        .WithMany("ItemsCotizar")
+                        .HasForeignKey("CotizacionExternoId");
+
                     b.HasOne("Doitclick.Models.Application.Cotizacion", "Cotizacion")
                         .WithMany("ItemsCotizar")
                         .HasForeignKey("CotizacionId");

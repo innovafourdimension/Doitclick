@@ -117,7 +117,7 @@ namespace Doitclick.Controllers.Api
             // String.IsNullOrEmpty(elUsuario.UserName)
             if(elUsuario == null)
             {
-                float prcc = !String.IsNullOrEmpty(entrada.PorcentajeComision) ? Convert.ToSingle(entrada.PorcentajeComision) : 0f; 
+                float prcc = !String.IsNullOrEmpty(entrada.PorcentajeComision) ? Convert.ToSingle(entrada.PorcentajeComision.Replace('.',',')) : 0f; 
                 var user = new Usuario { 
                     UserName = entrada.Identificacion, 
                     Email = entrada.Correo, 
@@ -130,7 +130,8 @@ namespace Doitclick.Controllers.Api
 
                 if (result.Succeeded)
                 {
-                    var rs = await _userManager.AddToRoleAsync(user, entrada.Rol);
+                    
+                    var rs = await _userManager.AddToRolesAsync(user, entrada.Rol);
                     
                     if(rs.Succeeded){
                         return Ok("Correcto!");
@@ -149,19 +150,18 @@ namespace Doitclick.Controllers.Api
                 elUsuario.Nombres = entrada.Nombres;
                 elUsuario.Email = entrada.Correo;
                 elUsuario.PhoneNumber = entrada.Telefono;
-                elUsuario.PorcentajeComision = !string.IsNullOrEmpty(entrada.PorcentajeComision) ? Convert.ToSingle(entrada.PorcentajeComision.Replace('.',',')) : 0;
-                var roledelete = await _context.UserRoles.FirstOrDefaultAsync(x => x.UserId == elUsuario.Id);
-                if(roledelete != null)
+                elUsuario.PorcentajeComision = !string.IsNullOrEmpty(entrada.PorcentajeComision) ? Convert.ToSingle(entrada.PorcentajeComision.Replace('.',',')) : 0f;
+                var roledeslete = await _userManager.GetRolesAsync(elUsuario);
+                if(roledeslete.Count > 0)
                 {
-                    var role = await _context.Roles.FirstOrDefaultAsync(r => r.Id == roledelete.RoleId);
-                    var rs1 = await _userManager.RemoveFromRoleAsync(elUsuario, role.Name);
+                    var rs1 = await _userManager.RemoveFromRolesAsync(elUsuario, roledeslete);
                 }
-                var rs = await _userManager.AddToRoleAsync(elUsuario, entrada.Rol);
+                var rs = await _userManager.AddToRolesAsync(elUsuario, entrada.Rol);
 
                 var result = await _userManager.UpdateAsync(elUsuario);
                 if (result.Succeeded)
                 {
-                    return Ok("Correcto!");
+                    return Ok();
                 }
                 else
                 {
@@ -308,26 +308,92 @@ namespace Doitclick.Controllers.Api
         }
 
         [Route("cliente/guardar")]
-        public IActionResult GuardarCliente([FromBody] FormCliente entrada)
+        public async Task<IActionResult> GuardarCliente([FromBody] FormCliente entrada)
         {
             Cliente elcliente = null;
             if(entrada.Id > 0)
             {
-                elcliente= _context.Clientes.Find(entrada.Id);
-                elcliente.Rut=entrada.RutCliente;
-                elcliente.Nombres=entrada.NombreCliente;
+                elcliente = _context.Clientes.Find(entrada.Id);
+                elcliente.Rut=entrada.rutCliente;
+                elcliente.Nombres=entrada.nombreCliente;
                 elcliente.TipoCliente=Enum.Parse<TipoCliente>(entrada.tipocliente);
-                elcliente.EsPersonalidadJuridica=entrada.optradio==1;
-                elcliente.PrevisionSalud=_context.PrevisionesSalud.Find(entrada.prevision);
+                elcliente.EsPersonalidadJuridica=Convert.ToBoolean(entrada.esJuridico);
+                elcliente.PrevisionSalud= elcliente.TipoCliente == TipoCliente.Paciente ? _context.PrevisionesSalud.Find(Convert.ToInt32(entrada.prevision)) : null;
+                elcliente.EntidadFacturacion = _context.EntidadesFacturacion.FirstOrDefault(efa => efa.Rut == entrada.rutFacturacon);
+                if(elcliente.EntidadFacturacion == null && elcliente.TipoCliente != TipoCliente.Paciente)
+                {
+                    elcliente.EntidadFacturacion = new EntidadFacturacion();
+                    elcliente.EntidadFacturacion.Rut = entrada.rutFacturacon;
+                    elcliente.EntidadFacturacion.RazonSocial  = entrada.razonSocialFacturacion;
+                    elcliente.EntidadFacturacion.Direccion = entrada.direccionFacturacion;
+                    elcliente.EntidadFacturacion.Giro = entrada.giroFacturacion;
+                    elcliente.EntidadFacturacion.Telefono = entrada.telefonoFacturacion;
+                }
+
+                _context.Clientes.Update(elcliente);
+
             }
             else
             {
                 elcliente = new Cliente();
-                elcliente.Rut=entrada.RutCliente;
-                elcliente.Nombres=entrada.NombreCliente;
+                elcliente.Rut=entrada.rutCliente;
+                elcliente.Nombres=entrada.nombreCliente;
                 elcliente.TipoCliente=Enum.Parse<TipoCliente>(entrada.tipocliente);
-                elcliente.EsPersonalidadJuridica=(entrada.optradio==1);
-                elcliente.PrevisionSalud=_context.PrevisionesSalud.Find(entrada.prevision);
+                elcliente.EsPersonalidadJuridica=Convert.ToBoolean(entrada.esJuridico);
+                elcliente.PrevisionSalud= elcliente.TipoCliente == TipoCliente.Paciente ? _context.PrevisionesSalud.Find(Convert.ToInt32(entrada.prevision)) : null;
+                
+
+                if(elcliente.TipoCliente != TipoCliente.Paciente){
+                    elcliente.EntidadFacturacion = _context.EntidadesFacturacion.FirstOrDefault(efa => efa.Rut == entrada.rutFacturacon);
+                    if(elcliente.EntidadFacturacion == null)
+                    {
+                        elcliente.EntidadFacturacion = new EntidadFacturacion();
+                        elcliente.EntidadFacturacion.Rut = entrada.rutFacturacon;
+                        elcliente.EntidadFacturacion.RazonSocial  = entrada.razonSocialFacturacion;
+                        elcliente.EntidadFacturacion.Direccion = entrada.direccionFacturacion;
+                        elcliente.EntidadFacturacion.Giro = entrada.giroFacturacion;
+                        elcliente.EntidadFacturacion.Telefono = entrada.telefonoFacturacion;
+                    }
+                    Usuario elUsuario = await _userManager.FindByNameAsync(entrada.rutCliente);
+                    if(elUsuario == null)
+                    {
+                        var user = new Usuario { 
+                            UserName = entrada.rutCliente, 
+                            Email = entrada.email, 
+                            Identificador = entrada.rutCliente, 
+                            Nombres = entrada.nombreCliente,
+                            PhoneNumber = entrada.telefono
+                        };
+                        var result = await _userManager.CreateAsync(user, "Doitclick.01");
+
+                        if (result.Succeeded)
+                        {
+                            
+                            var rs = await _userManager.AddToRoleAsync(user, "Cliente Externo");
+                        }
+                        else
+                        {
+                            return BadRequest(result.Errors);
+                        }
+                    }
+                }
+
+                Contacto cntEmail = new Contacto{
+                    Cliente = elcliente,
+                    EsPrincipal = false,
+                    TipoContacto = TipoContacto.CorreoElectronico,
+                    Resumen = entrada.email
+                };
+
+                Contacto cntFono = new Contacto{
+                    Cliente = elcliente,
+                    EsPrincipal = false,
+                    TipoContacto = TipoContacto.TelefonoMovil,
+                    Resumen = entrada.telefono
+                };
+                
+                _context.Contactos.Add(cntEmail);
+                _context.Contactos.Add(cntFono);
 
                 _context.Clientes.Add(elcliente);
             }

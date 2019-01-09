@@ -11,7 +11,6 @@ using Doitclick.Models.Helper;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.IdentityModel.Tokens.Jwt;
 using Doitclick.Models.Workflow;
 
@@ -19,7 +18,7 @@ namespace Doitclick.Controllers.Api
 {
     [Route("api/flujo-interno")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize]
     public class FlujoInternoController : ControllerBase
     {
 
@@ -157,6 +156,7 @@ namespace Doitclick.Controllers.Api
         public IActionResult GuardarAsignacionTrabajo([FromBody] ResultadoAsignacionDefault entrada)
         {
             _wfService.AsignarVariable("USUARIO_EVALUA_TRABAJO", entrada.UsuarioAsignado, entrada.NumeroTicket);
+            _wfService.AsignarVariable("USUARIO_EVALUA_COTIZACION", entrada.UsuarioAsignado, entrada.NumeroTicket);
             _wfService.Avanzar(_nombreProceso, EtapasFlujoInterno.AsignarTrabajo, entrada.NumeroTicket, User.Identity.Name);
             
             return Ok();
@@ -167,6 +167,7 @@ namespace Doitclick.Controllers.Api
         [HttpPost]
         public IActionResult GuardarAsignacionEvaluacion([FromBody] ResultadoAsignacionDefault entrada)
         {
+            _wfService.AsignarVariable("USUARIO_EVALUA_TRABAJO", entrada.UsuarioAsignado, entrada.NumeroTicket);
             _wfService.AsignarVariable("USUARIO_EVALUA_COTIZACION", entrada.UsuarioAsignado, entrada.NumeroTicket);
             _wfService.Avanzar(_nombreProceso, EtapasFlujoInterno.AsignarCotizacion, entrada.NumeroTicket, User.Identity.Name);
             
@@ -241,7 +242,7 @@ namespace Doitclick.Controllers.Api
                     MontoTransaccion  = entrada.ValorTotal,
                     NumeroTicket = entrada.NumeroTicket,
                     NumeroTransaccion = "C"+DateTime.Now.Ticks.ToString(),
-                    Resumen = "Cargo de valor servicio de laboratorio prestado",
+                    Resumen = "Cargo por Servicios",
                     TipoTransanccion = TipoTransaccionCuentaCorriente.CargoCobroServicio   
                 };   
                 _context.MovimientosCuentasCorrientes.Add(movCobro);             
@@ -254,7 +255,7 @@ namespace Doitclick.Controllers.Api
                     NumeroTicket = entrada.NumeroTicket,
                     NumeroDocumento = entrada.NumeroDocumento.Length > 0 ? entrada.NumeroDocumento : null,
                     NumeroTransaccion = "A"+DateTime.Now.Ticks.ToString(),
-                    Resumen = "Abono servicio de laboratorio prestado"
+                    Resumen = "Abono Servicios"
                 }; 
 
                 switch(entrada.FormaPago)
@@ -268,8 +269,12 @@ namespace Doitclick.Controllers.Api
                     case "CHQ": 
                         movPago.TipoTransanccion = TipoTransaccionCuentaCorriente.IngresoPagoCheque;
                         break;
+                    case "TRA":
+                        movPago.TipoTransanccion = TipoTransaccionCuentaCorriente.IngresoTransferenciaBancaria;
+                        break;
                 }
                 _context.MovimientosCuentasCorrientes.Add(movPago);
+                _context.SaveChanges();
 
             }
             
@@ -300,9 +305,58 @@ namespace Doitclick.Controllers.Api
 
         [Route("entrega-servicio")]
         [HttpPost]
-        public IActionResult GuardarEntregaServicio([FromBody] ResultadoDefault entrada)
+        
+        public IActionResult GuardarEntregaServicio([FromBody] ResultadoCobroServicios entrada)
         {
+            /*TODO  Al entregar servicio puede que se genere un pago asi que hay que implementarlo */
+            if(entrada.SaldoPendiente > 0)
+            {
+                _wfService.AsignarVariable("MONTO_CANCELADO_ENTREGA", entrada.ValorPagar.ToString(), entrada.NumeroTicket);
+                var cotizacion = _context.Cotizaciones.Include(d => d.Cliente).FirstOrDefault(c => c.NumeroTicket == entrada.NumeroTicket);
+                /* Existe cuenta corriente para el cliente */
+                var cuentaCorriente = _context.CuentasCorrientes.FirstOrDefault(x => x.Cliente == cotizacion.Cliente);
+                /*Genero pago de cliente */
+                var movPago = new MovimientoCuentaCorriente{
+                    CuentaCorriente = cuentaCorriente,
+                    FechaTransaccion = DateTime.Now,
+                    MontoTransaccion  = entrada.ValorPagar,
+                    NumeroTicket = entrada.NumeroTicket,
+                    NumeroDocumento = entrada.NumeroDocumento.Length > 0 ? entrada.NumeroDocumento : null,
+                    NumeroTransaccion = "A"+DateTime.Now.Ticks.ToString(),
+                    Resumen = "Abono Servicios"
+                }; 
+
+                switch(entrada.FormaPago)
+                {
+                    case "EFC":
+                        movPago.TipoTransanccion = TipoTransaccionCuentaCorriente.IngresoPagoEfectivo;
+                        break;
+                    case "TBK":
+                        movPago.TipoTransanccion = TipoTransaccionCuentaCorriente.IngresoPagoTransbank;
+                        break;
+                    case "CHQ": 
+                        movPago.TipoTransanccion = TipoTransaccionCuentaCorriente.IngresoPagoCheque;
+                        break;
+                    case "TRA":
+                        movPago.TipoTransanccion = TipoTransaccionCuentaCorriente.IngresoTransferenciaBancaria;
+                        break;
+                }
+                _context.MovimientosCuentasCorrientes.Add(movPago);
+                _context.SaveChanges();
+            }
             _wfService.Avanzar(_nombreProceso, EtapasFlujoInterno.EntregaServicio, entrada.NumeroTicket, User.Identity.Name);
+            return Ok();
+        }
+
+        [HttpPost("validar-mandante")]
+        public IActionResult EvaluarTrabajo([FromBody] ResultadoReparoDefault entrada)
+        {
+            _wfService.AsignarVariable("TRABAJO_CON_REPAROS_MANDANTE", entrada.Resultado.Equals("S") ? "0":"1", entrada.NumeroTicket);
+            if (entrada.Resultado == "N")
+            {
+                _wfService.AsignarVariable("MOTIVO_REPARO_MANDANTE", entrada.MotivoReparo, entrada.NumeroTicket);
+            }
+            _wfService.Avanzar(_nombreProceso, EtapasFlujoInterno.ValidacionMandante, entrada.NumeroTicket, User.Identity.Name);
             return Ok();
         }
 
@@ -355,6 +409,7 @@ namespace Doitclick.Controllers.Api
 
         }
 
+        /* Deprecada, se movio para el controlador de inicio */
         [Route("bandeja-tareas")]
         [HttpGet]
         public IActionResult BandejaTareas(int limit = 10, int offset = 0, string search = "")
@@ -366,19 +421,28 @@ namespace Doitclick.Controllers.Api
                           .Include(t => t.Etapa)
                           join cotiza in _context.Cotizaciones
                           .Include(x=>x.Cliente) on tarea.Solicitud.NumeroTicket equals cotiza.NumeroTicket
-                          where tarea.Solicitud.Proceso.Id == 1 && tarea.Estado == EstadoTarea.Activada && tarea.AsignadoA == rut
+                          where tarea.Solicitud.Proceso.Id == 1 && tarea.Estado == EstadoTarea.Activada && (tarea.AsignadoA == rut || (tarea.Etapa.TipoUsuarioAsignado == TipoUsuarioAsignado.Rol && User.IsInRole(tarea.AsignadoA)))
                           select new ListadoInicioContainer { Tarea = tarea, Cotizacion = cotiza };
                           
-
+            var bandeja2 = from tarea in _context.Tareas
+                        .Include(t => t.Solicitud).ThenInclude(s => s.Proceso)
+                        .Include(t => t.Etapa)
+                        join cotiza in _context.CotizacionesExternos on tarea.Solicitud.NumeroTicket equals cotiza.NumeroTicket  
+                        where tarea.Solicitud.Proceso.Id == 2 && tarea.Estado == EstadoTarea.Activada && (tarea.AsignadoA == rut || (tarea.Etapa.TipoUsuarioAsignado == TipoUsuarioAsignado.Rol && User.IsInRole(tarea.AsignadoA)))
+                        select new ListadoInicioContainer { Tarea = tarea, CotizacionExterno = cotiza };    
             
+
+            var bandejaFinal = bandeja.Union(bandeja2);
+
+
             if (!string.IsNullOrEmpty(search))
             {
-                bandeja = bandeja.Where(x => x.Tarea.Solicitud.NumeroTicket.Contains(search) || x.Cotizacion.Cliente.Rut.Contains(search) || x.Cotizacion.Cliente.Nombres.Contains(search));
+                bandejaFinal = bandejaFinal.Where(x => x.Tarea.Solicitud.NumeroTicket.Contains(search) || x.Cotizacion.Cliente.Rut.Contains(search) || x.Cotizacion.Cliente.Nombres.Contains(search));
             }
 
             BootstrapTableResult<ListadoInicioContainer> salida = new BootstrapTableResult<ListadoInicioContainer>();
-            salida.total = bandeja.Count();
-            salida.rows = bandeja.Skip(offset).Take(limit).ToList();
+            salida.total = bandejaFinal.Count();
+            salida.rows = bandejaFinal.Skip(offset).Take(limit).ToList();
             
             return Ok(salida);
         }

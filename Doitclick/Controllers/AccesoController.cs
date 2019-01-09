@@ -10,6 +10,10 @@ namespace Doitclick.Controllers
     {
         public IActionResult Login()
         {
+            if(User.Identity.IsAuthenticated)
+            {
+                return Redirect("/mi-gestion");
+            }
             return View();
         }
 
