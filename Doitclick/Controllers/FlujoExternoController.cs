@@ -98,9 +98,9 @@ namespace Doitclick.Controllers
                 var respuesta = await _context.SaveChangesAsync();
                 _context.Database.CommitTransaction();
                 return Ok(solicitudGen);
-            }catch(Exception){
+            }catch(Exception ex){
                 _context.Database.RollbackTransaction();
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
             
         }

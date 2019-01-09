@@ -30,7 +30,7 @@
                 }
             },
             "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development",
+                "ASPNETCORE_ENVIRONMENT": "Staging",
                 "Llave":"_HOLA$MUNDO$$%%LOL"
             },
             "sourceFileMap": {
