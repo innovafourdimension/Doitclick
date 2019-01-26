@@ -11,3 +11,6 @@ dotnet ef migrations remove
 
 #Testing RDS
 "DoItClickConnection": "server=doitclickdevinstance.c3i7tgmal0at.us-east-1.rds.amazonaws.com;port=3306;database=doitclick;uid=doitclick;password=Secretillo.01"
+
+
+Hola mundo como estas?
