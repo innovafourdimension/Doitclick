@@ -1,0 +1,26 @@
+﻿CREATE TABLE `SolicitudesMaterialesMensuales` (
+    `Id` varchar(255) NOT NULL,
+    `FechaSolicitud` datetime NOT NULL,
+    `Comentarios` longtext NULL,
+    `Estado` longtext NULL,
+    `FechaFinalizacion` datetime NOT NULL,
+    `ComentariosFin` longtext NULL,
+    CONSTRAINT `PK_SolicitudesMaterialesMensuales` PRIMARY KEY (`Id`)
+);
+
+CREATE TABLE `MaterialesMensualesSolicitados` (
+    `Id` varchar(255) NOT NULL,
+    `MaterialMensualId` int NULL,
+    `SolicitudMaterialMensualId` varchar(255) NULL,
+    CONSTRAINT `PK_MaterialesMensualesSolicitados` PRIMARY KEY (`Id`),
+    CONSTRAINT `FK_MaterialesMensualesSolicitados_MaterialesMensuales_MaterialM~` FOREIGN KEY (`MaterialMensualId`) REFERENCES `MaterialesMensuales` (`Id`) ON DELETE NO ACTION,
+    CONSTRAINT `FK_MaterialesMensualesSolicitados_SolicitudesMaterialesMensuale~` FOREIGN KEY (`SolicitudMaterialMensualId`) REFERENCES `SolicitudesMaterialesMensuales` (`Id`) ON DELETE NO ACTION
+);
+
+CREATE INDEX `IX_MaterialesMensualesSolicitados_MaterialMensualId` ON `MaterialesMensualesSolicitados` (`MaterialMensualId`);
+
+CREATE INDEX `IX_MaterialesMensualesSolicitados_SolicitudMaterialMensualId` ON `MaterialesMensualesSolicitados` (`SolicitudMaterialMensualId`);
+
+INSERT INTO `__EFMigrationsHistory` (`MigrationId`, `ProductVersion`)
+VALUES ('20190131004531_NuevasEntidadesMaterialMensualSolicitado', '2.1.4-rtm-31024');
+

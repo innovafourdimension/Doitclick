@@ -45,7 +45,9 @@ namespace Doitclick.Data
         public DbSet<EntidadFacturacion> EntidadesFacturacion { get; set; }
         public DbSet<CotizacionExterno> CotizacionesExternos { get; set; }
         public DbSet<Factura> Facturas { get; set; }
-       
+        public DbSet<SolicitudMaterialMensual> SolicitudesMaterialesMensuales { get; set; }
+        public DbSet<MaterialMensualSolicitado> MaterialesMensualesSolicitados { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
