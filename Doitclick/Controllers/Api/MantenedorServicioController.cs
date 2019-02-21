@@ -45,6 +45,7 @@ namespace Doitclick.Controllers.Api
                 
                 serv.MaterialesPresupuestados = new List<MaterialPresupuestado>();
                 float valorMateriales = 0;
+                
                 foreach(var x in servicios.Materiales){
                     MaterialPresupuestado mp = new MaterialPresupuestado{
                         CantidadMaterial = x.Cantidad,

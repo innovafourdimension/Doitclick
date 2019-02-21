@@ -183,7 +183,8 @@
                     stock: 0,
                     unidadMedida: '@item.MaterialDisponible.UnidadMedida.Nombre',
                     precio: parseInt(@item.MaterialDisponible.PrecioUnidad),
-                    valorTotal: parseInt(@(item.CantidadMaterial * item.MaterialDisponible.PrecioUnidad))
+                    valorTotal: parseInt(@(item.CantidadMaterial * item.MaterialDisponible.PrecioUnidad)),
+                    guid: '@Guid.NewGuid().ToString()'
                 });
             </script>
 

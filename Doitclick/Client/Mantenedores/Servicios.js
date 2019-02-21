@@ -1,12 +1,12 @@
 var modelo = {
-        
+
     NombreServicio: '',
     DescripcionServicio: '',
     CodigoServicio: '',
-    VManoObra: null,          
-    PorcentajeComision: null, 
+    VManoObra: null,
+    PorcentajeComision: null,
     materiales: []
-}
+};
 
 
 function render(){
@@ -18,29 +18,46 @@ function render(){
     //$("#NombreServicio").val(modelo.nombreServicio);
 
     modelo.materiales.forEach(function(material){
-        var _trMaterial = $("<tr>")
+        var _trMaterial = $("<tr>").prop({id: material.guid });
         
-        var _tdMaterial = $("<td>").append(material.nombre)
+        var _tdMaterial = $("<td>").append(material.nombre);
         _trMaterial.append(_tdMaterial);
 
-        var _tdUM = $("<td>").append(material.unidadMedida)
+        var _tdUM = $("<td>").append(material.unidadMedida);
         _trMaterial.append(_tdUM);
 
-        var _tdCNT = $("<td>").append(material.cantidad)
+        var _tdCNT = $("<td>").append(material.cantidad);
         _trMaterial.append(_tdCNT);
 
-        var _tdPrecio = $("<td>").append(material.precio.toMoney())
+        var _tdPrecio = $("<td>").append(material.precio.toMoney());
         _trMaterial.append(_tdPrecio);
 
-        var _tdTotal = $("<td>").append((material.precio * material.cantidad).toMoney())
+        var _tdTotal = $("<td>").append((material.precio * material.cantidad).toMoney());
         _trMaterial.append(_tdTotal);
-        /*var _tdStockA = $("<td>").append(material.stock)
-        _trMaterial.append(_tdStockA);*/
+
+        var _tdAcciones = $("<td>").append($('<button>').text('Eliminar').addClass('btn btn-danger btn-sm del-service').prop({type: 'button'}));
+        _trMaterial.append(_tdAcciones);
+
         $("#listado > tbody").append(_trMaterial);
     });
 }
 
 $(function () {
+
+
+
+    $(document).on('click', '.del-service', function () {
+        
+        var eleGuid = $(this).closest('tr').prop("id");
+        
+        var idxEliminar = modelo.materiales.findIndex(function (element) {
+            return element.guid === eleGuid;    
+        });
+
+        modelo.materiales.splice(idxEliminar, 1);
+        render();
+        //console.log({ idxEliminar, modelo });
+    });
             
     $('.btn-guardar-material').on('click', function(){
 
@@ -53,8 +70,9 @@ $(function () {
                 stock: $('#material option:selected').data('stocka'),
                 unidadMedida: $('#material option:selected').data('um'),
                 precio: parseInt($('#material option:selected').data('valor')),
-                valorTotal: parseInt($('#material option:selected').data('valor')) * parseInt($("#cantidad").val())
-            }
+                valorTotal: parseInt($('#material option:selected').data('valor')) * parseInt($("#cantidad").val()),
+                guid: uuid4()
+            };
 
 
             $('#material').val("");
@@ -133,3 +151,22 @@ $(function () {
     });
 
 });
+
+function uuid4() {
+    function hex(s, b) {
+        return s +
+            (b >>> 4).toString(16) +  // high nibble
+            (b & 0b1111).toString(16);   // low nibble
+    }
+
+    let r = crypto.getRandomValues(new Uint8Array(16));
+
+    r[6] = r[6] >>> 4 | 0b01000000; // Set type 4: 0100
+    r[8] = r[8] >>> 3 | 0b10000000; // Set variant: 100
+
+    return r.slice(0, 4).reduce(hex, '') +
+        r.slice(4, 6).reduce(hex, '-') +
+        r.slice(6, 8).reduce(hex, '-') +
+        r.slice(8, 10).reduce(hex, '-') +
+        r.slice(10, 16).reduce(hex, '-');
+}
