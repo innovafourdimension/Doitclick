@@ -109,9 +109,42 @@
             $('#frm-generico').on('submit', function (e) {
                 e.preventDefault();
                 var model = $(this).serializeFormJSON();
-                $(".submit-generico").html("Cargando...");
-
-                $.ajax({
+                if(model.Id>0)
+                {
+                     $.ajax({
+                    type: "POST",
+                    url: "/api/mantenedores/organizacion/editar",
+                    data: JSON.stringify(model),
+                    contentType: "application/json; charset=utf-8",
+                }).done(function (data) {
+                    $.niftyNoty({
+                        type: "success",
+                        container : "floating",
+                        title : "Suceso Exitoso",
+                        message : "Los datos de la Organización se han guardado correctamente",
+                        closeBtn : false,
+                        timer : 3000,
+                        onHide:function(){
+                            location.href=`/MantenedorOrganizacion/Listado`;
+                        }
+                    });
+                   
+                }).fail(function (errMsg) {
+                    $.niftyNoty({
+                        type: "error",
+                        container : "floating",
+                        title : "Suceso Inesperado",
+                        message : "Los datos de la Organización NO se han guardado!",
+                        closeBtn : false,
+                        timer : 5000
+                    });
+                }).always(function () {
+                    $(".submit-generico").html("Guardar");
+                });
+                }
+                else
+                {
+                   $.ajax({
                     type: "POST",
                     url: "/api/mantenedores/organizacion/guardar",
                     data: JSON.stringify(model),
@@ -138,6 +171,9 @@
                 }).always(function () {
                     $(".submit-generico").html("Guardar");
                 });
+                }
+
+               
 
             });
 

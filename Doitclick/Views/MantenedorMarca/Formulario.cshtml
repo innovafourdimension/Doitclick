@@ -72,7 +72,41 @@
                 e.preventDefault();
                 var $form = $(e.target);
                 let model = $form.serializeFormJSON();
-                $.ajax({
+                if(model.Id>0)
+                {
+            $.ajax({
+                    type: "POST",
+                    url: "/api/mantenedores/marcas/editar",
+                    data: JSON.stringify(model),
+                    contentType: "application/json; charset=utf-8" 
+                }).done(function (data) {
+                    $.niftyNoty({
+                        type: "success",
+                        container : "floating",
+                        title : "Suceso Exitoso",
+                        message : "Los datos de la Marca se han guardado correctamente",
+                        closeBtn : true,
+                        timer : 3000,
+                        onHide:function(){
+                            location.href=`/MantenedorMarca/Listado`;
+                        }
+                    });
+                }).fail(function (xhr, textStatus) {
+                    $.niftyNoty({
+                        type: "warning",
+                        container : "floating",
+                        title : "Suceso Erroneo",
+                        message : "Está mal: " + textStatus,
+                        closeBtn : false,
+                        timer : 5000
+                    });
+                }).always(function () {
+                    $(".submit-generico").html("Guardar");
+                });                    
+                }
+                else
+                {
+                    $.ajax({
                     type: "POST",
                     url: "/api/mantenedores/marcas/guardar",
                     data: JSON.stringify(model),
@@ -99,6 +133,10 @@
                 }).always(function () {
                     $(".submit-generico").html("Guardar");
                 });
+                }
+                console.log(model);
+                return false;
+                
             });
         });
     </script>
