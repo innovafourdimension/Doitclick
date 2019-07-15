@@ -10,6 +10,7 @@ namespace Doitclick.Models.Application
         public string Id { get; set; }
         public MaterialMensual MaterialMensual { get; set; }
         public SolicitudMaterialMensual SolicitudMaterialMensual { get; set; }
+        public int CantidadMateriales { get; set; }
     }
 }
 

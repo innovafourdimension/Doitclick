@@ -3,14 +3,16 @@ using System;
 using Doitclick.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Doitclick.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190712021355_AgregarCantidadMaterialesMensualSolicitados")]
+    partial class AgregarCantidadMaterialesMensualSolicitados
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -308,8 +310,6 @@ namespace Doitclick.Data.Migrations
                     b.Property<int?>("UnidadMedidaId")
                         .IsRequired();
 
-                    b.Property<int>("stockActual");
-
                     b.HasKey("Id");
 
                     b.HasIndex("MarcaId");
@@ -537,10 +537,6 @@ namespace Doitclick.Data.Migrations
                     b.Property<DateTime>("FechaFinalizacion");
 
                     b.Property<DateTime>("FechaSolicitud");
-
-                    b.Property<string>("RutResolutor");
-
-                    b.Property<string>("RutSolicitante");
 
                     b.HasKey("Id");
 

@@ -13,5 +13,7 @@ namespace Doitclick.Models.Application
         public string Estado { get; set; }
         public DateTime FechaFinalizacion { get; set; }
         public string ComentariosFin { get; set; }
+        public string RutSolicitante { get; set; }
+        public string RutResolutor { get; set; }
     }
 }
