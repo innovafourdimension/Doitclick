@@ -1,0 +1,84 @@
+@{
+    ViewData["Title"] = "Solicitud de Material Mensual";
+}
+
+<form id="frm-generico">
+    <div class="row">
+        <div class="col-lg-12">
+            <div id="demo-panel-network" class="panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <ol class="breadcrumb">
+                            <li></li>
+                            <li class="active">@ViewData["Title"]</li>
+                        </ol>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row mar-btm">
+                          <div class="col-lg-12">
+                              <label for="t_t">Comentarios</label>
+                                <textarea id="comentarios" class="form-control"></textarea>
+                          </div>
+                    </div>
+                    <div class="row mar-btm">
+                        <div class="col-sm-12 col-md-6">
+                            <label for="listado-materiales-mensuales">Agregar un Material</label>
+                            <select id="listado-materiales-mensuales" data-placeholder="Seleccione Material" tabindex="4" class="form-control">
+                                <option value="">Selecciona</option>
+                                @foreach (var itm in ViewBag.materialesMensuales)
+                                {
+                                    <option value="@itm.Id" data-descripcion="@itm.Descripcion">@itm.Nombre</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <label for="xs">&nbsp;</label>
+                            <div class="input-group mar-btm">
+                                <button type="button" class="btn btn-primary" id="agregar-material-mensual">Agregar</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 table-responsive">
+                            <table class="table table-bordered invoice-summary">
+                                <thead>
+                                    <tr class="bg-trans-dark">
+                                        <th class="text-uppercase">Descripción</th>
+                                        <th class="min-col text-center text-uppercase">Cantidad</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="detalles-solicitud"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer text-right">
+                    <input type="hidden" name="Id" value="@ViewBag.Id" />
+                    <a href="/MantenedorMaterialMensual/BandejaSolicitante" class="btn btn-primary" >Volver</a>
+                    <button class="btn btn-success submit-generico" id="bt_generar_solicitud" type="button">Generar Solicitud</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+
+    <script src="~/Assets/plugins/unitegallery/js/unitegallery.min.js"></script>
+    <script src="~/Assets/plugins/unitegallery/themes/tiles/ug-theme-tiles.js"></script>
+    <script src="~/js/SolicitudMaterialMensual/genera-solicitud.min.js"></script>
+    
+}
+
+
+
+
+
+
+
+
+
+

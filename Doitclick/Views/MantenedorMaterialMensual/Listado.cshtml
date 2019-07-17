@@ -40,10 +40,11 @@
                                                 <td>@itm.Descripcion</td>
                                                 <td>@itm.UnidadMedida.Nombre</td>
                                                 <td>@itm.Cantidad</td>
-                                                <td>@itm.StockAlerta</td>
+                                                <td>@itm.stockActual / @itm.StockAlerta</td>
                                                 <td>
                                                     <a href="#" data-id="@itm.Id" class="elimination btn btn-danger btn-sm">Eliminar</a>
                                                     <a href="/MantenedorMaterialMensual/Formulario/@itm.Id" class="edicion btn btn-primary btn-sm">Editar</a>
+                                                    <a href="/MantenedorMaterialMensual/AgregarStock/@itm.Id" class="add-stock btn btn-warning btn-sm">Agregar Stock</a>
                                                 </td>
                                             </tr>
 

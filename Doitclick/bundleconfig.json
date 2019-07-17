@@ -121,5 +121,16 @@
       "outputMode": "singleLine"
     },
     "sourceMap": true
+  },
+  {
+    "outputFileName": "wwwroot/js/SolicitudMaterialMensual/genera-solicitud.min.js",
+    "inputFiles": [
+      "Client/SolicitudMaterialMensual/genera-solicitud.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "outputMode": "singleLine"
+    },
+    "sourceMap": true
   }
 ]

@@ -1,0 +1,264 @@
+
+@{
+    ViewData["Title"] = "Listado Solicitudes Material Mensual";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+
+        <div class="panel">
+            <!--Panel heading-->
+            <div class="panel-heading">
+                <div class="panel-control">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tabs-box-internal" data-toggle="tab" aria-expanded="true">Activas</a></li>
+                        <li class=""><a href="#tabs-box-external" data-toggle="tab" aria-expanded="false">Historicas</a></li>
+                    </ul>
+                </div>
+                 <h3 class="panel-title">
+                    <ol class="breadcrumb">
+                        <li></li>
+                        <li class="active">@ViewData["Title"]</li>
+                    </ol>
+                </h3>
+            </div>
+
+            <!--Panel body-->
+            <div class="panel-body">
+                <div class="tab-content">
+                    <div class="tab-pane fade active in" id="tabs-box-internal">
+                         <div class="row">
+                             <div class="col-md-4">
+                                 <a class="btn btn-primary" href="/MantenedorMaterialMensual/GeneraSolicitud">Nueva Solicitud</a>
+                             </div>
+                         </div>
+                         <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <div class="table-responsive mar-top">
+                                    <table id="table-activas" class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>codigo</th>
+                                                <th>Fecha Solicitud</th>
+                                                <th>Comentarios</th>
+                                                <th>Estado</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach(var soli in ViewBag.SolicitudesPendientes)
+                                            {
+                                                <tr>
+                                                    @if(soli.Estado == "Aprobado")
+                                                    {
+                                                        <td><a href="#" class="btn-link" data-toggle="modal" data-target="#modal-resolucion" data-id="@soli.Id">@soli.Id.Substring(0,8)</a></td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td> @soli.Id.Substring(0,8) </td>
+                                                    }
+                                                    
+                                                    <td> @soli.FechaSolicitud </td>
+                                                    <td> @soli.Comentarios </td>
+                                                    <td> @soli.Estado </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-box-external">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <div class="table-responsive mar-top">
+                                    <table id="table-historicas" class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>codigo</th>
+                                                <th>Fecha Solicitud</th>
+                                                <th>Comentarios</th>
+                                                <th>Estado</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach(var soli in ViewBag.SolicitudesHistoricas)
+                                            {
+                                                <tr>
+                                                    <td> @soli.Id.Substring(0,8) </td>
+                                                    <td> @soli.FechaSolicitud </td>
+                                                    <td> @soli.Comentarios </td>
+                                                    <td> @soli.Estado </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="modal-resolucion" class="modal fade" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+                    <h4 class="modal-title" id="myLargeModalLabel">Revision de Solicitud de Material</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="text-bold">Solicitante:</label>
+                            <label class="text-small" id="show_solicitante"></label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="text-bold">Comentarios:</label><br/>
+                            <label class="text-small" id="show_comentarios"></label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <hr/>
+                            <label class="text-bold">Resolutor:</label>
+                            <label class="text-small" id="show_resolutor"></label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="text-bold">Comentarios Cierre:</label><br/>
+                            <label class="text-small" id="show_comentarios_cierre"></label>
+                        </div>
+                    </div>
+                    
+                   
+                    <div class="row">
+                        <div class="col-md-12">
+                            <hr/>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Material</th>
+                                        <th>Cantidad</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="show_materiales">
+                                </tbody>
+                            </table>
+                             <hr/>
+                        </div>
+                    </div> 
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="chk-recibo-conforme">Certifico que se me ha entregado la totalidad de los materiales y que estos estan en optimas condiciones para su uso:</label>
+                            <input type="checkbox" id="chk-recibo-conforme" class="checkbox"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" id="id-solicitud" value="" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-success" id="btn-finalizar">Finalizar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+@section Scripts{
+
+    <script>
+        $(function(){
+
+            $('#modal-resolucion').on('show.bs.modal', function(event){
+
+                var $opener = $(event.relatedTarget);
+                var id = $opener.data('id');
+                $('#id-solicitud').val(id);
+                $.ajax({
+                    type: "GET",
+                    url: `/MantenedorMaterialMensual/ObtenerSolicitud/${id}`
+                }).done(function (data) {
+                    console.log({
+                        data
+                    })
+                    $('#show_solicitante').text(data.solicitante.nombres);
+                    $('#show_comentarios').text(data.solicitud.comentarios);
+                    $('#show_resolutor').text(data.resolutor.nombres);
+                    $('#show_comentarios_cierre').text(data.solicitud.comentariosFin);
+
+                    $.each(data.materiales, function(i, material){
+
+                        $('#show_materiales').append(
+                            $('<tr>').append(
+                                $('<td>').html(`<strong>${material.materialMensual.nombre}</strong><br/><small>${material.materialMensual.descripcion}</small>`)
+                            ).append(
+                                $('<td>').html(material.cantidadMateriales)
+                            )
+                        )
+                    });
+                });
+            });
+
+            $('#modal-resolucion').on('hidden.bs.modal', function(event){
+                $('#show_solicitante').text('');
+                $('#show_comentarios').text('');
+                $('#show_materiales').html('');
+                $('#show_resolutor').html('');
+                $('#show_comentarios_cierre').html('');
+                $('#id-solicitud').val('');
+            });
+
+            $('#btn-finalizar').on('click', function(){
+                if($('#chk-recibo-conforme').is(':checked')){
+                    const id = $('#id-solicitud').val();
+                    $.ajax({
+                        type: "GET",
+                        url: `/MantenedorMaterialMensual/ConfirmarSolicitud/${id}`
+                    }).done(function (data) {
+                        $.niftyNoty({
+                            type: "success",
+                            container: "floating",
+                            title: `Solicitud Material Mensual`,
+                            message: `Solicitud Resuelta con éxito`,
+                            closeBtn: true,
+                            timer: 5000,
+                            onHidden: function() {
+                                location.reload();
+                            }
+                        });
+                    });
+                }else{
+                    $.niftyNoty({
+                            type: "danger",
+                            container: "floating",
+                            title: `Se Exige Confirmación`,
+                            message: `Marca la casilla para confirmar la declaración simple.`,
+                            closeBtn: true
+                        });
+                }
+            });
+        });
+    </script>
+}
+
+
+
+
+
+
+
+
+
+

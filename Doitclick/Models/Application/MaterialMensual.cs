@@ -16,5 +16,27 @@ namespace Doitclick.Models.Application
         public string Codigo { get; set; }
         public Marca Marca { get; set; }
         public bool Activa { get; set; }
+        public int stockActual { get; set; }
+
+
+        public void AgregarStock(int stockAgregar)
+        {
+
+            if(stockAgregar > 0){
+                this.stockActual = this.stockActual + stockAgregar;
+            }else{
+                throw new Exception("Debes agregar un stock > 0");
+            }
+        }
+
+        public void RestarStock(int stockRestar)
+        {
+            if((this.stockActual - stockRestar) < 0)
+            {
+                throw new Exception("El stock resultante es negativo. No hay stock");
+            }
+
+            this.stockActual = this.stockActual - stockRestar;
+        }
     }
 }

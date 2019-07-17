@@ -259,6 +259,26 @@
                                         </ul>
 
                                     </li>
+                                    <li class="">
+                                        <a href="#">
+                                            <i class="demo-pli-home"></i>
+                                            <span class="menu-title">Solicitudes</span>
+                                            <i class="arrow"></i>
+                                        </a>
+                                        <ul class="collapse">
+                                            @if(User.IsInRole("Laboratorista"))
+                                            {
+                                                <li><a href="/MantenedorMaterialMensual/BandejaSolicitante">Material Mensual</a></li>
+                                            }
+                                            
+                                            @if(User.IsInRole("Supervisor Laboratorio") || User.IsInRole("Administrador"))
+                                            {
+                                                <li><a href="/MantenedorMaterialMensual/BandejaResolutor">Material Mensual</a></li>
+                                            }
+                                            
+                                            
+                                        </ul>
+                                    </li>
 
                                     @if(User.IsInRole("Administrador"))
                                     {
