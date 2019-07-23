@@ -163,12 +163,46 @@
                 }
                     },
                     }
-            }).on('success.form.bv', function (e) {
+   }).on('success.form.bv', function (e) {
                 // Prevén que se mande el formulario
                 e.preventDefault();
                 var $form = $(e.target);
                 let model = $form.serializeFormJSON();
-                $.ajax({
+                if(model.Id>0)
+                {
+            $.ajax({
+                    type: "POST",
+                    url: "/api/mantenedores/instrumento/editar",
+                    data: JSON.stringify(model),
+                    contentType: "application/json; charset=utf-8" 
+                }).done(function (data) {
+                    $.niftyNoty({
+                        type: "success",
+                        container : "floating",
+                        title : "Suceso Exitoso",
+                        message : "Instrumento se ha guardado correctamente",
+                        closeBtn : true,
+                        timer : 3000,
+                        onHide:function(){
+                            location.href=`/MantenedorInstrumento/Listado`;
+                        }
+                    });
+                }).fail(function (xhr, textStatus) {
+                    $.niftyNoty({
+                        type: "warning",
+                        container : "floating",
+                        title : "Suceso Erroneo",
+                        message : "Está mal: " + textStatus,
+                        closeBtn : false,
+                        timer : 5000
+                    });
+                }).always(function () {
+                    $(".submit-generico").html("Guardar");
+                });                    
+                }
+                else
+                {
+                    $.ajax({
                     type: "POST",
                     url: "/api/mantenedores/instrumento/guardar",
                     data: JSON.stringify(model),
@@ -178,7 +212,7 @@
                         type: "success",
                         container : "floating",
                         title : "Suceso Exitoso",
-                        message : "Se ha Ingresado Instrumento y/o Máquina",
+                        message : "Instrumento se ha guardado correctamente",
                         closeBtn : false,
                         timer : 5000
                     });
@@ -195,12 +229,14 @@
                 }).always(function () {
                     $(".submit-generico").html("Guardar");
                 });
+                }
+                console.log(model);
+                return false;
+                
             });
         });
     </script>
     }
-
-
 
 
 

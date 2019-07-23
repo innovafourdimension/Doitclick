@@ -34,6 +34,17 @@ namespace Doitclick.Controllers.Api
         public IActionResult GuardarOrganzacion([FromBody] FormOrganizacion entrada)
         {
             Organizacion laOrganizacion = null;
+            laOrganizacion = new Organizacion();
+            laOrganizacion.Nombre = entrada.Nombre;
+            laOrganizacion.TipoOrganizacion = Enum.Parse<TipoOrganizacion>(entrada.TipoOrganizacion);
+            _context.Organizaciones.Add(laOrganizacion);
+            _context.SaveChanges();
+            return Ok();
+        }
+        [Route("organizacion/editar")]
+        public IActionResult EditarOrganzacion([FromBody] FormOrganizacion entrada)
+        {
+            Organizacion laOrganizacion = null;
             if(entrada.Id > 0)
             {
                 laOrganizacion = _context.Organizaciones.Find(entrada.Id);
@@ -42,14 +53,10 @@ namespace Doitclick.Controllers.Api
             }
             else
             {
-                laOrganizacion = new Organizacion();
-                laOrganizacion.Nombre = entrada.Nombre;
-                laOrganizacion.TipoOrganizacion = Enum.Parse<TipoOrganizacion>(entrada.TipoOrganizacion);
-                _context.Organizaciones.Add(laOrganizacion);
+            return BadRequest("Organizacion no editada");
             }
             _context.SaveChanges();
-
-            return Ok("Salimos cauros!! " + entrada.Nombre);
+            return Ok();
         }
 
         [Route("organizacion/eliminar/{id}")]
@@ -60,7 +67,7 @@ namespace Doitclick.Controllers.Api
             return Ok("Eliminamos cauros: " + id);
         }
 
-        [Route("rol/guardar")]
+      [Route("rol/guardar")]
         public async Task<IActionResult> GuardarRol([FromBody] FormRol entrada)
         {
             var orga = _context.Organizaciones.Where(org => org.Id == entrada.Organizacion).FirstOrDefault();
@@ -196,6 +203,25 @@ namespace Doitclick.Controllers.Api
         public IActionResult GuardarInstrumento([FromBody] FormInstrumento entrada)
         {
             Instrumento elInstrumento = null;
+           
+                elInstrumento = new Instrumento();
+                elInstrumento.Nombre = entrada.NombreInstrumento;
+                elInstrumento.Codigo = entrada.CodigoInstrumento;
+                elInstrumento.Marca = _context.Marcas.Find(entrada.Marca);
+                elInstrumento.Estado = entrada.Estado;
+                elInstrumento.Descripcion = entrada.Descripcion;
+                elInstrumento.Activa = true;
+
+                _context.Instrumentos.Add(elInstrumento);
+                _context.SaveChanges();
+
+            return Ok();
+        }
+        //EDITAR.
+        [Route("instrumento/editar")]
+        public IActionResult EditarInstrumento([FromBody] FormInstrumento entrada)
+        {
+            Instrumento elInstrumento = null;
             if(entrada.Id > 0)
             {
                 elInstrumento = _context.Instrumentos.Find(entrada.Id);
@@ -208,21 +234,13 @@ namespace Doitclick.Controllers.Api
             }
             else
             {
-                elInstrumento = new Instrumento();
-                elInstrumento.Nombre = entrada.NombreInstrumento;
-                elInstrumento.Codigo = entrada.CodigoInstrumento;
-                elInstrumento.Marca = _context.Marcas.Find(entrada.Marca);
-                elInstrumento.Estado = entrada.Estado;
-                elInstrumento.Descripcion = entrada.Descripcion;
-                elInstrumento.Activa = true;
-
-                _context.Instrumentos.Add(elInstrumento);
+               return BadRequest("Marca no editada");
             }
             _context.SaveChanges();
-
             return Ok();
         }
-        
+        //FIN EDITAR INSTRUMENTO
+
         [Route("instrumento/eliminar/{id}")]
         public IActionResult Eliminarinstrumento([FromRoute] int id)
         {
@@ -414,6 +432,20 @@ namespace Doitclick.Controllers.Api
         public IActionResult GuardarMarca([FromBody] FormGenerico entrada)
         {
             Marca laMarca = null;
+
+                laMarca = new Marca();
+                laMarca.Nombre = entrada.Nombre;
+                laMarca.Activa = true;
+                _context.Marcas.Add(laMarca);
+           
+            _context.SaveChanges();
+            return Ok();
+        }
+         
+        [Route("marcas/editar")]
+        public IActionResult EditarMarca([FromBody] FormGenerico entrada)
+        {
+            Marca laMarca = null;
             if (entrada.Id > 0)
             {
                 laMarca = _context.Marcas.Find(entrada.Id);
@@ -422,11 +454,9 @@ namespace Doitclick.Controllers.Api
             }
             else
             {
-                laMarca = new Marca();
-                laMarca.Nombre = entrada.Nombre;
-                laMarca.Activa = true;
-                _context.Marcas.Add(laMarca);
+                return BadRequest("Marca no editada");
             }
+            
             _context.SaveChanges();
 
             return Ok();
