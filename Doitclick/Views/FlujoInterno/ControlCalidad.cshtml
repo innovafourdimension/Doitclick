@@ -50,16 +50,26 @@
                                 <tbody>
                                     @foreach (var itm in ViewBag.Servicios)
                                     {
-                                        var total  = itm.Cantidad*itm.Servicio.ValorCosto;
-                                        totalGeneral = totalGeneral + total;
-
-                                        <tr>
-                                            <td>
-                                                <strong>@itm.Servicio.Nombre</strong><br />
-                                                <small>@itm.Servicio.Resumen</small>
-                                            </td>
-                                            <td>@itm.Cantidad</td>
-                                        </tr>
+                                        @if(itm.Servicio != null)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <strong>@itm.Servicio.Nombre</strong><br />
+                                                    <small>@itm.Servicio.Resumen</small>
+                                                </td>
+                                                <td>@itm.Cantidad</td>
+                                            </tr>
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <strong>Servicio Especial</strong><br />
+                                                    <small>@ViewBag.Cotizacion.Resumen</small>
+                                                </td>
+                                                <td>1</td>
+                                            </tr>
+                                        }
                                     }
                                 </tbody>
                             </table>
@@ -166,8 +176,8 @@
                 var model = $(this).serializeFormJSON();
                 const initialLabelText = $("#btn-confirmar").text();
                 $("#btn-confirmar").prop("enabled", false).text("...Cargando");
-        
-                 
+
+                console.log({model})
                 $.ajax({
                     type: "POST",
                     url: "/api/flujo-interno/control-calidad",

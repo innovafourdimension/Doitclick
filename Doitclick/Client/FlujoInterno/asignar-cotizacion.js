@@ -12,7 +12,7 @@ $(function () {
     $('#frm-generico').on('submit', function (e) {
         e.preventDefault();
         var model = $(this).serializeFormJSON();
-        console.log(model)
+        console.log({model});
 
         $.ajax({
             type: "POST",
@@ -47,7 +47,7 @@ $(function () {
                 timer : 5000
             });
         }).always(function () {
-            $("#btn-confirmar").prop("enabled", true).text(initialLabelText);
+            //$("#btn-confirmar").prop("enabled", true).text(initialLabelText);
             //const user = "Chachacharles";
             //const message = "Siempre paso por aqui";
             //connection.invoke("SendMessage", user, message).catch(err => console.error(err.toString()));

@@ -50,16 +50,29 @@
                                 <tbody>
                                     @foreach (var itm in ViewBag.Servicios)
                                     {
-                                        var total  = itm.Cantidad*itm.Servicio.ValorCosto;
-                                        totalGeneral = totalGeneral + total;
-
-                                        <tr>
-                                            <td>
-                                                <strong>@itm.Servicio.Nombre</strong><br />
-                                                <small>@itm.Servicio.Resumen</small>
-                                            </td>
-                                            <td>@itm.Cantidad</td>
-                                        </tr>
+                                    
+                                        @if(itm.Servicio != null)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <strong>@itm.Servicio.Nombre</strong><br />
+                                                    <small>@itm.Servicio.Resumen</small>
+                                                </td>
+                                                <td>@itm.Cantidad</td>
+                                            </tr>
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <strong>Servicio Especial</strong><br />
+                                                    <small>@ViewBag.Cotizacion.Resumen</small>
+                                                </td>
+                                                <td>1</td>
+                                            </tr>
+                                        }
+                                         
+                                        
                                     }
                                 </tbody>
                             </table>
@@ -94,7 +107,16 @@
                         <div class="col-sm-12">
                             <div class="text-right no-print">
                                 <a href="/mi-gestion" class="btn btn-warning">Volver</a>
-                                <button class="btn btn-primary btn-finalizar">Trabajo Finalizado</button>
+                                @if(ViewBag.MomentoInicio == "")
+                                {
+                                    <button class="btn btn-success btn-comenzar" id="btn-comenzar" type="button">Comenzar</button>
+                                    <button class="btn btn-primary btn-finalizar" id="btn-finalizar" style="display:none;">Trabajo Finalizado</button>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-primary btn-finalizar" id="btn-finalizar">Trabajo Finalizado</button>
+                                }
+                                
                             </div>
                         </div>
                     </div>
@@ -175,6 +197,43 @@
 
             $('.resultado-presupuesto').on('click', function(){
                 $('#acepta-presupuesto').val($(this).data('acepta'))
+            });
+
+            $('#btn-comenzar').on('click', function(){
+
+                var model = $('#frm-generico').serializeFormJSON();
+                $.ajax({
+                    type: "POST",
+                    url: "/api/flujo-interno/iniciar-ejecucion-trabajo",
+                    data: JSON.stringify(model),
+                    contentType: "application/json; charset=utf-8"
+                }).done(function (data) {
+                    $.niftyNoty({
+                        type: "success",
+                        container : "floating",
+                        title : "Notificaciones Workflow",
+                        message : "Actividad Iniciada...",
+                        closeBtn : true,
+                        timer : 5000,
+                        
+                    });
+
+                    $('#btn-comenzar').hide();
+                    $('#btn-finalizar').show();
+
+                }).fail(function (errMsg) {
+                    console.log(errMsg);
+                    $.niftyNoty({
+                        type: "warning",
+                        container : "floating",
+                        title : "Notificaciones Workflow",
+                        message : ":( Problemas al Finalizar Etapa, contacta a soporte",
+                        closeBtn : false,
+                        timer : 5000
+                    });
+                }).always(function () {
+                    //$("#btn-confirmar").prop("enabled", true).text(initialLabelText);
+                });
             });
 
             
