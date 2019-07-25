@@ -195,9 +195,21 @@ namespace Doitclick.Controllers.Api
         {
 
             _wfService.AsignarVariable("LABORATORISTA_ACEPTA_COTIZACION", entrada.Resultado.Equals("S") ? "1":"0", entrada.NumeroTicket);
+            
+            
             if (entrada.Resultado == "N")
             {
-                _wfService.AsignarVariable("MOTIVO_REPARO_COTZACION", entrada.MotivoReparo, entrada.NumeroTicket);
+                _wfService.AsignarVariable("MOTIVO_RECHAZO_COTZACION", entrada.MotivoReparo, entrada.NumeroTicket);
+            }
+            else
+            {
+                _wfService.AsignarVariable("DESCRIPCION_COTIZACION", entrada.DescripcionCotizacion, entrada.NumeroTicket);
+                _wfService.AsignarVariable("VALOR_COTIZACION", entrada.ValorCotizacion.ToString(), entrada.NumeroTicket);
+                var cotizacionPendiente = _context.Cotizaciones.FirstOrDefault(cot => cot.NumeroTicket == entrada.NumeroTicket);
+                cotizacionPendiente.PrecioCotizacion = entrada.ValorCotizacion;
+                cotizacionPendiente.Resumen = entrada.DescripcionCotizacion;
+                _context.Cotizaciones.Update(cotizacionPendiente);
+                _context.SaveChanges();
             }
             
             _wfService.Avanzar(_nombreProceso, EtapasFlujoInterno.EvaluarCotizacion, entrada.NumeroTicket, User.Identity.Name);
@@ -286,7 +298,17 @@ namespace Doitclick.Controllers.Api
         [HttpPost]
         public IActionResult GuardarEjecutarTrabajo([FromBody] ResultadoDefault entrada)
         {
+            _wfService.AsignarVariable("MOMENTO_FINALIZA_TRABAJO", DateTime.Now.ToString(), entrada.NumeroTicket);
+            //_wfService.AsignarVariable("HORAS_TRABAJADAS_ACUMULADAS", DateTime.Now.ToString(), entrada.NumeroTicket);
             _wfService.Avanzar(_nombreProceso, EtapasFlujoInterno.EjecutarTrabajo, entrada.NumeroTicket, User.Identity.Name);
+            return Ok();
+        }
+
+        [Route("iniciar-ejecucion-trabajo")]
+        [HttpPost]
+        public IActionResult GuardarIniciarEjecutarTrabajo([FromBody] ResultadoDefault entrada)
+        {
+            _wfService.AsignarVariable("MOMENTO_INICIO_TRABAJO", DateTime.Now.ToString(), entrada.NumeroTicket);
             return Ok();
         }
 
@@ -295,6 +317,7 @@ namespace Doitclick.Controllers.Api
         public IActionResult GuardarControlCalidad([FromBody] ResultadoReparoDefault entrada)
         {
             _wfService.AsignarVariable("TRABAJO_CON_REPAROS_CC", entrada.Resultado.Equals("S") ? "0":"1", entrada.NumeroTicket);
+            _wfService.AsignarVariable("CONTROL_CALIDAD_OK", entrada.Resultado.Equals("S") ? "1" : "0", entrada.NumeroTicket);
             if (entrada.Resultado == "N")
             {
                 _wfService.AsignarVariable("MOTIVO_REPARO_CC", entrada.MotivoReparo, entrada.NumeroTicket);
@@ -303,30 +326,34 @@ namespace Doitclick.Controllers.Api
             return Ok();
         }
 
-        [Route("entrega-servicio")]
+
+        [Route("pago-entrega-servicio")]
         [HttpPost]
-        
-        public IActionResult GuardarEntregaServicio([FromBody] ResultadoCobroServicios entrada)
+
+        public IActionResult GuardarPAgoEntregaServicio([FromBody] ResultadoCobroServicios entrada)
         {
             /*TODO  Al entregar servicio puede que se genere un pago asi que hay que implementarlo */
-            if(entrada.SaldoPendiente > 0)
+            if (entrada.SaldoPendiente > 0)
             {
                 _wfService.AsignarVariable("MONTO_CANCELADO_ENTREGA", entrada.ValorPagar.ToString(), entrada.NumeroTicket);
+                _wfService.AsignarVariable("FECHA_CANCELA_MONTO_ENTREGA", DateTime.Now.ToString(), entrada.NumeroTicket);
+                _wfService.AsignarVariable("USUARIO_COBRADOR", User.Identity.Name, entrada.NumeroTicket);
                 var cotizacion = _context.Cotizaciones.Include(d => d.Cliente).FirstOrDefault(c => c.NumeroTicket == entrada.NumeroTicket);
                 /* Existe cuenta corriente para el cliente */
                 var cuentaCorriente = _context.CuentasCorrientes.FirstOrDefault(x => x.Cliente == cotizacion.Cliente);
                 /*Genero pago de cliente */
-                var movPago = new MovimientoCuentaCorriente{
+                var movPago = new MovimientoCuentaCorriente
+                {
                     CuentaCorriente = cuentaCorriente,
                     FechaTransaccion = DateTime.Now,
-                    MontoTransaccion  = entrada.ValorPagar,
+                    MontoTransaccion = entrada.ValorPagar,
                     NumeroTicket = entrada.NumeroTicket,
                     NumeroDocumento = entrada.NumeroDocumento.Length > 0 ? entrada.NumeroDocumento : null,
-                    NumeroTransaccion = "A"+DateTime.Now.Ticks.ToString(),
+                    NumeroTransaccion = "A" + DateTime.Now.Ticks.ToString(),
                     Resumen = "Abono Servicios"
-                }; 
+                };
 
-                switch(entrada.FormaPago)
+                switch (entrada.FormaPago)
                 {
                     case "EFC":
                         movPago.TipoTransanccion = TipoTransaccionCuentaCorriente.IngresoPagoEfectivo;
@@ -334,7 +361,7 @@ namespace Doitclick.Controllers.Api
                     case "TBK":
                         movPago.TipoTransanccion = TipoTransaccionCuentaCorriente.IngresoPagoTransbank;
                         break;
-                    case "CHQ": 
+                    case "CHQ":
                         movPago.TipoTransanccion = TipoTransaccionCuentaCorriente.IngresoPagoCheque;
                         break;
                     case "TRA":
@@ -344,6 +371,15 @@ namespace Doitclick.Controllers.Api
                 _context.MovimientosCuentasCorrientes.Add(movPago);
                 _context.SaveChanges();
             }
+           
+            return Ok();
+        }
+
+        [Route("entrega-servicio")]
+        [HttpPost]
+        
+        public IActionResult GuardarEntregaServicio([FromBody] ResultadoCobroServicios entrada)
+        {
             _wfService.Avanzar(_nombreProceso, EtapasFlujoInterno.EntregaServicio, entrada.NumeroTicket, User.Identity.Name);
             return Ok();
         }

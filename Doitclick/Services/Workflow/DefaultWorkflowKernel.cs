@@ -75,7 +75,7 @@ namespace Doitclick.Services.Workflow
             Proceso proceso = _context.Procesos.Include(d => d.Etapas).FirstOrDefault(x => x.NombreInterno == nombreInternoProceso);
 
             //Segundo Obtengo la etapa
-            Etapa etapa = proceso.Etapas.FirstOrDefault(x => x.NombreInterno == nombreInternoEtapa);
+            Etapa etapa = _context.Etapas.FirstOrDefault(x => x.NombreInterno == nombreInternoEtapa && x.Proceso == proceso);
             
             //Tercero obtengo la solicitud
             Solicitud solicitud = proceso.Solicitudes.FirstOrDefault(d => d.NumeroTicket == numeroTicket);

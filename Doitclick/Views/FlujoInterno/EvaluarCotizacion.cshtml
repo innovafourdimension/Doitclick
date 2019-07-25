@@ -109,6 +109,9 @@
             $('#frm-generico').on('submit', function (e) {
                 e.preventDefault();
                 var model = $(this).serializeFormJSON();
+
+                console.log({ model });
+                //return false;
                 
                 $.ajax({
                     type: "POST",

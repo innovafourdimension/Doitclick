@@ -52,18 +52,34 @@
                                     <tbody>
                                         @foreach (var itm in ViewBag.Servicios)
                                         {
-                                            var total  = itm.Cantidad*itm.Servicio.ValorCosto;
+                                            var total = 0;
+                                            @if(itm.Servicio != null)
+                                            {
+                                                total = itm.Cantidad*itm.Servicio.ValorCosto;
+                                                <tr>
+                                                    <td>
+                                                        <strong>@itm.Servicio.Nombre</strong><br />
+                                                        <small>@itm.Servicio.Resumen</small>
+                                                    </td>
+                                                    <td>@itm.Cantidad</td>
+                                                    <td>$@string.Format("{0:n0}", itm.Servicio.ValorCosto)</td>
+                                                    <td>$@string.Format("{0:n0}",total)</td>
+                                                </tr>
+                                            }
+                                            else
+                                            {
+                                                total = ViewBag.Cotizacion.PrecioCotizacion;
+                                                <tr>
+                                                    <td>
+                                                        <strong>Servicio Especial</strong><br />
+                                                        <small>@ViewBag.Cotizacion.Resumen</small>
+                                                    </td>
+                                                    <td>1</td>
+                                                    <td>$@string.Format("{0:n0}",ViewBag.Cotizacion.PrecioCotizacion)</td>
+                                                    <td>$@string.Format("{0:n0}",ViewBag.Cotizacion.PrecioCotizacion)</td>
+                                                </tr>
+                                            }
                                             totalGeneral = totalGeneral + total;
-
-                                            <tr>
-                                                <td>
-                                                    <strong>@itm.Servicio.Nombre</strong><br />
-                                                    <small>@itm.Servicio.Resumen</small>
-                                                </td>
-                                                <td>@itm.Cantidad</td>
-                                                <td>$@string.Format("{0:n0}", itm.Servicio.ValorCosto)</td>
-                                                <td>$@string.Format("{0:n0}",total)</td>
-                                            </tr>
                                         }
 
                                         <tr>
@@ -172,7 +188,14 @@
                         <div class="col-sm-12">
                             <div class="text-right no-print">
                                 <a href="/mi-gestion" class="btn btn-warning">Volver</a>
-                                <button class="btn btn-primary btn-finalizar" id="btn-confirmar">Servicio Entregado</button>
+                                @if(ViewBag.CalculoBalance.Balance > 0)
+                                {
+                                     <button class="btn btn-success btn-pagar" id="btn-pagar" type="button">Generar Pago</button>
+                                }
+                                else
+                                {
+                                     <button class="btn btn-primary btn-finalizar" id="btn-confirmar">Servicio Entregado</button>
+                                }
                             </div>
                         </div>
                     </div>
@@ -210,12 +233,12 @@
     <script src="~/lib/signalr.js"></script>
     <script type="text/javascript">
         $(function () {
-            $("#selResultadoEvaluacion").on("change", function (event) {
+            $('#formaPago').on('change', function(){
                 console.log($(this).val())
-                if ($(this).val() == "S") {
-                    $(".reparos").hide();
-                } else {
-                    $(".reparos").show();
+                if($(this).val() != "EFC"){
+                    $('#swNumDoc').show();
+                }else{
+                    $('#swNumDoc').hide();
                 }
             });
 
@@ -241,7 +264,7 @@
                         timer : 5000,
                         onHidden: function(){
                             location.href = '/mi-gestion'
-                            window.open('/FlujoInterno/VerComprobante?ticket=@ViewBag.Cotizacion.NumeroTicket')
+                            //window.open('/FlujoInterno/VerComprobante?ticket=@ViewBag.Cotizacion.NumeroTicket')
                         }
                     });
 
@@ -258,6 +281,47 @@
                     });
                 }).always(function () {
                     $("#btn-confirmar").prop("enabled", true).text(initialLabelText);
+                });
+            });
+
+
+            $('#btn-pagar').on('click', function (e) {
+                e.preventDefault();
+                var model = $('#frm-generico').serializeFormJSON();
+                $("#btn-pagar").prop("enabled", false).text("...Cargando");
+                
+                 console.log({model});
+
+                $.ajax({
+                    type: "POST",
+                    url: "/api/flujo-interno/pago-entrega-servicio",
+                    data: JSON.stringify(model),
+                    contentType: "application/json; charset=utf-8"
+                }).done(function (data) {
+                    $.niftyNoty({
+                        type: "success",
+                        container : "floating",
+                        title : "Notificaciones Workflow",
+                        message : "Pago Realizado",
+                        closeBtn : true,
+                        timer : 5000,
+                        onHidden: function(){
+                            location.reload();
+                            window.open('/FlujoInterno/VerComprobante?ticket=@ViewBag.Cotizacion.NumeroTicket')
+                        }
+                    });
+                }).fail(function (errMsg) {
+                    console.log(errMsg);
+                    $.niftyNoty({
+                        type: "warning",
+                        container : "floating",
+                        title : "Notificaciones Workflow",
+                        message : ":( Problemas al generar Pago, contacta a soporte",
+                        closeBtn : false,
+                        timer : 5000
+                    });
+                }).always(function () {
+                    //$("#btn-confirmar").prop("enabled", true).text(initialLabelText);
                 });
             });
 
