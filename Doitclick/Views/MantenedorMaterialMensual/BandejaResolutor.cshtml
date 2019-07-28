@@ -81,7 +81,8 @@
                                 <thead>
                                     <tr>
                                         <th>Material</th>
-                                        <th>Cantidad</th>
+                                        <th>Cantidad Solicitada</th>
+                                        <th>Stock Actual</th>
                                     </tr>
                                 </thead>
                                 <tbody id="show_materiales">
@@ -133,10 +134,14 @@
                     $.each(data.materiales, function(i, material){
 
                         $('#show_materiales').append(
-                            $('<tr>').append(
+                            $('<tr>')
+                             .append(
                                 $('<td>').html(`<strong>${material.materialMensual.nombre}</strong><br/><small>${material.materialMensual.descripcion}</small>`)
                             ).append(
                                 $('<td>').html(material.cantidadMateriales)
+                            )
+                            .append(
+                                $('<td>').html(material.materialMensual.stockActual)
                             )
                         )
                     });
