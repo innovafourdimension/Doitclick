@@ -190,12 +190,27 @@ $(function () {
 
     $('#frm-ingreso-datos-paciente').on("submit", function (event) {
         event.preventDefault();
+
+
+        if (_servicios_detalle_cotizacion.length == 0)
+        {
+            $.niftyNoty({
+                type: "warning",
+                container: "floating",
+                title: "Error Al Grabar Cotización",
+                message: "Para grabar una cotización debes ingresar almenos un servicio a cotizar.<br/><small>Agrega Servicios para que puedas grabar...</small>",
+                closeBtn: true
+            });
+            return false;
+        }
+
         let $form = $(this); 
         const initialLabelText = $("#btn-confirmar").text();
         $("#btn-confirmar").prop("enabled", false).text("...Cargando");
         let model = $form.serializeFormJSON();
         model.SrcImagen = $("#img-previsualiza").prop("src");
         model.Servicios = _servicios_detalle_cotizacion;
+
 
         $.ajax({
             type: "POST",
