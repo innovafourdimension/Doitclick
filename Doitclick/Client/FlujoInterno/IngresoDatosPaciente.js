@@ -228,22 +228,6 @@ $(function () {
 
 });
 
-
-const connection = new signalR.HubConnectionBuilder()
-    .withUrl("/hubs/push")
-    .build();
-
-connection.on("ReceiveMessage", function(user, message) {
-    const msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    const encodedMsg = user + " says " + msg;
-    console.log('ReceiveMessage', encodedMsg);
-});
-
-
-connection.start().catch(function(err){
-    console.error(err.toString())
-});
-
 /**
  * 
  * const user = "Chachacharles";

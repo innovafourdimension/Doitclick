@@ -148,7 +148,7 @@ namespace Doitclick.Services.Workflow
         {
             Proceso proceso = _context.Procesos.FirstOrDefault(p => p.NombreInterno == nombreInternoProceso);
             Solicitud solicitud = _context.Solicitudes.Include(x=>x.Tareas).FirstOrDefault(c => c.NumeroTicket.Equals(numeroTicket));
-            Tarea tareaActual = _context.Tareas.Include(t => t.Solicitud).Include(t => t.Etapa).FirstOrDefault(d => d.Etapa.NombreInterno.Equals(nombreInternoEtapa) && d.FechaTerminoFinal == null && d.Estado == EstadoTarea.Activada && d.Solicitud.NumeroTicket == numeroTicket);
+            Tarea tareaActual = _context.Tareas.Include(t => t.Solicitud).Include(t => t.Etapa).FirstOrDefault(d => d.Etapa.NombreInterno.Equals(nombreInternoEtapa) && d.Estado == EstadoTarea.Activada && d.Solicitud.NumeroTicket == numeroTicket);
 
             tareaActual.EjecutadoPor = identificacionUsuario;
             tareaActual.FechaTerminoFinal = DateTime.Now;
@@ -164,7 +164,7 @@ namespace Doitclick.Services.Workflow
             _context.Entry(tareaActual).State = EntityState.Modified;
             _context.SaveChanges();
             
-            ICollection<Transito> transiciones = _context.Transiciones.Include(d => d.EtapaActaual).Include(d => d.EtapaDestino).Where(d => d.EtapaActaual.NombreInterno == nombreInternoEtapa).ToList();
+            ICollection<Transito> transiciones = _context.Transiciones.Include(d => d.EtapaActaual).ThenInclude(e => e.Proceso).Include(d => d.EtapaDestino).Where(d => d.EtapaActaual.NombreInterno == nombreInternoEtapa && d.EtapaActaual.Proceso == proceso).ToList();
             foreach (Transito transicion in transiciones)
             {
                 bool estadoAvance = EjecutaValidacion(transicion.NamespaceValidacion, transicion.ClaseValidacion, transicion.MetodoValidacion, numeroTicket);
