@@ -26,19 +26,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-6 from-group">
-                            <label for="RutPaciente">Previsión Salud</label>
-                            <div class="input-group mar-btm">
-                                <span class="input-group-addon"><i class="demo-pli-male"></i></span>
-                                <select id="PrevisionSalud" name="PrevisionSalud" class="form-control" required>
-                                    <option value="">Selecciona</option>
-                                    @foreach (var prv in ViewBag.PrevisionesSalud)
-                                    {
-                                        <option value="@prv.Id">@prv.Nombre</option>
-                                    }
-                                </select>
-                            </div>
-                        </div>
+                        
                     </div>
                     <div class="row">
                         <div class="col-sm-12 col-md-6 from-group">
@@ -114,7 +102,7 @@
                     <div class="row">
                         <div class=" pad-top">
                             <p>Previsualización</p>
-                            <img id="img-previsualiza" src="" alt="Previsualizacion Imagen" style="display:none;width:95%; height: 95%;">
+                            <img id="img-previsualiza" src="" alt="Previsualizacion Imagen" style="display:none;width:50%; height: 50%;">
                         </div>
                     </div>
                 </div>
