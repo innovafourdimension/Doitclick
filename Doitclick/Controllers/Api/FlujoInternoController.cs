@@ -420,6 +420,33 @@ namespace Doitclick.Controllers.Api
 
         }
 
+        [Route("cotizaciones-all")]
+        [HttpGet]
+        public IActionResult ListarAllCotizaciones(int limit = 10, int offset = 0, string search = "")
+        {
+            var rut = User.Identity.Name;
+            var bandeja = from solicitud in _context.Solicitudes
+                          join tareaLast in _context.Tareas.Include(t => t.Etapa) on solicitud equals tareaLast.Solicitud 
+                          join cotiza in _context.Cotizaciones
+                          .Include(x => x.Cliente) on solicitud.NumeroTicket equals cotiza.NumeroTicket
+                          where solicitud.Proceso.Id == 1 
+                          && cotiza.DrSolicitante == rut
+                          && tareaLast.Estado == EstadoTarea.Activada
+                          select new HistorialCerradasContainer { Solicitud = solicitud, Cotizacion = cotiza };
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                bandeja = bandeja.Where(x => x.Solicitud.NumeroTicket.Contains(search) || x.Cotizacion.Cliente.Rut.Contains(search) || x.Cotizacion.Cliente.Nombres.Contains(search));
+            }
+
+            BootstrapTableResult<HistorialCerradasContainer> salida = new BootstrapTableResult<HistorialCerradasContainer>();
+            salida.total = bandeja.Count();
+            salida.rows = bandeja.Skip(offset).Take(limit).ToList();
+
+            return Ok(salida);
+
+        }
+
 
         [Route("detalle-cotizacion")]
         [HttpGet]

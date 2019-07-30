@@ -210,6 +210,11 @@ namespace Doitclick.Controllers
             return View();
         }
 
+        public IActionResult VistaPacientesMandante()
+        {
+            return View();
+        }
+
         
     }
 }
