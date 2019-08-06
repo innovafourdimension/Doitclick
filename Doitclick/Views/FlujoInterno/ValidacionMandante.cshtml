@@ -45,13 +45,27 @@
                                 <tbody>
                                     @foreach (var itm in ViewBag.Servicios)
                                     {
-                                        <tr>
-                                            <td>
-                                                <strong>@itm.Servicio.Nombre</strong><br />
-                                                <small>@itm.Servicio.Resumen</small>
-                                            </td>
-                                            <td>@itm.Cantidad</td>
-                                        </tr>
+                                        @if(itm.Servicio != null)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <strong>@itm.Servicio.Nombre</strong><br />
+                                                    <small>@itm.Servicio.Resumen</small>
+                                                </td>
+                                                <td>@itm.Cantidad</td>
+                                            </tr>
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <strong>Servicio Especial</strong><br />
+                                                    <small>@ViewBag.Cotizacion.Resumen</small>
+                                                </td>
+                                                <td>1</td>
+                                            </tr>
+                                        }
+                                        
                                     }
                                 </tbody>
                             </table>

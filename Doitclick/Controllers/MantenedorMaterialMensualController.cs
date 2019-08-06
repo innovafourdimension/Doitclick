@@ -60,6 +60,12 @@ namespace Doitclick.Controllers
         public IActionResult GuardarGeneraSolicitud([FromBody] GeneraSolicitudContainerDto entrada)
         {
 
+            var cantidadSolicitudesNoFinalizadas = _context.SolicitudesMaterialesMensuales.Where(sol => sol.RutSolicitante == User.Identity.Name && (sol.Estado == "Pendiente" || sol.Estado == "Aprobado")).Count();
+
+            if(cantidadSolicitudesNoFinalizadas == 3){
+                return BadRequest("No puedes tener mas de 3 solicitudes sin confirmar");
+            }
+
             SolicitudMaterialMensual nueva_solicitud = new SolicitudMaterialMensual();
             nueva_solicitud.Comentarios = entrada.comentarios;
             nueva_solicitud.Estado = "Pendiente";

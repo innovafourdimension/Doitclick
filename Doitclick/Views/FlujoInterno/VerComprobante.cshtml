@@ -111,18 +111,34 @@
     <tbody>
         @foreach (var itm in Model.Servicios)
         {
-            var total  = itm.Cantidad*itm.Servicio.ValorCosto;
+            var total = 0;
+            @if(itm.Servicio != null)
+            {
+                total = itm.Cantidad*itm.Servicio.ValorCosto;
+                <tr>
+                    <td>
+                        <strong>@itm.Servicio.Nombre</strong><br />
+                        <small>@itm.Servicio.Resumen</small>
+                    </td>
+                    <td>@itm.Cantidad</td>
+                    <td>$@string.Format("{0:n0}", itm.Servicio.ValorCosto)</td>
+                    <td>$@string.Format("{0:n0}",total)</td>
+                </tr>
+            }
+            else
+            {
+                total = Model.Cotizacion.PrecioCotizacion;
+                <tr>
+                    <td>
+                        <strong>Servicio Especial</strong><br />
+                        <small>@Model.Cotizacion.Resumen</small>
+                    </td>
+                    <td>1</td>
+                    <td>$@string.Format("{0:n0}",Model.Cotizacion.PrecioCotizacion)</td>
+                    <td>$@string.Format("{0:n0}",Model.Cotizacion.PrecioCotizacion)</td>
+                </tr>
+            }
             totalGeneral = totalGeneral + total;
-
-            <tr>
-                <td>
-                    <strong>@itm.Servicio.Nombre</strong><br />
-                    <small>@itm.Servicio.Resumen</small>
-                </td>
-                <td>@itm.Cantidad</td>
-                <td>$@string.Format("{0:n0}", itm.Servicio.ValorCosto)</td>
-                <td>$@string.Format("{0:n0}",total)</td>
-            </tr>
         }
 
         <tr>

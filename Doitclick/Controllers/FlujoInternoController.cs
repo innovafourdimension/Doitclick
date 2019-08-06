@@ -145,6 +145,7 @@ namespace Doitclick.Controllers
             ViewBag.DrMandante = await _userManager.FindByNameAsync(cotizacion.DrSolicitante);
             ViewBag.ExisteReparo = _wfservice.ObtenerVariable("TRABAJO_CON_REPAROS_CC",ticket);
             ViewBag.MotivoReparo = _wfservice.ObtenerVariable("MOTIVO_REPARO_CC",ticket);
+            ViewBag.MomentoInicio = _wfservice.ObtenerVariable("MOMENTO_INICIO_TRABAJO", ticket);
 
             return View();
         }

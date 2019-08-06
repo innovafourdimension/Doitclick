@@ -58,7 +58,14 @@ $('#bt_generar_solicitud').on('click', function(){
         });
     }).fail(function (errMsg) {
         console.log(errMsg);
-
+        $.niftyNoty({
+            type: "danger",
+            container: "floating",
+            title: "Notificaciones Workflow",
+            message: errMsg.responseText,
+            closeBtn: true,
+            timer: 5000
+        });
     })
 
     return false;

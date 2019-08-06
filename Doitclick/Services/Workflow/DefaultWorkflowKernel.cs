@@ -75,7 +75,7 @@ namespace Doitclick.Services.Workflow
             Proceso proceso = _context.Procesos.Include(d => d.Etapas).FirstOrDefault(x => x.NombreInterno == nombreInternoProceso);
 
             //Segundo Obtengo la etapa
-            Etapa etapa = proceso.Etapas.FirstOrDefault(x => x.NombreInterno == nombreInternoEtapa);
+            Etapa etapa = _context.Etapas.FirstOrDefault(x => x.NombreInterno == nombreInternoEtapa && x.Proceso == proceso);
             
             //Tercero obtengo la solicitud
             Solicitud solicitud = proceso.Solicitudes.FirstOrDefault(d => d.NumeroTicket == numeroTicket);
@@ -164,7 +164,7 @@ namespace Doitclick.Services.Workflow
             _context.Entry(tareaActual).State = EntityState.Modified;
             _context.SaveChanges();
             
-            ICollection<Transito> transiciones = _context.Transiciones.Include(d => d.EtapaActaual).Include(d => d.EtapaDestino).Where(d => d.EtapaActaual.NombreInterno == nombreInternoEtapa).ToList();
+            ICollection<Transito> transiciones = _context.Transiciones.Include(d => d.EtapaActaual).Include(d => d.EtapaDestino).Where(d => d.EtapaActaual.NombreInterno == nombreInternoEtapa && d.EtapaActaual.).ToList();
             foreach (Transito transicion in transiciones)
             {
                 bool estadoAvance = EjecutaValidacion(transicion.NamespaceValidacion, transicion.ClaseValidacion, transicion.MetodoValidacion, numeroTicket);
