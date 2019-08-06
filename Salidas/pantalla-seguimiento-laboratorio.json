@@ -1,0 +1,30 @@
+[
+    {
+        "rut": "11111111-1",
+        "nombre":"Cristian Muñoz",
+        "tareas": [
+            {
+                "desc":"Carlos Pradenas - 17042783-1",
+                "estado":"En Ejecución"
+            },
+            {
+                "desc":"Enrrique Ortiz - 22222222-2",
+                "estado":"En Ejecución"
+            }
+        ]
+    },
+    {
+        "rut": "22222222-1",
+        "nombre":"Marcelo Contreras",
+        "tareas": [
+            {
+                "desc":"Carlos Pradenas - 17042783-1",
+                "estado":"En Ejecución"
+            },
+            {
+                "desc":"Enrrique Ortiz - 22222222-2",
+                "estado":"En Ejecución"
+            }
+        ]
+    }
+]

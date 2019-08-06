@@ -164,7 +164,7 @@ namespace Doitclick.Services.Workflow
             _context.Entry(tareaActual).State = EntityState.Modified;
             _context.SaveChanges();
             
-            ICollection<Transito> transiciones = _context.Transiciones.Include(d => d.EtapaActaual).Include(d => d.EtapaDestino).Where(d => d.EtapaActaual.NombreInterno == nombreInternoEtapa).ToList();
+            ICollection<Transito> transiciones = _context.Transiciones.Include(d => d.EtapaActaual).Include(d => d.EtapaDestino).Where(d => d.EtapaActaual.NombreInterno == nombreInternoEtapa && d.EtapaActaual.).ToList();
             foreach (Transito transicion in transiciones)
             {
                 bool estadoAvance = EjecutaValidacion(transicion.NamespaceValidacion, transicion.ClaseValidacion, transicion.MetodoValidacion, numeroTicket);
