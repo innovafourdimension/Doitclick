@@ -95,13 +95,13 @@
                         $('.botonyweas').html(oldText);
                         location.href = '/mi-gestion';
                     },
-                    failure: function (errMsg) {
-                        console.log(errMsg);
+                    error: function (errMsg) {
+                        
                         $.niftyNoty({
-                            type: "warning",
+                            type: "danger",
                             container : "floating",
                             title : "Ingreso Erroneo",
-                            message : errMsg
+                            message : 'Datos de acceso Invalidos!'
                         });
                     }
                 });
