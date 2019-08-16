@@ -163,7 +163,6 @@ namespace Doitclick.Services.Workflow
 
             _context.Entry(tareaActual).State = EntityState.Modified;
             _context.SaveChanges();
-            
             ICollection<Transito> transiciones = _context.Transiciones.Include(d => d.EtapaActaual).ThenInclude(e => e.Proceso).Include(d => d.EtapaDestino).Where(d => d.EtapaActaual.NombreInterno == nombreInternoEtapa && d.EtapaActaual.Proceso == proceso).ToList();
             foreach (Transito transicion in transiciones)
             {

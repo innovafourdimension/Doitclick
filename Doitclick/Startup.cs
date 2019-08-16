@@ -21,6 +21,7 @@ using Doitclick.Services.Notification;
 using Doitclick.Services.Workflow;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Rotativa.AspNetCore;
+using Doitclick.Data.Repository;
 
 namespace Doitclick
 {
@@ -43,6 +44,7 @@ namespace Doitclick
             services.AddIdentity<Usuario, Rol>()
                  .AddEntityFrameworkStores<ApplicationDbContext>()
                  .AddDefaultTokenProviders();
+            services.AddTransient<ILaboratorioRepository, LaboratorioRepository>();
 
             services.Configure<CookiePolicyOptions>(options =>
             {
