@@ -190,12 +190,27 @@ $(function () {
 
     $('#frm-ingreso-datos-paciente').on("submit", function (event) {
         event.preventDefault();
+
+
+        if (_servicios_detalle_cotizacion.length == 0)
+        {
+            $.niftyNoty({
+                type: "warning",
+                container: "floating",
+                title: "Error Al Grabar Cotización",
+                message: "Para grabar una cotización debes ingresar almenos un servicio a cotizar.<br/><small>Agrega Servicios para que puedas grabar...</small>",
+                closeBtn: true
+            });
+            return false;
+        }
+
         let $form = $(this); 
         const initialLabelText = $("#btn-confirmar").text();
         $("#btn-confirmar").prop("enabled", false).text("...Cargando");
         let model = $form.serializeFormJSON();
         model.SrcImagen = $("#img-previsualiza").prop("src");
         model.Servicios = _servicios_detalle_cotizacion;
+
 
         $.ajax({
             type: "POST",
@@ -226,22 +241,6 @@ $(function () {
         return false;
     });
 
-});
-
-
-const connection = new signalR.HubConnectionBuilder()
-    .withUrl("/hubs/push")
-    .build();
-
-connection.on("ReceiveMessage", function(user, message) {
-    const msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    const encodedMsg = user + " says " + msg;
-    console.log('ReceiveMessage', encodedMsg);
-});
-
-
-connection.start().catch(function(err){
-    console.error(err.toString())
 });
 
 /**

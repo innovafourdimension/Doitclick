@@ -73,6 +73,8 @@ $('#bt_generar_solicitud').on('click', function(){
 });
 
 
+
+
 function render_material_solicitado(listado = []){
     $("#detalles-solicitud").html("");
     listado.forEach(function(matm){
@@ -145,3 +147,10 @@ function eliminaMaterialSolicitud(e) {
     //$(document).trigger('doitclick.events.onCambiaValor', { opts, type: 'borra' });
     //console.log({ e, that: $that, prnt, opts, svcIndex });
 }
+
+
+
+$(function(){
+
+    $('#listado-materiales-mensuales').chosen({ width: '95%' });
+})

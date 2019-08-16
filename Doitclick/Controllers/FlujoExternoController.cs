@@ -107,42 +107,65 @@ namespace Doitclick.Controllers
         
         [HttpGet("retiro-y-entrega/{numeroTicket?}")]
         public IActionResult RetiroYEntrega(string numeroTicket = ""){
+            var cotizacion = _context.CotizacionesExternos.FirstOrDefault(x => x.NumeroTicket == numeroTicket);
+            var entidadSolicitante = _context.EntidadesFacturacion.FirstOrDefault(d => d.Rut == cotizacion.EntidadSolicitante);
+            var solicitud = _context.Solicitudes.FirstOrDefault(f => f.NumeroTicket == numeroTicket);
+            var solicitante = _context.Users.FirstOrDefault(u => u.Identificador == solicitud.InstanciadoPor);
+            
+            ViewBag.cotizacion = cotizacion;
+            ViewBag.entidadSolicitante = entidadSolicitante;
+            ViewBag.solicitud = solicitud;
+            ViewBag.solicitante = solicitante;
+
             return View();
         }
 
         [HttpPost("retiro-y-entrega")]
-        public async Task<IActionResult> RetiroYEntrega([FromBody] dynamic postData)
+        public IActionResult RetiroYEntrega([FromBody] dynamic postData)
         {
-            string stepName = "ANALISIS_Y_ASIGNACION_DE_SOLICITUD";
+            string stepName = "RETIRO_Y_ENTREGA_INGRESADO";
             string numeroTicket = postData.numeroTicket;
-            var transaction = await _context.Database.BeginTransactionAsync();
             try
-            {
-                
+            {   
                 _wfservice.Avanzar("FlujoExternos", stepName, numeroTicket, User.Identity.Name);
-                transaction.Commit();
                 return Ok(postData);
             }
             catch(Exception ex)
             {
-                transaction.Rollback();
                 return BadRequest(ex.Message);
             }
-
-
-
-
-            
         }
 
         [HttpGet("recepcion/{numeroTicket?}")]
         public IActionResult Recepcion(string numeroTicket = ""){
+            var cotizacion = _context.CotizacionesExternos.FirstOrDefault(x => x.NumeroTicket == numeroTicket);
+            var entidadSolicitante = _context.EntidadesFacturacion.FirstOrDefault(d => d.Rut == cotizacion.EntidadSolicitante);
+            var solicitud = _context.Solicitudes.FirstOrDefault(f => f.NumeroTicket == numeroTicket);
+            var solicitante = _context.Users.FirstOrDefault(u => u.Identificador == solicitud.InstanciadoPor);
+
+            ViewBag.cotizacion = cotizacion;
+            ViewBag.entidadSolicitante = entidadSolicitante;
+            ViewBag.solicitud = solicitud;
+            ViewBag.solicitante = solicitante;
+
             return View();
         }
 
         [HttpPost("recepcion")]
         public IActionResult Recepcion([FromBody] dynamic postData){
-            return Ok(postData);
+
+            string stepName = "RECEPCION_INGRESADO";
+            string numeroTicket = postData.numeroTicket;
+            try
+            {
+                _wfservice.Avanzar("FlujoExternos", stepName, numeroTicket, User.Identity.Name);
+                return Ok(postData);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
         }
 
         [HttpGet("analisis-y-asignacion/{numeroTicket?}")]

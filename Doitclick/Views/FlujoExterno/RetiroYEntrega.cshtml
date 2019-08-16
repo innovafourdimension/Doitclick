@@ -21,15 +21,15 @@
                             <div class="row">
                                 <div class="col-sm-12 col-md-12">
                                     <div class="from-group">
-                                        <label class="control-label" for="RutPaciente">Dirección de Rertiro</label>
+                                        <label class="control-label" for="RutPaciente">Dirección de Contacto</label>
                                         <div class="input-group mar-btm">
                                             <span class="input-group-addon"><i class="demo-pli-list-view"></i></span>
-                                            <input type="text" id="DireccionRetiro" name="DireccionRetiro" class="form-control" readonly>
+                                            <input type="text" id="DireccionRetiro" name="DireccionRetiro" value="@ViewBag.cotizacion.DireccionRetiro" class="form-control" readonly>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-12 col-md-12 from-group">
-                                    <label for="NombrePaciente">Nombre Doctor</label>
+                                <!--div class="col-sm-12 col-md-12 from-group">
+                                    <label for="NombrePaciente">Nombre de Contacto</label>
                                     <div class="input-group mar-btm">
                                         <span class="input-group-addon"><i class="demo-pli-male"></i></span>
                                         <input type="text" id="NombrePaciente" name="NombrePaciente" class="form-control" readonly>
@@ -41,7 +41,7 @@
                                         <span class="input-group-addon"><i class="demo-pli-male"></i></span>
                                         <input type="text" id="NombrePaciente" name="NombrePaciente" class="form-control" readonly>
                                     </div>
-                                </div>
+                                </div-->
                             </div>
                             
                            
@@ -50,7 +50,8 @@
                     <div class="row">
                         <div class="col-sm-12 pad-top">
                             <div class="text-right no-print">
-                                <button class="btn btn-primary" id="btn-confirmar"><i class="demo-pli-printer icon-lg"> </i> Producto entregado en Recepción</button>
+                                <input type="hidden" name="numeroTicket" value="@ViewBag.cotizacion.NumeroTicket" />
+                                <button class="btn btn-primary" id="btn-confirmar"><i class="demo-pli-like icon-lg"> </i> Ítem Finalizado</button>
                             </div>
                         </div>
                     </div>

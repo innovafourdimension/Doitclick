@@ -1,9 +1,9 @@
 ﻿@{
     ViewData["Title"] = "Cobro de Servicios";
     var totalGeneral = 0f;
-    var totalFinal = 0f;
-    var iva = 0f;
-    var prcIva = 0.19f;
+    //var totalFinal = 0f;
+    //var iva = 0f;
+    //var prcIva = 0.19f;
 }
 
 <form id="frm-generico">
@@ -165,7 +165,7 @@
                 <h4 class="modal-title" id="myModalLabel">Imagen Orden de Trabajo</h4>
             </div>
             <div class="modal-body">
-                <img src="@ViewBag.Cotizacion.ImagenOrdenSolicitante" alt="Orden de Trabajo" />
+                <img src="@ViewBag.Cotizacion.ImagenOrdenSolicitante" class="img-fluid rounded" style="max-width: 500px; height: auto;" alt="Orden de Trabajo" />
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>

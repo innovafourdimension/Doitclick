@@ -99,7 +99,7 @@ function initTable() {
             }, 
             {
                 title: 'Mandante',
-                field: 'mandante.nombres',
+                field: 'mandante.razonSocial',
                 align: 'center',
                 valign: 'middle'
             },  {
