@@ -5,7 +5,7 @@
                 <div class="from-group">
                     <label class="control-label text-bold" for="RutPaciente">Mandante</label>
                     <div class="input-group mar-btm">
-                        <span class="text-left">Dr. Carlos Antonio Pradenas Pérez</span>
+                        <span class="text-left">@ViewBag.entidadSolicitante.RazonSocial</span>
                     </div>
                 </div>
             </div>
@@ -13,7 +13,7 @@
                 <div class="from-group">
                     <label class="control-label text-bold" for="RutPaciente">Nro. Orden</label>
                     <div class="input-group mar-btm">
-                        <span class="text-left">231423424</span>
+                        <span class="text-left">@ViewBag.cotizacion.OrdenFolio</span>
                     </div>
                 </div>
             </div>
@@ -21,7 +21,7 @@
                 <div class="from-group">
                     <label class="control-label text-bold" for="RutPaciente">Paciente</label>
                     <div class="input-group mar-btm">
-                        <span class="text-left">Monica Rincon</span>
+                        <span class="text-left">@ViewBag.cotizacion.RutPaciente \ @ViewBag.cotizacion.NombrePaciente</span>
                     </div>
                 </div>
             </div>
@@ -30,20 +30,13 @@
         <div class="row">
             <div class="col-sm-12 col-md-4">
                 <div class="from-group">
-                    <label class="control-label text-bold" for="RutPaciente">Fecha Inicio Solicitud</label>
+                    <label class="control-label text-bold" for="RutPaciente">Momento Inicio Solicitud</label>
                     <div class="input-group mar-btm">
-                        <span class="text-left">30-11-2222</span>
+                        <span class="text-left">@ViewBag.solicitud.FechaInicio</span>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-12 col-md-4">
-                <div class="from-group">
-                    <label class="control-label text-bold" for="RutPaciente">Fecha Inicio Actividad</label>
-                    <div class="input-group mar-btm">
-                        <span class="text-left">30-11-2222</span>
-                    </div>
-                </div>
-            </div>
+            
         </div>
     </div>
 </div>

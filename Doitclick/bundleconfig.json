@@ -123,6 +123,17 @@
     "sourceMap": true
   },
   {
+    "outputFileName": "wwwroot/js/FlujoExterno/recepcion.min.js",
+    "inputFiles": [
+      "Client/FlujoExterno/recepcion.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "outputMode": "singleLine"
+    },
+    "sourceMap": true
+  },
+  {
     "outputFileName": "wwwroot/js/SolicitudMaterialMensual/genera-solicitud.min.js",
     "inputFiles": [
       "Client/SolicitudMaterialMensual/genera-solicitud.js"
