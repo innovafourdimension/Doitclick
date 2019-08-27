@@ -29,6 +29,7 @@
     <!--<PackageReference Include="Rotativa.AspNetCore" Version="1.0.6" />-->
     <PackageReference Include="WebPush" Version="1.0.11" />
     <DotNetCliToolReference Include="BundlerMinifier.Core" Version="2.6.362" />
+    <PackageReference Include="WestWind.AspnetCore.LiveReload" Version="0.1.5.2" />
   </ItemGroup>
 
   <ItemGroup>

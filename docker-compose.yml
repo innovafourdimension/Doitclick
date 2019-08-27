@@ -1,8 +1,0 @@
-version: '3.4'
-
-services:
-  doitclick:
-    image: ${DOCKER_REGISTRY-}doitclick
-    build:
-      context: .
-      dockerfile: Doitclick/Dockerfile

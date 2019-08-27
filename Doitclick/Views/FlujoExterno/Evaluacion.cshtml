@@ -22,7 +22,7 @@
                                 <div class="col-sm-12 col-md-12 from-group">
                                     <label class="control-label text-bold">Análisis del Trabajo</label>
                                     <div class="mar-btm">
-                                        <textarea class="form-control" rows="5" required></textarea>
+                                        <textarea class="form-control" name="descipcionAnalisis" rows="5" required></textarea>
                                         <small>Max 500 caracteres.</small>
                                     </div>
                                 </div>
@@ -30,7 +30,7 @@
                                     <label class="control-label text-bold">Resultado del Análisis</label>
                                     <div class="input-group mar-btm">
                                         <span class="input-group-addon"><i class="demo-pli-male"></i></span>
-                                        <select name="ResultadoAnalisis" class="form-control" required>
+                                        <select name="resultadoAnalisis" class="form-control" required>
                                             <option value="">Selecciona una Opción</option>
                                             <option value="S1">Si se puede ejecutar</option>
                                             <option value="N1">No se puede ejecutar, Quebrado o Roto</option>
@@ -45,6 +45,7 @@
                     <div class="row">
                         <div class="col-sm-12 pad-top">
                             <div class="text-right no-print">
+                                <input type="hidden" name="numeroTicket" value="@ViewBag.cotizacion.NumeroTicket" />
                                 <button class="btn btn-primary" id="btn-confirmar"><i class="demo-pli-printer icon-lg"> </i> Terminar Actividad</button>
                             </div>
                         </div>
@@ -81,5 +82,5 @@
 }
 @section Scripts{
     <script src="~/Assets/plugins/chosen/chosen.jquery.min.js"></script>
-    <script src="~/js/FlujoExterno/analisis-y-asignacion.min.js" type="text/javascript"></script>
+    <script src="~/js/FlujoExterno/evaluacion.min.js" type="text/javascript"></script>
 }

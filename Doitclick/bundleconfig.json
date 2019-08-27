@@ -134,6 +134,28 @@
     "sourceMap": true
   },
   {
+    "outputFileName": "wwwroot/js/FlujoExterno/evaluacion.min.js",
+    "inputFiles": [
+      "Client/FlujoExterno/evaluacion.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "outputMode": "singleLine"
+    },
+    "sourceMap": true
+  },
+  {
+    "outputFileName": "wwwroot/js/FlujoExterno/ejecucion.min.js",
+    "inputFiles": [
+      "Client/FlujoExterno/ejecucion.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "outputMode": "singleLine"
+    },
+    "sourceMap": true
+  },
+  {
     "outputFileName": "wwwroot/js/SolicitudMaterialMensual/genera-solicitud.min.js",
     "inputFiles": [
       "Client/SolicitudMaterialMensual/genera-solicitud.js"

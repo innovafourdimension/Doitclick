@@ -33,6 +33,7 @@ namespace Doitclick.Controllers
             _roleManager = roleManager;
         }
 
+        #region Ingreso de Solicitud
         [HttpGet("ingreso-solicitud")]
         public IActionResult IngresoSolicitud()
         {
@@ -105,6 +106,9 @@ namespace Doitclick.Controllers
             
         }
         
+        #endregion
+
+
         [HttpGet("retiro-y-entrega/{numeroTicket?}")]
         public IActionResult RetiroYEntrega(string numeroTicket = ""){
             var cotizacion = _context.CotizacionesExternos.FirstOrDefault(x => x.NumeroTicket == numeroTicket);
@@ -116,6 +120,8 @@ namespace Doitclick.Controllers
             ViewBag.entidadSolicitante = entidadSolicitante;
             ViewBag.solicitud = solicitud;
             ViewBag.solicitante = solicitante;
+
+            
 
             return View();
         }
@@ -169,37 +175,137 @@ namespace Doitclick.Controllers
         }
 
         [HttpGet("analisis-y-asignacion/{numeroTicket?}")]
-        public IActionResult AnalisisYAsignacion(string numeroTicket = ""){
+        public async Task<IActionResult> AnalisisYAsignacion(string numeroTicket = ""){
+            var cotizacion = _context.CotizacionesExternos.FirstOrDefault(x => x.NumeroTicket == numeroTicket);
+            var entidadSolicitante = _context.EntidadesFacturacion.FirstOrDefault(d => d.Rut == cotizacion.EntidadSolicitante);
+            var solicitud = _context.Solicitudes.FirstOrDefault(f => f.NumeroTicket == numeroTicket);
+            var solicitante = _context.Users.FirstOrDefault(u => u.Identificador == solicitud.InstanciadoPor);
+            var laboratoristas = await _userManager.GetUsersInRoleAsync("Laboratorista");
+
+            ViewBag.cotizacion = cotizacion;
+            ViewBag.entidadSolicitante = entidadSolicitante;
+            ViewBag.solicitud = solicitud;
+            ViewBag.solicitante = solicitante;
+            ViewBag.laboratoristas = laboratoristas;
+
             return View();
         }
 
         [HttpPost("analisis-y-asignacion")]
         public IActionResult AnalisisYAsignacion([FromBody] dynamic postData){
-            return Ok(postData);
+            
+            string stepName = "ANALISIS_Y_ASIGNACION_DE_SOLICITUD";
+            try
+            {
+                _wfservice.AsignarVariable("TIPO_TRABAJO", (string)postData.tipoTrabajo, (string)postData.numeroTicket);
+                _wfservice.AsignarVariable("LAB_ASIGNADO", (string)postData.laboratoristaAsignado, (string)postData.numeroTicket);
+                _wfservice.AsignarVariable("COMENTARIOS_ANALISIS_ASIGNACION", (string)postData.comentarios, (string)postData.numeroTicket);
+                _wfservice.Avanzar("FlujoExternos", stepName, (string)postData.numeroTicket, User.Identity.Name);
+
+                return Ok(postData);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
+
+        #region Evaluacion de trabajo x parte del Laboratorista
 
         [HttpGet("evaluacion-trabajo/{numeroTicket?}")]
         public IActionResult Evaluacion(string numeroTicket = ""){
+
+            var cotizacion = _context.CotizacionesExternos.FirstOrDefault(x => x.NumeroTicket == numeroTicket);
+            var entidadSolicitante = _context.EntidadesFacturacion.FirstOrDefault(d => d.Rut == cotizacion.EntidadSolicitante);
+            var solicitud = _context.Solicitudes.FirstOrDefault(f => f.NumeroTicket == numeroTicket);
+            var solicitante = _context.Users.FirstOrDefault(u => u.Identificador == solicitud.InstanciadoPor);
+
+            ViewBag.cotizacion = cotizacion;
+            ViewBag.entidadSolicitante = entidadSolicitante;
+            ViewBag.solicitud = solicitud;
+            ViewBag.solicitante = solicitante;
+
             return View();
         }
 
         [HttpPost("evaluacion-trabajo")]
         public IActionResult Evaluacion([FromBody] dynamic postData){
-            return Ok(postData);
+            string stepName = "ANALIZAR_Y_EVALUAR_TRABAJO";
+            try
+            {
+                var sepuede = (string)postData.resultadoAnalisis == "S1" ? $"1" : $"0";
+                _wfservice.AsignarVariable("RESULTADO_EVALUACION", (string)postData.resultadoAnalisis, (string)postData.numeroTicket);
+                _wfservice.AsignarVariable("COMENTARIOS_EVALUACION", (string)postData.descipcionAnalisis, (string)postData.numeroTicket);
+                _wfservice.AsignarVariable("SE_PUEDE_EJECUTAR", sepuede, (string)postData.numeroTicket);
+                _wfservice.Avanzar("FlujoExternos", stepName, (string)postData.numeroTicket, User.Identity.Name);
+                return Ok(postData);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
+        #endregion
+
+        #region Ejecucion del trabajo
         [HttpGet("ejecucion-trabajo/{numeroTicket?}")]
         public IActionResult Ejecucion(string numeroTicket = ""){
+
+            var cotizacion = _context.CotizacionesExternos.FirstOrDefault(x => x.NumeroTicket == numeroTicket);
+            var entidadSolicitante = _context.EntidadesFacturacion.FirstOrDefault(d => d.Rut == cotizacion.EntidadSolicitante);
+            var solicitud = _context.Solicitudes.FirstOrDefault(f => f.NumeroTicket == numeroTicket);
+            var solicitante = _context.Users.FirstOrDefault(u => u.Identificador == solicitud.InstanciadoPor);
+            var trabajoIniciado = _wfservice.ObtenerVariable("MOMENTO_INICIO_TRABAJO", numeroTicket);
+
+            
+
+            ViewBag.cotizacion = cotizacion;
+            ViewBag.entidadSolicitante = entidadSolicitante;
+            ViewBag.solicitud = solicitud;
+            ViewBag.solicitante = solicitante;
+            ViewBag.trabajoIniciado = trabajoIniciado;
+
             return View();
         }
 
-        [HttpPost("ejecucion-trabajo")]
+        [HttpPost("ejecucion-trabajo/inicio")]
+        public IActionResult EjecucionIniciar([FromBody] dynamic postData)
+        {
+            //#EJECUTAR_TRABAJO
+            try
+            {
+                _wfservice.AsignarVariable("MOMENTO_INICIO_TRABAJO", DateTime.Now.ToString(), (string)postData.numeroTicket);
+                
+                return Ok(postData);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+        
+        [HttpPost("ejecucion-trabajo/fin")]
         public IActionResult Ejecucion([FromBody] dynamic postData){
             return Ok(postData);
         }
 
+        #endregion
+
         [HttpGet("vb-mandante/{numeroTicket?}")]
         public IActionResult VbMandante(string numeroTicket = ""){
+
+            var cotizacion = _context.CotizacionesExternos.FirstOrDefault(x => x.NumeroTicket == numeroTicket);
+            var entidadSolicitante = _context.EntidadesFacturacion.FirstOrDefault(d => d.Rut == cotizacion.EntidadSolicitante);
+            var solicitud = _context.Solicitudes.FirstOrDefault(f => f.NumeroTicket == numeroTicket);
+            var solicitante = _context.Users.FirstOrDefault(u => u.Identificador == solicitud.InstanciadoPor);
+
+            ViewBag.cotizacion = cotizacion;
+            ViewBag.entidadSolicitante = entidadSolicitante;
+            ViewBag.solicitud = solicitud;
+            ViewBag.solicitante = solicitante;
+
             return View();
         }
 
@@ -210,6 +316,17 @@ namespace Doitclick.Controllers
 
         [HttpGet("vb-control/{numeroTicket?}")]
         public IActionResult VbControl(string numeroTicket = ""){
+
+            var cotizacion = _context.CotizacionesExternos.FirstOrDefault(x => x.NumeroTicket == numeroTicket);
+            var entidadSolicitante = _context.EntidadesFacturacion.FirstOrDefault(d => d.Rut == cotizacion.EntidadSolicitante);
+            var solicitud = _context.Solicitudes.FirstOrDefault(f => f.NumeroTicket == numeroTicket);
+            var solicitante = _context.Users.FirstOrDefault(u => u.Identificador == solicitud.InstanciadoPor);
+
+            ViewBag.cotizacion = cotizacion;
+            ViewBag.entidadSolicitante = entidadSolicitante;
+            ViewBag.solicitud = solicitud;
+            ViewBag.solicitante = solicitante;
+
             return View();
         }
 
@@ -220,6 +337,17 @@ namespace Doitclick.Controllers
 
         [HttpGet("preparar-despacho/{numeroTicket?}")]
         public IActionResult PrepararDespacho(string numeroTicket = ""){
+
+            var cotizacion = _context.CotizacionesExternos.FirstOrDefault(x => x.NumeroTicket == numeroTicket);
+            var entidadSolicitante = _context.EntidadesFacturacion.FirstOrDefault(d => d.Rut == cotizacion.EntidadSolicitante);
+            var solicitud = _context.Solicitudes.FirstOrDefault(f => f.NumeroTicket == numeroTicket);
+            var solicitante = _context.Users.FirstOrDefault(u => u.Identificador == solicitud.InstanciadoPor);
+
+            ViewBag.cotizacion = cotizacion;
+            ViewBag.entidadSolicitante = entidadSolicitante;
+            ViewBag.solicitud = solicitud;
+            ViewBag.solicitante = solicitante;
+
             return View();
         }
 

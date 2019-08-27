@@ -1,15 +1,17 @@
 $(function () {
-
+    
     $('#frm-generico').on('submit', function () {
         event.preventDefault();
         let $form = $(this);
         let model = $form.serializeFormJSON();
+
         const initialLabelText = $("#btn-confirmar").text();
         $("#btn-confirmar").prop("enabled", false).text("...Cargando");
 
+
         $.ajax({
             type: "POST",
-            url: "/procesos/ext/recepcion",
+            url: "/procesos/ext/evaluacion-trabajo",
             data: JSON.stringify(model),
             contentType: "application/json; charset=utf-8"
         }).done(function (data) {
@@ -35,4 +37,4 @@ $(function () {
         return false;
     });
 
-});
+})

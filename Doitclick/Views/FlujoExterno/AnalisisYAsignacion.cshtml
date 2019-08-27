@@ -23,10 +23,10 @@
                                     <label class="control-label text-bold">Tipo de Trabajo</label>
                                     <div class="mar-btm">
                                         <label class="form-radio form-normal active">
-                                            <input type="radio" name="TipoTrabajo" required> Virtual
+                                            <input type="radio" name="tipoTrabajo" value="VIRTUAL" required> Virtual
                                         </label>
                                         <label class="form-radio form-normal active">
-                                            <input type="radio" name="TipoTrabajo" required> Fisico
+                                            <input type="radio" name="tipoTrabajo" value="FISICO" required> Fisico
                                         </label>
                                     </div>
                                 </div>
@@ -34,19 +34,21 @@
                                     <label class="control-label text-bold">Laboratorista Asignado</label>
                                     <div class="input-group mar-btm">
                                         <span class="input-group-addon"><i class="demo-pli-male"></i></span>
-                                        <select name="LaboratoristaAsignado" id="select-laboratoristas" class="form-control" data-placeholder="Buscar.." required>
+                                        <select name="laboratoristaAsignado" id="select-laboratoristas" class="form-control" data-placeholder="Selecciona.." required>
                                             <option value=""></option>
-                                            <option>Carlos Pradenas P.</option>
-                                            <option>Ivonne  Hernandez L.</option>
+                                            @foreach (var item in ViewBag.laboratoristas)
+                                            {
+                                                <option value="@item.Identificador">@item.Nombres</option>
+                                            }
                                         </select>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-sm-12 col-md-12 from-group">
-                                    <label class="control-label text-bold">¿Algo que decir?</label>
+                                    <label class="control-label text-bold">Comentarios</label>
                                     <div class="mar-btm">
-                                        <textarea name="Comentarios" rows="5" class="form-control"></textarea>
+                                        <textarea name="comentarios" rows="5" class="form-control"></textarea>
                                         <small>Máximo 500 caracteres.</small>
                                     </div>
                                 </div>
@@ -57,6 +59,7 @@
                     <div class="row">
                         <div class="col-sm-12 pad-top">
                             <div class="text-right no-print">
+                                <input type="hidden" name="numeroTicket" value="@ViewBag.cotizacion.NumeroTicket" />
                                 <button class="btn btn-primary" id="btn-confirmar"><i class="demo-pli-printer icon-lg"> </i> Terminar Actividad</button>
                             </div>
                         </div>

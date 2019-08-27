@@ -16,31 +16,39 @@
                 </div>
                 <div class="panel-body">
                     <partial name="_EncaezadoSolicitudPartial" />
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="row">
-                                <div class="col-sm-12 col-md-12 from-group">
-                                    <label class="control-label text-bold">Resumen Final</label>
-                                    <div class="mar-btm">
-                                        <textarea name="ResumenFinalizado" rows="5" class="form-control"></textarea>
-                                        <small>Máximo 500 caracteres.</small>
+                    @if(ViewBag.trabajoIniciado == "1")
+                    {
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-12 from-group">
+                                        <label class="control-label text-bold">Resumen Final</label>
+                                        <div class="mar-btm">
+                                            <textarea name="ResumenFinalizado" rows="5" class="form-control"></textarea>
+                                            <small>Máximo 500 caracteres.</small>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    }
                     <div class="row">
                         <div class="col-sm-12 pad-top">
                             <div class="text-right no-print">
-                                <button class="btn btn-mint" id="btn-control-tiempo"><i class="demo-pli-printer icon-lg"> </i> Iniciar Acticidad</button>
-                                <button class="btn btn-primary" id="btn-confirmar" disabled><i class="demo-pli-printer icon-lg"> </i> Terminar Actividad</button>
+                                <input type="hidden" name="numeroTicket" value="@ViewBag.cotizacion.NumeroTicket" />
+                                @if(ViewBag.trabajoIniciado == "1")
+                                {   
+                                    <button class="btn btn-primary" id="btn-confirmar" disabled><i class="demo-pli-printer icon-lg"> </i> Terminar Actividad</button>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-mint" id="btn-control-tiempo"><i class="demo-pli-printer icon-lg"> </i> Iniciar Acticidad</button>
+                                }
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-lg-5">
         </div>
     </div>
 
@@ -69,5 +77,5 @@
 }
 @section Scripts{
     <script src="~/Assets/plugins/chosen/chosen.jquery.min.js"></script>
-    <script src="~/js/FlujoExterno/analisis-y-asignacion.min.js" type="text/javascript"></script>
+    <script src="~/js/FlujoExterno/ejecucion.min.js" type="text/javascript"></script>
 }

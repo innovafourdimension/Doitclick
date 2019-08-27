@@ -22,6 +22,7 @@ using Doitclick.Services.Workflow;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Rotativa.AspNetCore;
 using Doitclick.Data.Repository;
+using Westwind.AspNetCore.LiveReload;
 
 namespace Doitclick
 {
@@ -64,7 +65,8 @@ namespace Doitclick
                 options.SlidingExpiration = true;
             });
 
-            services.AddSignalR();
+            services.AddLiveReload();
+
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddJsonOptions(ConfigureJson);
@@ -87,18 +89,13 @@ namespace Doitclick
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-           
-            
+
+            app.UseLiveReload();            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseAuthentication();
             
-
-            app.UseSignalR(routes => {
-                routes.MapHub<PushHub>("/hubs/push");
-            });
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

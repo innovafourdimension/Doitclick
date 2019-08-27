@@ -28,9 +28,12 @@
             "args": [
                 "watch",
                 "run",
+                "-p",
                 "${workspaceFolder}/Doitclick/Doitclick.csproj"
             ],
-            "problemMatcher": "$tsc"
+            "problemMatcher": [
+                "$msCompile"
+            ]
         }
     ]
 }

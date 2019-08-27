@@ -247,6 +247,8 @@
                                             <span class="menu-title">Mi Gestión</span>
                                         </a>
                                     </li>
+                                    @if(User.IsInRole("Recepcionista") || User.IsInRole("Supervisor Laboratorio"))
+                                    {
                                     <li class="">
                                         <a href="#">
                                             <i class="demo-pli-home"></i>
@@ -259,6 +261,8 @@
                                         </ul>
 
                                     </li>
+                                    }
+                                    
                                     <li class="">
                                         <a href="#">
                                             <i class="demo-pli-home"></i>

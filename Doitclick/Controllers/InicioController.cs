@@ -92,6 +92,52 @@ namespace Doitclick.Controllers
             
             return Ok(salida);
         }
-        
+
+        [Route("bandeja-tareas/all")]
+        [HttpGet]
+        public IActionResult BandejaTareasAll(int limit = 20, int offset = 0, string search = "")
+        {
+
+            var rut = User.Identity.Name;
+            var bandeja = from tarea in _context.Tareas
+                          .Include(t => t.Solicitud).ThenInclude(s => s.Proceso)
+                          .Include(t => t.Etapa)
+                          join cotiza in _context.Cotizaciones
+                          .Include(x => x.Cliente) on tarea.Solicitud.NumeroTicket equals cotiza.NumeroTicket
+                          where tarea.Solicitud.Proceso.Id == 1 && tarea.Estado == EstadoTarea.Activada && (tarea.AsignadoA == rut || (tarea.Etapa.TipoUsuarioAsignado == TipoUsuarioAsignado.Rol && User.IsInRole(tarea.AsignadoA)))
+                          select new ListadoInicioContainer { Tarea = tarea, Cotizacion = cotiza };
+
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                bandeja = bandeja.Where(x => x.Tarea.Solicitud.NumeroTicket.Contains(search) || x.Cotizacion.Cliente.Rut.Contains(search) || x.Cotizacion.Cliente.Nombres.Contains(search));
+            }
+
+
+            var bandeja2 = from tarea in _context.Tareas
+                        .Include(t => t.Solicitud).ThenInclude(s => s.Proceso)
+                        .Include(t => t.Etapa)
+                          join cotiza in _context.CotizacionesExternos on tarea.Solicitud.NumeroTicket equals cotiza.NumeroTicket
+                          join mndte in _context.EntidadesFacturacion on cotiza.EntidadSolicitante equals mndte.Rut
+                          where tarea.Solicitud.Proceso.Id == 2 && tarea.Estado == EstadoTarea.Activada && (tarea.AsignadoA == rut || (tarea.Etapa.TipoUsuarioAsignado == TipoUsuarioAsignado.Rol && User.IsInRole(tarea.AsignadoA)))
+                          select new ListadoInicioContainer { Tarea = tarea, CotizacionExterno = cotiza, Mandante = mndte };
+
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                bandeja2 = bandeja.Where(x => x.Tarea.Solicitud.NumeroTicket.Contains(search) || x.Cotizacion.Cliente.Rut.Contains(search) || x.Cotizacion.Cliente.Nombres.Contains(search));
+            }
+
+            var vanfinal = bandeja.ToList();
+            vanfinal.AddRange(bandeja2);
+
+            BootstrapTableResult<ListadoInicioContainer> salida = new BootstrapTableResult<ListadoInicioContainer>();
+            salida.total = vanfinal.Count();
+            salida.rows = vanfinal.Skip(offset).Take(limit).ToList();
+
+            return Ok(salida);
+        }
+
+
     }
 }
